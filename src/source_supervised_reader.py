@@ -185,6 +185,17 @@ def score(folder,separate=False):
         training_status=json.loads((folder/'training_status.json').read_text()),
         expansion_gate_passed=bool(delta.mean()>=.03 and all(n<=.05*len(expected) for n in capped.values())),
         scope='existing eight-conversation cohort, reused in research' if separate else 'one heldout dialogue, not full benchmark')
+    if separate:
+        from collections import Counter
+        training=result['training'];excluded={training['train_dialogue'],training['validation_dialogue']}
+        counts=Counter(q['category'] for name,s in data.items() if name not in excluded
+                       for q in s['qa'] if q['category'] in (1,2,3,4))
+        before=result['metrics']['base']['by_category'];after=result['metrics']['adapted']['by_category']
+        effects={c:after[c]['f1']-before[c]['f1'] for c in counts}
+        result['target_mix_sensitivity']=dict(target_n=sum(counts.values()),target_category_counts=dict(counts),
+            observed_category_counts={c:before[c]['n'] for c in counts},category_deltas=effects,
+            delta=sum(counts[c]/sum(counts.values())*effects[c] for c in counts),
+            interpretation='Assumes within-category effects transfer to the complete target cohort. Sensitivity only, not measured full-benchmark F1. The original triage gate is unchanged.')
     atomic_json(target/'scored.json',combined);atomic_json(target/'summary.json',result)
     atomic_json(ROOT/'reports'/('source_reader_'+suffix+'.json'),result)
     print(json.dumps({k:result[k] for k in ('n','delta','bootstrap_ci','wins','losses','ties','capped_outputs','expansion_gate_passed')}))

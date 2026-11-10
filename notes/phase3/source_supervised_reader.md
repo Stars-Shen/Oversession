@@ -66,6 +66,15 @@ each condition. A meaningful separate-conversation gain can justify one full
 1307-question evaluation. No rank, epoch, auxiliary-weight or prompt grid.
 These cohorts have been reused in research; do not call them untouched tests.
 
+Before any validation result is available, the later separate-cohort report also
+records a target-category-mixture sensitivity. It weights each observed category
+effect by that category's share among the full 1307 eligible questions, following
+the earlier [native-reasoning mixture audit](category_mix.md). This adds no
+generations or extra cohort. It is not an observed full score: within-category
+effects may also vary across questions/users. Keep the declared triage gate
+unchanged and use this information when deciding whether a full evaluation has
+enough decision value; do not promote a balanced-cohort gain to a full result.
+
 ## An adjacent alternative, read but not launched
 
 Targeted method, tables, limitations and prompts of
