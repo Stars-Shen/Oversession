@@ -1,0 +1,224 @@
+{
+  "complete": true,
+  "n": 81,
+  "scope": "one heldout dialogue; not a full benchmark or multi-user confirmation",
+  "metrics": {
+    "adapted": {
+      "n": 81,
+      "f1": 0.5212680328299236,
+      "macro_f1": 0.538959257559736,
+      "evidence_recall": 0.9131687242798354,
+      "context_tokens": 2997.1111111111113,
+      "by_category": {
+        "1": {
+          "n": 11,
+          "f1": 0.5254451987406533
+        },
+        "2": {
+          "n": 26,
+          "f1": 0.6433455433455433
+        },
+        "4": {
+          "n": 44,
+          "f1": 0.4480870305930114
+        }
+      }
+    },
+    "base": {
+      "n": 81,
+      "f1": 0.49279592653056276,
+      "macro_f1": 0.5247556346609796,
+      "evidence_recall": 0.9131687242798354,
+      "context_tokens": 2997.1111111111113,
+      "by_category": {
+        "1": {
+          "n": 11,
+          "f1": 0.5719500196772924
+        },
+        "2": {
+          "n": 26,
+          "f1": 0.5820512820512821
+        },
+        "4": {
+          "n": 44,
+          "f1": 0.4202656022543642
+        }
+      }
+    }
+  },
+  "delta": 0.028472106299360984,
+  "bootstrap_ci": [
+    -0.022324166817502995,
+    0.08123350031954542
+  ],
+  "wins": 22,
+  "losses": 20,
+  "ties": 39,
+  "incomplete_outputs": [
+    {
+      "qid": "conv-30:54",
+      "method": "base"
+    }
+  ],
+  "training": {
+    "base_run": "local_native_capacity_dev",
+    "train_dialogue": "conv-26",
+    "validation_dialogue": "conv-30",
+    "train_n": 152,
+    "validation_n": 81,
+    "train_hash": "dd467b4046156cf89c073b3121dd081a2d019b1c4c9f65f233cf716bda914821",
+    "validation_hash": "8ca03efabb90d48640af13e66bb090f28e6da11b5b0e1c9cfe349fbb97cba412",
+    "rank": 8,
+    "alpha": 16,
+    "targets": [
+      "q_proj",
+      "v_proj"
+    ],
+    "epochs": 3,
+    "learning_rate": 0.0001,
+    "gradient_accumulation": 8,
+    "gradient_clip": 1.0,
+    "seed": 20261111,
+    "scope": "supervised reader adaptation, not Memory-R1 RL reproduction",
+    "decision": "One fixed training schedule, last adapter only. Validate once on the other dialogue; no epoch or parameter search."
+  },
+  "training_status": {
+    "complete": true,
+    "steps": 57,
+    "epochs": 3,
+    "adapter_sha256": "de076c407561d6a1e6b06172cc91fc5e9381f175083a93f44db2de10daa44507",
+    "trainable_parameters": 2949120,
+    "torch": "2.5.1+cu121",
+    "transformers": "4.51.3",
+    "max_cuda_memory_gib": 8.905397891998291,
+    "elapsed_seconds": 863.5891060829163
+  },
+  "config": {
+    "model": "/home/wqshen/state-evolution-memory/runs/phase3/models/Qwen3-4B",
+    "model_id": "Qwen/Qwen3-4B",
+    "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+    "weight_sha256": {
+      "model-00001-of-00003.safetensors": "328a91d3122359d5547f9d79521205bc0a46e1f79a792dfe650e99fc2d651223",
+      "model-00002-of-00003.safetensors": "6cd087b316306a68c562436b5492edbcf6e16c6dba3a1308279caa5a58e21ca5",
+      "model-00003-of-00003.safetensors": "e4bf436957184f4eeb86a80e9db394503f1f56446b2e6b7edeac5b81470f4ca1"
+    },
+    "model_config_sha256": "8ba006f74fecfaaeb392872a60f4a480e7ec9860153d2e1b769ec81f9a147f8a",
+    "inputs_hash": "8ca03efabb90d48640af13e66bb090f28e6da11b5b0e1c9cfe349fbb97cba412",
+    "question_ids": [
+      "conv-30:32",
+      "conv-30:70",
+      "conv-30:75",
+      "conv-30:31",
+      "conv-30:21",
+      "conv-30:8",
+      "conv-30:0",
+      "conv-30:48",
+      "conv-30:25",
+      "conv-30:52",
+      "conv-30:27",
+      "conv-30:16",
+      "conv-30:77",
+      "conv-30:62",
+      "conv-30:15",
+      "conv-30:18",
+      "conv-30:3",
+      "conv-30:81",
+      "conv-30:29",
+      "conv-30:22",
+      "conv-30:6",
+      "conv-30:40",
+      "conv-30:36",
+      "conv-30:42",
+      "conv-30:68",
+      "conv-30:19",
+      "conv-30:65",
+      "conv-30:26",
+      "conv-30:54",
+      "conv-30:14",
+      "conv-30:37",
+      "conv-30:57",
+      "conv-30:23",
+      "conv-30:20",
+      "conv-30:24",
+      "conv-30:9",
+      "conv-30:17",
+      "conv-30:30",
+      "conv-30:66",
+      "conv-30:5",
+      "conv-30:28",
+      "conv-30:55",
+      "conv-30:12",
+      "conv-30:74",
+      "conv-30:63",
+      "conv-30:78",
+      "conv-30:13",
+      "conv-30:72",
+      "conv-30:7",
+      "conv-30:67",
+      "conv-30:73",
+      "conv-30:38",
+      "conv-30:56",
+      "conv-30:11",
+      "conv-30:50",
+      "conv-30:10",
+      "conv-30:46",
+      "conv-30:76",
+      "conv-30:1",
+      "conv-30:34",
+      "conv-30:35",
+      "conv-30:33",
+      "conv-30:49",
+      "conv-30:43",
+      "conv-30:39",
+      "conv-30:61",
+      "conv-30:64",
+      "conv-30:71",
+      "conv-30:41",
+      "conv-30:69",
+      "conv-30:44",
+      "conv-30:60",
+      "conv-30:59",
+      "conv-30:4",
+      "conv-30:2",
+      "conv-30:45",
+      "conv-30:58",
+      "conv-30:47",
+      "conv-30:53",
+      "conv-30:80",
+      "conv-30:51"
+    ],
+    "source_manifest": "local_reader_adapter_source",
+    "memory_sha256": {
+      "conv-26": "499886ffc8474c8088b219e16b9e6a21e5d7a0ae82f104686db4daa8ab005f55",
+      "conv-30": "f1fbb6408076d505495037d331e97b31de320d212cea019a54af3de5514cbb52"
+    },
+    "context_budget": 3000,
+    "writer": "frozen v2 Luna",
+    "split": "dialogue-separated validation",
+    "methods": [
+      "off"
+    ],
+    "max_new_tokens": {
+      "off": 192,
+      "on": 4096
+    },
+    "generation": {
+      "do_sample": true,
+      "temperature": 0.6,
+      "top_p": 0.95,
+      "top_k": 20,
+      "min_p": 0.0
+    },
+    "dtype": "bfloat16",
+    "seed": 20261111,
+    "decision": "One final three-epoch adapter, one validation. Require >=3 paired F1 points and <=5% incomplete outputs per condition before separate-conversation evaluation.",
+    "interpretation": "Same off-mode sampling and evidence; compare with one final task-local adapter.",
+    "adapter_file": "runs/phase3/reader_adapter/adapter.pt",
+    "adapter_sha256": "de076c407561d6a1e6b06172cc91fc5e9381f175083a93f44db2de10daa44507",
+    "adapter_config": {
+      "rank": 8,
+      "alpha": 16
+    }
+  },
+  "expansion_gate_passed": false
+}

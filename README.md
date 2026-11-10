@@ -128,3 +128,11 @@ or selected as breakthroughs. No new paid calls were made. See
 [research decisions](notes/phase3/decisions.md),
 [value-layer protocol](notes/phase3/canonical_values.md), and
 [completed local comparison](reports/local_selective_canonical_validation.json).
+
+A matched Qwen3-4B native-thinking trial improves its own development control
+52.44 → 58.25 F1, but remains below the existing 30B reader's 58.40, so it is not
+expanded. One fixed low-rank reader adaptation, trained only on conversation 0,
+improves conversation 1 by 2.85 points but falls **46.25 → 45.37** on the
+160-question separate-conversation check, versus 51.58 for the existing 30B reader.
+That adapter is rejected. See the [native-capacity protocol](notes/phase3/local_native_capacity.md)
+and [learned-reader results](notes/phase3/learned_reader_hypothesis.md).

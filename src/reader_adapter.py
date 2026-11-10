@@ -154,11 +154,31 @@ def prepare_evaluation(folder):
     print('prepared final-adapter validation',len(config['question_ids']),flush=True)
 
 
-def score(folder):
+def prepare_separate(folder):
+    status=json.loads((folder/'training_status.json').read_text());training=json.loads((folder/'training_config.json').read_text())
+    source=ROOT/'runs/phase3/local_plain_validation';inputs=(source/'inputs.jsonl').read_text()
+    rows=[json.loads(l) for l in inputs.splitlines()];assert len(rows)==160
+    config=json.loads((ROOT/'runs/phase3/local_adapter_baseline_validation/config.json').read_text())
+    config.update(question_ids=[r['qid'] for r in rows],inputs_hash=digest(rows),source_manifest='local_plain_validation',
+                  memory_sha256=json.loads((source/'config.json').read_text())['memory_sha256'],
+                  split='eight separate conversations; existing 160-question manifest',
+                  decision='Explicit one-time exception to the +3 validation triage gate: observed +2.85 on one dialogue. No retraining or tuning. Require >=3 paired F1 points and >=3 above existing 30B reader before full evaluation.')
+    for name,adapted in [('local_adapter_baseline_separate',False),('local_adapter_separate',True)]:
+        target=ROOT/'runs/phase3'/name;target.mkdir(exist_ok=True);value=dict(config)
+        if adapted:value.update(adapter_file=str((folder/'adapter.pt').relative_to(ROOT)),adapter_sha256=status['adapter_sha256'],
+                                adapter_config={key:training[key] for key in ('rank','alpha')})
+        cp=target/'config.json'
+        if cp.exists() and json.loads(cp.read_text())!=value:raise ValueError('Separate-conversation config changed')
+        atomic_json(cp,value);(target/'inputs.jsonl').write_text(inputs)
+    print('prepared unchanged final adapter and base on 160 separate-conversation questions',flush=True)
+
+
+def score(folder,separate=False):
     import numpy as np
     import re
     from experiment import scorer,summarize
-    target=ROOT/'runs/phase3/local_adapter_validation';baseline=ROOT/'runs/phase3/local_adapter_baseline_validation'
+    suffix='separate' if separate else 'validation'
+    target=ROOT/'runs/phase3'/('local_adapter_'+suffix);baseline=ROOT/'runs/phase3'/('local_adapter_baseline_'+suffix)
     config=json.loads((target/'config.json').read_text());ids=set(config['question_ids'])
     samples={s['sample_id']:s for s in json.loads((ROOT/'data/locomo10.json').read_text())};metric=scorer()
     combined=[];by={}
@@ -177,22 +197,30 @@ def score(folder):
     rng=np.random.default_rng(20261111)
     ci=np.quantile([rng.choice(delta,len(delta),replace=True).mean() for _ in range(10000)],[.025,.975])
     incomplete=[dict(qid=r['qid'],method=r['method']) for r in combined if not r['stopped_with_eos'] or not r['closed_reasoning']]
-    result=dict(complete=True,n=len(ids),scope='one heldout dialogue; not a full benchmark or multi-user confirmation',
+    result=dict(complete=True,n=len(ids),scope='eight separate conversations, not untouched across research revisions' if separate
+                else 'one heldout dialogue; not a full benchmark or multi-user confirmation',
                 metrics=summarize(combined),delta=float(delta.mean()),bootstrap_ci=ci.tolist(),
                 wins=int((delta>0).sum()),losses=int((delta<0).sum()),ties=int((delta==0).sum()),
                 incomplete_outputs=incomplete,training=json.loads((folder/'training_config.json').read_text()),
                 training_status=json.loads((folder/'training_status.json').read_text()),config=config,
                 expansion_gate_passed=bool(delta.mean()>=.03 and all(sum(r['method']==m for r in incomplete)<=.05*len(ids) for m in by)))
+    if separate:
+        reference=[r for r in json.loads((ROOT/'runs/phase3/local_plain_validation/scored.json').read_text()) if r['method']=='plain']
+        assert {r['qid'] for r in reference}==ids
+        result['existing_30b_reader_f1']=float(np.mean([r['f1'] for r in reference]))
+        result['delta_vs_30b_reader']=result['metrics']['adapted']['f1']-result['existing_30b_reader_f1']
+        result['expansion_gate_passed'] &= result['delta_vs_30b_reader']>=.03
     atomic_json(target/'scored.json',combined);atomic_json(target/'summary.json',result)
-    atomic_json(ROOT/'reports/reader_adapter_validation.json',result)
+    atomic_json(ROOT/'reports'/('reader_adapter_'+suffix+'.json'),result)
     print(json.dumps({k:result[k] for k in ('n','delta','bootstrap_ci','wins','losses','ties','incomplete_outputs','expansion_gate_passed')},indent=2))
     print({m:s['f1'] for m,s in result['metrics'].items()})
 
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('command',choices=['prepare','train','prepare-evaluation','score'])
+    p=argparse.ArgumentParser();p.add_argument('command',choices=['prepare','train','prepare-evaluation','score','prepare-separate','score-separate'])
     args=p.parse_args();folder=ROOT/'runs/phase3/reader_adapter';folder.mkdir(parents=True,exist_ok=True)
-    {'prepare':prepare,'train':train,'prepare-evaluation':prepare_evaluation,'score':score}[args.command](folder)
+    if args.command=='score-separate':score(folder,separate=True)
+    else:{'prepare':prepare,'train':train,'prepare-evaluation':prepare_evaluation,'score':score,'prepare-separate':prepare_separate}[args.command](folder)
 
 
 if __name__=='__main__':main()

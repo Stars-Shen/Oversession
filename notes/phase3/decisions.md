@@ -56,3 +56,24 @@ baseline caches and original ledgers are preserved.
 
 This file records decisions in the active authorized research task. It does not
 instruct a future session to resume experiments or launch jobs automatically.
+
+## Later capacity and learning checks
+
+The [broader strong-memory review](strong_memory_followup.md) adds Hindsight,
+SimpleMem, Memora and complementary curation/consolidation. Their high judge
+accuracies must not be compared directly with official F1. A
+[category-mixture audit](category_mix.md) further shows why the interrupted
+DeepSeek cohort cannot establish a full-micro-F1 breakthrough.
+
+Qwen3-4B native thinking improves its own 80-question development control
+52.44 → 58.25, but the existing 30B plain reader is 58.40. Reject native-only
+expansion; a large gain over a weaker baseline is not a new best result.
+
+One [fixed low-rank reader adaptation](learned_reader_hypothesis.md), trained on
+152 questions from conversation 0, gives +2.85 points on conversation 1's 81
+questions. This misses the initial 3-point triage gate. One explicitly recorded
+exception checks the unchanged final adapter on the existing 160-question
+separate-conversation manifest: **46.25 → 45.37**, versus **51.58** for the
+existing 30B reader. Reject this adapter; do not tune epochs/rank/temperature or
+expand it to the full benchmark. All these jobs have finished. The broader goal
+of a larger absolute breakthrough remains unmet.
