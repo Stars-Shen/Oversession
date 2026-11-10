@@ -94,5 +94,18 @@
       "interpretation": "Abstention changes to reference state; packed annotated source contains the Talkeetna geographical clue."
     }
   ],
-  "interpretation": "Purposeful examples and length/marker summaries, not prevalence estimates or causal isolation. They do not prove attention faithfulness. Full evaluation weights and policy remain unchanged."
+  "interpretation": "Purposeful examples and length/marker summaries, not prevalence estimates or causal isolation. They do not prove attention faithfulness. Full evaluation weights and policy remain unchanged.",
+  "stronger_cached_reference": {
+    "n": 160,
+    "checks": {
+      "same_question_ids": true,
+      "same_source_ids": true,
+      "same_context_token_counts": true
+    },
+    "deepseek_nonthinking_f1": 0.5968281309542653,
+    "deepseek_deliberate_f1": 0.6540000779394927,
+    "local_adapted_f1": 0.556960526674529,
+    "delta_vs_deepseek_deliberate": -0.09703955126496366,
+    "interpretation": "The local adaptation improves its own control but remains below this stronger same-question reader. Full local evaluation must not be presented as having surpassed DeepSeek, whose full evaluation remains incomplete."
+  }
 }

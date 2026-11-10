@@ -147,3 +147,11 @@ points and zero capped outputs. Target-mixture sensitivity is +4.29 points;
 multi-hop declines by 3.97 points. A fixed 1307-question paired comparison is
 now running, reusing the existing 160 answers in each condition. Its full result
 is pending; no full-benchmark breakthrough is claimed.
+
+The stronger same-context DeepSeek deliberate reference on those 160 questions
+is **65.40 F1**, 9.70 points above the adapted local reader. A gain against the
+weaker local control therefore does not establish the broader research goal.
+One [full-history development test](notes/phase3/full_history.md) now examines
+whether the 3K information budget is the bottleneck, with the original unadapted
+reader and causal prefix reuse. Expansion requires an improvement over the
+strongest existing development reader; results are pending.

@@ -201,3 +201,11 @@ requires the full paired Qwen control. No old API answers are regenerated.
 
 This note records the active authorized experiment. It does not instruct another
 session to resume it automatically.
+
+The stronger existing same-context comparison must also be retained. On the
+same 160 question IDs, source IDs and context token counts, DeepSeek without
+thinking scores 59.6828 and deliberate scores **65.4000**, versus **55.6961**
+for this local adapter. The latter is **9.7040 points below** the strongest
+reference, which leads in all four categories. The local paired gain does not
+constitute the desired larger absolute breakthrough. This is recorded in
+`reports/source_reader_diagnostic.json` without new model calls.

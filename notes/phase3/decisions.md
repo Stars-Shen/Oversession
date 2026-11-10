@@ -106,6 +106,15 @@ declared +3-point expansion gate fails; stop selector variants. A gold-only
 pool ceiling is diagnostic, not achieved performance. The fixed 30B training
 continues independently; no additional training or paid job is launched.
 
+The stronger same-context 160-question anchor is DeepSeek deliberate at 65.40,
+versus the source adapter's 55.70. Its local-control gain is not a larger
+absolute breakthrough. A fixed [full raw history study](full_history.md) tests
+the information-budget hypothesis with the original unadapted 30B reader and
+question-independent KV reuse. Expansion requires >=3 F1 points over the
+strongest existing 80-question development reader (65.5748), not merely over
+the weaker local control. No prompt or memory-profile grid is authorized by
+that protocol. Existing 3K full evaluation continues on its original GPUs.
+
 The [Memory-R1 final paper and pinned release assessment](memory_r1_release.md)
 replaces stale assumptions that author code is unavailable. It distinguishes
 trajectory cloning, final-answer supervision and outcome learning, and records
