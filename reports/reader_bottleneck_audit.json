@@ -1,0 +1,31 @@
+{
+  "local_cad_greedy_dev": {
+    "all_annotated_sources_present": {
+      "n": 70,
+      "f1": 0.5624216346110755,
+      "f1_loss_mass": 30.630485577224707,
+      "share_of_f1_loss": 0.9204801358548605
+    },
+    "some_annotated_source_missing": {
+      "n": 10,
+      "f1": 0.7353846153846154,
+      "f1_loss_mass": 2.646153846153846,
+      "share_of_f1_loss": 0.07951986414513919
+    }
+  },
+  "local_plain_validation": {
+    "all_annotated_sources_present": {
+      "n": 130,
+      "f1": 0.5592077743774576,
+      "f1_loss_mass": 57.30298933093051,
+      "share_of_f1_loss": 0.7395871276835981
+    },
+    "some_annotated_source_missing": {
+      "n": 30,
+      "f1": 0.3274429527223249,
+      "f1_loss_mass": 20.176711418330257,
+      "share_of_f1_loss": 0.26041287231640164
+    }
+  },
+  "limitations": "Annotations may omit needed context; complete annotated roots do not prove semantic sufficiency. F1 losses include formatting and reference mismatch, not only factual mistakes. This is descriptive, not a causal decomposition."
+}
