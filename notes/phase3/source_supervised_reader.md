@@ -172,5 +172,32 @@ are reused sequentially, with no new paid calls. Progress is stored in
 `runs/phase3/source_reader/full_pipeline.log` and the two full-run generation
 logs. The full result is pending; this is not yet a full-benchmark breakthrough.
 
+## Cache-only interpretation and comparison anchor
+
+`reports/source_reader_diagnostic.json` uses only existing outputs and packed
+inputs, with zero new model calls. Multi-hop median completion length falls
+10.5 -> 5.5 tokens; single-hop falls 8 -> 5. Inference-category occurrences of
+the literal standard abstention marker fall 8 -> 0. These observations do not
+isolate why training changes answers or establish a causal effect of length.
+
+Five purposeful high-gain cases show a mixture of changes. The packed input
+contains both Sam's earlier hiking habit and a December hiking trip when the
+answer changes from running to hiking (`conv-49:72`). Other changes replace
+abstention with a reference-matching location, with Italy explicit in a dated
+source (`conv-47:82`) or geographical clues in the source (`conv-48:28`,
+`conv-48:48`). A relative-year answer changes to its clock-resolved absolute
+year (`conv-41:53`), which is a normalization gain without independently new
+factual content. These are examples, not a prevalence estimate or proof that
+the model's attention faithfully explains its decisions. Full-evaluation policy
+and weights remain unchanged.
+
+The completed v2 Luna reference on the **same 1307 questions** is **61.4174 F1**,
+not its 1540-question aggregate. A one-time alignment check confirms identical
+question-ID sets, dataset/scorer hashes, the eight memory-ledger hashes, and
+the 3000-token evidence budget. Shared `experiment.py`, `memory.py` and
+`longmem.py` are unchanged since the pre-phase3 commit. Comparing with Luna
+assesses the complete reader solution; attribution of the training update still
+requires the full paired Qwen control. No old API answers are regenerated.
+
 This note records the active authorized experiment. It does not instruct another
 session to resume it automatically.

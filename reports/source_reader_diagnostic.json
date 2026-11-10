@@ -1,0 +1,98 @@
+{
+  "new_model_calls": 0,
+  "reference": {
+    "reader": "gpt-6-luna",
+    "n": 1307,
+    "f1": 0.6141744446926007,
+    "checks": {
+      "same_question_ids": true,
+      "same_dataset": true,
+      "same_official_scorer": true,
+      "same_memory_ledgers": true,
+      "same_evidence_budget": true
+    },
+    "shared_baseline_files_unchanged_since_phase3": true,
+    "interpretation": "Cross-reader benchmark reference; attribution of adaptation requires the paired Qwen control."
+  },
+  "completion_diagnostics": {
+    "1": {
+      "base": {
+        "n": 40,
+        "median_completion_tokens": 10.5,
+        "mean_completion_tokens": 12.425,
+        "literal_abstention_marker_count": 1
+      },
+      "adapted": {
+        "n": 40,
+        "median_completion_tokens": 5.5,
+        "mean_completion_tokens": 7.95,
+        "literal_abstention_marker_count": 1
+      }
+    },
+    "2": {
+      "base": {
+        "n": 40,
+        "median_completion_tokens": 8.0,
+        "mean_completion_tokens": 7.5,
+        "literal_abstention_marker_count": 3
+      },
+      "adapted": {
+        "n": 40,
+        "median_completion_tokens": 8.5,
+        "mean_completion_tokens": 7.95,
+        "literal_abstention_marker_count": 0
+      }
+    },
+    "3": {
+      "base": {
+        "n": 40,
+        "median_completion_tokens": 4.0,
+        "mean_completion_tokens": 6.575,
+        "literal_abstention_marker_count": 8
+      },
+      "adapted": {
+        "n": 40,
+        "median_completion_tokens": 3.5,
+        "mean_completion_tokens": 5.225,
+        "literal_abstention_marker_count": 0
+      }
+    },
+    "4": {
+      "base": {
+        "n": 40,
+        "median_completion_tokens": 8.0,
+        "mean_completion_tokens": 9.375,
+        "literal_abstention_marker_count": 1
+      },
+      "adapted": {
+        "n": 40,
+        "median_completion_tokens": 5.0,
+        "mean_completion_tokens": 6.675,
+        "literal_abstention_marker_count": 0
+      }
+    }
+  },
+  "qualitative_cases": [
+    {
+      "qid": "conv-49:72",
+      "interpretation": "Activity correction: both prior hiking habit and December hiking trip appear in packed annotated sources."
+    },
+    {
+      "qid": "conv-48:28",
+      "interpretation": "Abstention changes to reference country; packed source includes a Bogota vacation and session time."
+    },
+    {
+      "qid": "conv-47:82",
+      "interpretation": "Abstention changes to Italy; source explicitly states Italy last year under an April 2022 session."
+    },
+    {
+      "qid": "conv-41:53",
+      "interpretation": "Last year changes to 2022 under an August 2023 clock: benchmark normalization gain, not independently new factual content."
+    },
+    {
+      "qid": "conv-48:48",
+      "interpretation": "Abstention changes to reference state; packed annotated source contains the Talkeetna geographical clue."
+    }
+  ],
+  "interpretation": "Purposeful examples and length/marker summaries, not prevalence estimates or causal isolation. They do not prove attention faithfulness. Full evaluation weights and policy remain unchanged."
+}
