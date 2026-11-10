@@ -1,0 +1,177 @@
+{
+  "complete": true,
+  "n": 80,
+  "metrics": {
+    "evidence_first": {
+      "n": 80,
+      "f1": 0.5850713832950676,
+      "macro_f1": 0.5593419741265031,
+      "evidence_recall": 0.9258547008547009,
+      "context_tokens": 2996.0625,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.7033126293995859
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.6133838383838385
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.346632854325162
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.574038574397426
+        }
+      }
+    },
+    "plain": {
+      "n": 80,
+      "f1": 0.5840420072077681,
+      "macro_f1": 0.5671566210806861,
+      "evidence_recall": 0.9258547008547009,
+      "context_tokens": 2996.0625,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.6816252587991719
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.5523875114784205
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.4297830374753452
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.6048306765698069
+        }
+      }
+    }
+  },
+  "delta": 0.0010293760872994273,
+  "wins": 17,
+  "losses": 12,
+  "ties": 51,
+  "format_or_source_errors": [],
+  "truncated_outputs": [],
+  "expansion_gate_passed": false,
+  "config": {
+    "model": "/home/wqshen/models/Qwen3-30B-A3B-Instruct-2507",
+    "alpha": 0.5,
+    "max_new_tokens": 384,
+    "dtype": "bfloat16",
+    "methods": [
+      "evidence_first"
+    ],
+    "question_ids": [
+      "conv-26:78",
+      "conv-26:62",
+      "conv-26:22",
+      "conv-26:95",
+      "conv-26:37",
+      "conv-30:32",
+      "conv-26:14",
+      "conv-30:70",
+      "conv-26:71",
+      "conv-26:33",
+      "conv-26:30",
+      "conv-30:75",
+      "conv-26:56",
+      "conv-26:45",
+      "conv-26:2",
+      "conv-26:105",
+      "conv-30:31",
+      "conv-26:20",
+      "conv-26:46",
+      "conv-26:141",
+      "conv-26:66",
+      "conv-26:63",
+      "conv-26:59",
+      "conv-26:103",
+      "conv-26:48",
+      "conv-26:41",
+      "conv-26:42",
+      "conv-26:148",
+      "conv-26:39",
+      "conv-30:21",
+      "conv-26:50",
+      "conv-26:114",
+      "conv-26:4",
+      "conv-30:8",
+      "conv-26:64",
+      "conv-26:90",
+      "conv-26:40",
+      "conv-30:0",
+      "conv-26:81",
+      "conv-30:48",
+      "conv-30:25",
+      "conv-26:12",
+      "conv-26:27",
+      "conv-26:139",
+      "conv-26:76",
+      "conv-26:21",
+      "conv-26:69",
+      "conv-30:52",
+      "conv-30:27",
+      "conv-30:16",
+      "conv-26:77",
+      "conv-30:77",
+      "conv-26:23",
+      "conv-26:8",
+      "conv-26:131",
+      "conv-26:3",
+      "conv-26:5",
+      "conv-26:151",
+      "conv-26:55",
+      "conv-26:67",
+      "conv-30:62",
+      "conv-26:18",
+      "conv-30:15",
+      "conv-26:117",
+      "conv-30:18",
+      "conv-26:31",
+      "conv-26:118",
+      "conv-26:15",
+      "conv-26:17",
+      "conv-26:116",
+      "conv-30:3",
+      "conv-26:35",
+      "conv-30:81",
+      "conv-30:29",
+      "conv-26:49",
+      "conv-26:137",
+      "conv-26:61",
+      "conv-30:22",
+      "conv-26:146",
+      "conv-26:52"
+    ],
+    "seed": 20261111,
+    "inputs_hash": "26caa1a96127e2f891a48046a5203aab6da20f846bf0be6936e5f30750c9837a",
+    "memory_sha256": {
+      "conv-26": "499886ffc8474c8088b219e16b9e6a21e5d7a0ae82f104686db4daa8ab005f55",
+      "conv-30": "f1fbb6408076d505495037d331e97b31de320d212cea019a54af3de5514cbb52"
+    },
+    "context_budget": 3000,
+    "model_config_sha256": "a1ee086a68d0cbfc87316da00ba4b8507bd1292978108e2496201a30a450f438",
+    "tokenizer_config_sha256": "a62ff0a2472a0fa1b8eaabcb57c59b58afa42a22831dc141400b6e0cf2b65ce3",
+    "provider": "local; no network",
+    "writer": "frozen v2 Luna",
+    "split": "development",
+    "decoding": "greedy; explicit do_sample=False override",
+    "routing_execution": "original expert order, empty experts skipped",
+    "prompt_hash": "f83006fcfa33a61de012b01f44760289483f07750adc0ca08de56199bbe25168",
+    "baseline_run": "local_cad_greedy_dev",
+    "guided_repair": true,
+    "xgrammar_dependency_path": "/home/wqshen/OverSession/.venv-hypermem-faithful/lib/python3.11/site-packages",
+    "initial_attempts_file": "runs/phase3/local_evidence_first_pilot/predictions.jsonl",
+    "initial_attempts_hash": "3f30da170c372d3d30c345854732bc9f6ba53e69a307931c859a922743c8df32",
+    "reused_first_attempts": 22,
+    "intervention": "unchanged evidence-first prompt; accept valid first attempt, otherwise one source-enum-constrained retry",
+    "decision": "No further interface/prompt grid. Expand only with >=3 F1 points and no truncation on 80 development questions."
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "status": "source-binding diagnosis; no gold answers used",
+  "memory_sha256": "499886ffc8474c8088b219e16b9e6a21e5d7a0ae82f104686db4daa8ab005f55",
+  "cases": [
+    {
+      "source": {
+        "id": "D15:12",
+        "speaker": "Melanie",
+        "text": "That's so cool, Caroline! That's a great way to show off and be proud of everyone's skills. You know I love live music. Can't wait to hear about it! [Shared image caption (automatic): a photo of a band playing on a stage in a park]",
+        "date": "3:19 pm on 28 August, 2023",
+        "session": "session_15",
+        "order": 14
+      },
+      "generated_claim": "Melanie took her kids to a park yesterday",
+      "finding": "The cited human text is encouragement, and the automatic image caption mentions a park. The source does not assert the claimed visit."
+    },
+    {
+      "source": {
+        "id": "D15:11",
+        "speaker": "Caroline",
+        "text": "We're putting together a talent show for the kids next month. I'm looking forward to seeing how much fun everyone has and how proud they'll feel of their talents!",
+        "date": "3:19 pm on 28 August, 2023",
+        "session": "session_15",
+        "order": 14
+      },
+      "generated_clock": "25 August 2023",
+      "generated_answer": "October 2023",
+      "finding": "Actual source clock is 28 August 2023. Its next-month reference is September 2023 at month precision."
+    }
+  ],
+  "next_design_constraint": "Materialize source metadata from the immutable ledger; distinguish human assertions, automatic captions, and inferred events."
+}

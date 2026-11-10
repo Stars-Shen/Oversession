@@ -7,7 +7,9 @@ with guidance_scale=1+alpha. This reuses the installed library, not paper code.
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
+import sys
 import time
 from api import ROOT,atomic_json,digest
 
@@ -35,7 +37,6 @@ def active_experts_forward(self,hidden_states):
 
 
 def prepare(args,folder):
-    import os
     from types import SimpleNamespace
     import numpy as np
     import tiktoken
@@ -86,15 +87,28 @@ def generate(args,folder):
     pending=[(r,m) for r in rows for m in config['methods'] if (r['qid'],m) not in done]
     if not pending:print('all outputs already saved',flush=True);return
     tok=AutoTokenizer.from_pretrained(config['model'],local_files_only=True)
+    first_attempts={};compiler=None
+    if config.get('guided_repair'):
+        from evidence_contract import parse_answer
+        sys.path.append(config['xgrammar_dependency_path'])
+        import xgrammar as xgr
+        from xgrammar.contrib.hf import LogitsProcessor
+        vocab_size=json.loads((Path(config['model'])/'config.json').read_text())['vocab_size']
+        compiler=xgr.GrammarCompiler(xgr.TokenizerInfo.from_huggingface(tok,vocab_size=vocab_size))
+        first=[json.loads(l) for l in (ROOT/config['initial_attempts_file']).read_text().splitlines()]
+        assert digest(first)==config['initial_attempts_hash'];first_attempts={r['qid']:r for r in first}
     print('loading local model on visible GPUs',torch.cuda.device_count(),flush=True)
     Qwen3MoeSparseMoeBlock.forward=active_experts_forward
     model=AutoModelForCausalLM.from_pretrained(config['model'],local_files_only=True,
             torch_dtype=torch.bfloat16,device_map='balanced',
             max_memory={i:'22GiB' for i in range(torch.cuda.device_count())},attn_implementation='sdpa').eval()
     assert all(str(device) not in ('cpu','disk') for device in model.hf_device_map.values())
-    atomic_json(folder/'runtime.json',dict(torch=torch.__version__,transformers=transformers.__version__,
-                                         device_map={k:str(v) for k,v in model.hf_device_map.items()},
-                                         alpha=config['alpha'],guidance_scale=1+config['alpha']))
+    runtime=dict(torch=torch.__version__,transformers=transformers.__version__,
+                 device_map={k:str(v) for k,v in model.hf_device_map.items()},
+                 cuda_visible_devices=os.environ.get('CUDA_VISIBLE_DEVICES'))
+    if 'cad' in config['methods']:runtime.update(alpha=config['alpha'],guidance_scale=1+config['alpha'])
+    if compiler is not None:runtime['source_repair']='one xgrammar constrained retry on contract failure'
+    atomic_json(folder/'runtime.json',runtime)
     device=model.get_input_embeddings().weight.device
     gen=GenerationConfig(do_sample=False,max_new_tokens=config['max_new_tokens'],
                          eos_token_id=model.generation_config.eos_token_id,pad_token_id=tok.pad_token_id)
@@ -112,15 +126,24 @@ def generate(args,folder):
                 negative=prompt('Question: '+row['question'])
                 extra=dict(guidance_scale=1+config['alpha'],negative_prompt_ids=negative,
                            negative_prompt_attention_mask=torch.ones_like(negative))
-            with torch.inference_mode():
-                output=model.generate(ids,attention_mask=torch.ones_like(ids),generation_config=gen,
-                                      do_sample=False,temperature=1.0,top_p=1.0,top_k=50,
-                                      logits_to_keep=1,**extra)
-            answer_ids=output[0,ids.shape[1]:].tolist()
-            result=dict(qid=row['qid'],method=method,hypothesis=tok.decode(answer_ids,skip_special_tokens=True).strip(),
-                        elapsed_seconds=time.time()-start,completion_tokens=len(answer_ids),
-                        stopped_with_eos=bool(answer_ids and answer_ids[-1] in eos),
-                        context_tokens=row['context_tokens'],source_ids=row['source_ids'])
+            def decode(options):
+                with torch.inference_mode():
+                    output=model.generate(ids,attention_mask=torch.ones_like(ids),generation_config=gen,
+                                          do_sample=False,temperature=1.0,top_p=1.0,top_k=50,
+                                          logits_to_keep=1,**options)
+                answer_ids=output[0,ids.shape[1]:].tolist()
+                return dict(qid=row['qid'],method=method,hypothesis=tok.decode(answer_ids,skip_special_tokens=True).strip(),
+                            elapsed_seconds=time.time()-start,completion_tokens=len(answer_ids),
+                            stopped_with_eos=bool(answer_ids and answer_ids[-1] in eos),
+                            context_tokens=row['context_tokens'],source_ids=row['source_ids'])
+            result=dict(first_attempts[row['qid']]) if row['qid'] in first_attempts else decode(extra)
+            if compiler is not None:
+                try:parse_answer(result['hypothesis'],set(row['source_ids']))
+                except (ValueError,KeyError,TypeError) as error:
+                    initial=result
+                    constrained=dict(extra,logits_processor=[LogitsProcessor(compiler.compile_json_schema(row['schema']))])
+                    result=decode(constrained);result.update(repair_used=True,initial_error=str(error),first_attempt=initial,
+                                                            total_completion_tokens=initial['completion_tokens']+result['completion_tokens'])
             out.write(json.dumps(result,ensure_ascii=False)+'\n');out.flush();records.append(result)
             print(len(records),'/',len(rows)*len(config['methods']),row['qid'],method,
                   repr(result['hypothesis']),round(result['elapsed_seconds'],2),flush=True)
