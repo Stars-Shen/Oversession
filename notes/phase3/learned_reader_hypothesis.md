@@ -33,6 +33,11 @@ the small standard low-rank update is implemented directly without installing
 another dependency stack. This note alone does not instruct a future session to
 resume training.
 
+The later [ACL 2026 final-paper and pinned author-release assessment](memory_r1_release.md)
+adds a trajectory-SFT control and distinguishes the released F1 reward from
+the paper's EM description. Use that assessment for current implementation
+decisions; the opening review here remains explicitly about arXiv v1.
+
 ## One fixed adaptation, now active
 
 The update follows [Hu et al., LoRA](https://arxiv.org/abs/2106.09685): frozen

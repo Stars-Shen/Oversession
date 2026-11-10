@@ -94,3 +94,11 @@ strongest existing DeepSeek reasoning reader, with no new model calls. Its
 declared +3-point expansion gate fails; stop selector variants. A gold-only
 pool ceiling is diagnostic, not achieved performance. The fixed 30B training
 continues independently; no additional training or paid job is launched.
+
+The [Memory-R1 final paper and pinned release assessment](memory_r1_release.md)
+replaces stale assumptions that author code is unavailable. It distinguishes
+trajectory cloning, final-answer supervision and outcome learning, and records
+the released reward/data/compute differences. Reuse the outcome signal only
+after the current fixed candidate has an actual validation result; do not
+install or launch the full public RL stack as an automatic response to a weak
+SFT result. The ongoing training and evaluation queue remain unchanged.
