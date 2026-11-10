@@ -29,9 +29,9 @@ def consolidate(path,api):
     result=api.call(PROMPT,json.dumps(inputs,ensure_ascii=False),max_tokens=12000,json_output=True)
     by_id={f['id']:f for f in facts}
     tracks=[]
-    for t in result['parsed']['tracks']:
+    for t in result['parsed'].get('tracks',[]):
         if not isinstance(t.get('entity'),str) or not isinstance(t.get('attribute'),str):continue
-        members=list(dict.fromkeys(aliases[x] for x in t['members'] if x in aliases))
+        members=list(dict.fromkeys(aliases[x] for x in (t.get('members') or []) if x in aliases))
         if len(members)<2:continue
         mode=t.get('mode','collection')
         if mode not in ('state','event_sequence','collection'):continue

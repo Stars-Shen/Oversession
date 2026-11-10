@@ -7,6 +7,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+from types import SimpleNamespace
 import random
 import re
 import string
@@ -176,7 +177,7 @@ def main():
         raise ValueError('Run config changed; choose a new --run name')
     atomic_json(config_path, config)
     os.environ['TIKTOKEN_CACHE_DIR'] = str(ROOT / 'runs/tokenizer_cache')
-    encoder = tiktoken.get_encoding('cl100k_base')
+    encoder = SimpleNamespace(encode=tiktoken.get_encoding('cl100k_base').encode_ordinary)
     metric = scorer()
     records = []
     predfile = run / 'predictions.jsonl'

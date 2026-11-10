@@ -7,6 +7,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+from types import SimpleNamespace
 import numpy as np
 import tiktoken
 from api import API, ROOT, atomic_json, digest
@@ -96,7 +97,7 @@ def main():
         atomic_json(run/'extraction_errors.json',errors)
         return
     os.environ['TIKTOKEN_CACHE_DIR']=str(ROOT/'runs/tokenizer_cache')
-    encoder=tiktoken.get_encoding('cl100k_base')
+    encoder=SimpleNamespace(encode=tiktoken.get_encoding('cl100k_base').encode_ordinary)
     methods=args.methods.split(',')
     config=dict(dataset_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),question_ids=selected_ids,
                 methods=methods,budget=args.budget,model=api.model,split=args.split,
