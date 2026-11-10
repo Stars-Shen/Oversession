@@ -56,3 +56,19 @@ generation configuration are shared across all workers.
 
 The SiliconFlow queue remains stopped after insufficient balance. These local
 outputs cannot replace the missing exact-model DeepSeek full-evaluation rows.
+
+## Result: paired gain, no absolute breakthrough
+
+All 80 pairs completed. Off F1 is **52.4384**, on **58.2469** (+5.8086 points),
+27 wins / 19 losses / 34 ties. The paired question-bootstrap interval is
+[−0.6138, +11.9315] points. Each mode has one capped output; all are retained.
+On uses 56251 completion tokens, including 51286 reasoning tokens; off uses 1555.
+Temporal improves substantially, inference declines, and single-hop is nearly
+unchanged. This is one sampling seed, not a multi-seed robustness claim.
+
+The existing 30B plain reader scores **58.4042** on exactly these questions.
+The new on condition is **0.1573 points lower**, failing the predefined absolute
+gain criterion. Stop native-only expansion; the +5.81 gain over a weaker control
+must not be presented as a new best score. `reports/local_native_capacity_dev.json`
+records the complete comparison. This result motivates the separately specified
+learned-reader adaptation; it does not authorize a temperature or budget grid.

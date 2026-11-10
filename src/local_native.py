@@ -58,12 +58,19 @@ def generate(folder,mode,shard,shards):
     tok=AutoTokenizer.from_pretrained(config['model'],local_files_only=True)
     model=AutoModelForCausalLM.from_pretrained(config['model'],local_files_only=True,
             torch_dtype=torch.bfloat16,attn_implementation='sdpa').to('cuda').eval()
+    if config.get('adapter_file'):
+        from reader_adapter import load_adapter
+        path=ROOT/config['adapter_file']
+        assert hashlib.sha256(path.read_bytes()).hexdigest()==config['adapter_sha256']
+        load_adapter(model,path,config['adapter_config']);model.eval()
     closing=tok.convert_tokens_to_ids('</think>')
     assert closing is not None and tok.convert_ids_to_tokens(closing)=='</think>'
     eos=model.generation_config.eos_token_id;eos=set(eos if isinstance(eos,list) else [eos])
-    atomic_json(folder/f'runtime.{mode}.{shard}.json',dict(torch=torch.__version__,transformers=transformers.__version__,
+    runtime=dict(torch=torch.__version__,transformers=transformers.__version__,
                 gpu=torch.cuda.get_device_name(0),cuda_visible_devices=os.environ.get('CUDA_VISIBLE_DEVICES'),
-                mode=mode,shard=shard,shards=shards,closing_token_id=closing))
+                mode=mode,shard=shard,shards=shards,closing_token_id=closing)
+    if config.get('adapter_file'):runtime.update(adapter_file=config['adapter_file'],adapter_sha256=config['adapter_sha256'])
+    atomic_json(folder/f'runtime.{mode}.{shard}.json',runtime)
     with pf.open('a') as out:
         for index,row in enumerate(pending):
             start=time.time();seed=(config['seed']+int(digest(row['qid'])[:8],16))%(2**31)
