@@ -93,13 +93,20 @@ With the same frozen v2 memory, evidence, prompts and 3000-token final context,
 
 | LoCoMo cohort | Thinking disabled | Thinking enabled | Difference |
 |---|---:|---:|---:|
-| Separate validation, 160 questions | 59.68 | 65.40 | +5.72 F1 points |
+| Category-balanced separate validation, 160 questions | 59.68 | 65.40 | +5.72 F1 points |
 | Available confirmation pairs excluding development/validation, 603 questions | 60.04 | 63.94 | +3.90 F1 points |
 
 The confirmation paired bootstrap interval is [+1.59, +6.33] points. Single-hop
 performance declines in that cohort; this is not a uniform improvement. Thinking
 uses extra inference compute and a larger completion limit, and the writer remains
 the frozen Luna writer. This is a reader-compute result, not a new memory algorithm.
+
+The interrupted confirmation cohort underrepresents single-hop questions, where
+thinking declines. A [category-mixture audit](notes/phase3/category_mix.md) shows
+that transferring its category effects to the still-eligible confirmation pool's
+proportions would give only +0.93 points. This is a sensitivity calculation,
+not a completed score: within-category completion may also be nonrandom.
+The measured +3.90 cohort gain must not be presented as a full-benchmark gain.
 
 The full run stopped on SiliconFlow HTTP 402 (insufficient balance), with 1855/3080
 outputs and 924 complete pairs saved. **There is no completed 1540-question phase-3

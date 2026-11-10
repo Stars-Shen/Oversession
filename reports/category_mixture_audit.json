@@ -1,0 +1,59 @@
+{
+  "full_category_counts": {
+    "2": 321,
+    "3": 96,
+    "1": 282,
+    "4": 841
+  },
+  "cohorts": {
+    "validation": {
+      "target_pool_n": 1307,
+      "target_category_counts": {
+        "4": 727,
+        "2": 258,
+        "1": 239,
+        "3": 83
+      },
+      "observed_category_counts": {
+        "1": 40,
+        "2": 40,
+        "3": 40,
+        "4": 40
+      },
+      "observed_paired_delta": 0.05717194698522732,
+      "category_deltas": {
+        "1": 0.016399610568865186,
+        "2": 0.09683982683982684,
+        "3": 0.08652195865186135,
+        "4": 0.02892639188035595
+      },
+      "target_mix_sensitivity_delta": 0.043699305061788346,
+      "full_mix_sensitivity_delta": 0.04437888194672886
+    },
+    "confirmation": {
+      "target_pool_n": 1147,
+      "target_category_counts": {
+        "4": 687,
+        "2": 218,
+        "1": 199,
+        "3": 43
+      },
+      "observed_category_counts": {
+        "1": 176,
+        "2": 174,
+        "3": 43,
+        "4": 210
+      },
+      "observed_paired_delta": 0.0390061352086607,
+      "category_deltas": {
+        "1": 0.036155354856881594,
+        "2": 0.12536468958882752,
+        "3": 0.0880048857100234,
+        "4": -0.04019194760940836
+      },
+      "target_mix_sensitivity_delta": 0.009325858783566954,
+      "full_mix_sensitivity_delta": 0.016288906828768872
+    }
+  },
+  "interpretation": "Weighted deltas assume observed within-category means transfer to the target pool. Interrupted-run completion need not be random within categories. These are sensitivity calculations, not completed benchmark scores or replacements for missing answers; no new generations or rule tuning."
+}
