@@ -1,0 +1,72 @@
+{
+  "scope": "24 frozen LongMemEval development memories; no questions or answer labels read",
+  "question_ids": [
+    "c7dc5443",
+    "830ce83f",
+    "41698283",
+    "dfde3500",
+    "1f2b8d4f",
+    "gpt4_2ba83207",
+    "a9f6b44c",
+    "88432d0a_abs",
+    "51b23612",
+    "8cf51dda",
+    "4baee567",
+    "58470ed2",
+    "6b7dfb22",
+    "caf03d32",
+    "1d4e3b97",
+    "a89d7624",
+    "f8c5f88b",
+    "66f24dbb",
+    "60d45044",
+    "af8d2e46",
+    "2ebe6c92",
+    "gpt4_93159ced_abs",
+    "982b5123",
+    "993da5e2"
+  ],
+  "memory_sha256": {
+    "c7dc5443": "60c55a6654b6f5f3d597e016f2fcca3fdb9eb73f358d2e3904f18d293f08ccc7",
+    "830ce83f": "b53b9576b21a8830b758060303d9ac50e1d99401e95dfbd9d4b0fda3bb0444bb",
+    "41698283": "c80fbc322a09c7ddeca34845f583ef7172b08f691beb19affd7e8b6bd49fee9a",
+    "dfde3500": "79c4a68402d76168685b7d32b6fb79bc058160f1cca4fee78101aa70d5252552",
+    "1f2b8d4f": "1125df1f93f1cf239e502e6425d0966d666f929b47a7641284936560536f86c0",
+    "gpt4_2ba83207": "2248fa4105f9ee3fa4a4b3719ce0174efe4034df9a1d86d5d9ae879a98d183ae",
+    "a9f6b44c": "fe03d4cd2cf73919819715f40512f9af60544a4d8936384c5b344115630856ad",
+    "88432d0a_abs": "f799c37ff117c572345f097db44154464c2ae6d0f3f22902bff37df38282f19f",
+    "51b23612": "2756ebe3a26923a0031e9626e1a85c6795a79ba3f1a7cff3ed00d6b9fce4a52b",
+    "8cf51dda": "6125fa29cf48178d06a75b9f6509c88ac49bf422400b517d058e1409bfee2f5a",
+    "4baee567": "6a020b0184ded36e05b4ca9402c4b6141c40e6dd19613372bb1b1dc0247544e8",
+    "58470ed2": "6edda5da74888610a1e9f2dedc790d7e461d27757e91953bebe1faa471f76c4b",
+    "6b7dfb22": "983134dc7d598e91e58cf123a1f53de2393f56c4fdf57fdb22b63d0b2b7930e5",
+    "caf03d32": "e8552ac1cdacee506c5a68561a301bd188bb9f795fb543f2afea292d80589b45",
+    "1d4e3b97": "17d16f63d6783517fc7f64803698ceb9c0da078aae9fc41b8fe07da6da695bc2",
+    "a89d7624": "6fa50d06d9ae7c6d818e5d86d846af696b3a082518b9105c79a4e5d6072f5868",
+    "f8c5f88b": "65c4eeb5d309f5a69f9a375b2abea1bc00148a9cbb90d1a3c4f2cd2533915ed5",
+    "66f24dbb": "d245219bdda166bbf05a7246de61e8ae6b906b1688d56e1100cd58a9420e21ea",
+    "60d45044": "c408a562c7fde59247e42650badad2f41c336e3cad2dd9971df446976a5f4aa5",
+    "af8d2e46": "e4566c99720eb8ee5e352be5f75dc9a8023450a2d51ccdf65b424ad28b1b1eb4",
+    "2ebe6c92": "e5a36b6e5820f5c5fac41fc68ca51301b472ba980a78c9a3b1965fe90f8d20c7",
+    "gpt4_93159ced_abs": "57924f1f0a9083563333ef75f6cf9d4e90c6aa0b0461969d3ced7ff111409cfd",
+    "982b5123": "31fbf2f5185f782885e3ec47ab4ad00317e61ac1d7beb1fd21e1261c12889b88",
+    "993da5e2": "fb6acf1945e248eb294e4a7c0908997570367d028c736e76814dc315cb05906d"
+  },
+  "counts": {
+    "facts": 7381,
+    "single_state_facts": 122,
+    "candidate_state_tracks": 8,
+    "multiple_observation_state_tracks": 2,
+    "adjacent_pairs": 2,
+    "cross_session_adjacent_pairs": 2
+  },
+  "shared_rotation": {
+    "before_dot": -2.1257819621117697,
+    "after_dot": -2.1257819621117697,
+    "absolute_difference": 0.0
+  },
+  "decisions": [
+    "Do not estimate a state changepoint likelihood from two candidate pairs.",
+    "Shared rotations alone preserve dot products; RoMem needs trained anisotropic relation weights."
+  ]
+}
