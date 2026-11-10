@@ -1,0 +1,96 @@
+{
+  "status": "exploratory post-hoc analysis, not independent test evidence",
+  "reason": "Question-operator policy motivated after inspecting existing error patterns; freeze before prospective testing.",
+  "rule": "\\b(?:when|how\\s+(?:long|many|much|old)|before|after|since|between|earlier|later|first|last|latest|currently|now|date|year|month|week|day|likely|would|might|could|both|in common|considered|personality)\\b",
+  "rule_hash": "69d8f0389c4b216b8fcf131da561e3cba532e02c5fcf99b9b001a6a126b878a0",
+  "input_run": "sf_deliberate_full",
+  "input_scope": "completed paired portion of the interrupted run, not the full 1540 questions",
+  "n": 924,
+  "selected_thinking": 388,
+  "metrics": {
+    "deliberate": {
+      "n": 924,
+      "f1": 0.648420953628242,
+      "macro_f1": 0.604028041940651,
+      "evidence_recall": 0.9035241005423734,
+      "context_tokens": 2996.448051948052,
+      "by_category": {
+        "1": {
+          "n": 259,
+          "f1": 0.5934257112622854
+        },
+        "2": {
+          "n": 270,
+          "f1": 0.7221869488536156
+        },
+        "3": {
+          "n": 96,
+          "f1": 0.3871730396122008
+        },
+        "4": {
+          "n": 299,
+          "f1": 0.7133264680345023
+        }
+      }
+    },
+    "selective": {
+      "n": 924,
+      "f1": 0.6374547867634764,
+      "macro_f1": 0.5885824510204148,
+      "evidence_recall": 0.9035241005423734,
+      "context_tokens": 2996.448051948052,
+      "by_category": {
+        "1": {
+          "n": 259,
+          "f1": 0.5721232368366571
+        },
+        "2": {
+          "n": 270,
+          "f1": 0.7089770723104056
+        },
+        "3": {
+          "n": 96,
+          "f1": 0.35217302404185163
+        },
+        "4": {
+          "n": 299,
+          "f1": 0.7210564708927448
+        }
+      }
+    },
+    "v2": {
+      "n": 924,
+      "f1": 0.6054727148204725,
+      "macro_f1": 0.5535225417473637,
+      "evidence_recall": 0.9035241005423734,
+      "context_tokens": 2996.448051948052,
+      "by_category": {
+        "1": {
+          "n": 259,
+          "f1": 0.5611737168645808
+        },
+        "2": {
+          "n": 270,
+          "f1": 0.6119537972315751
+        },
+        "3": {
+          "n": 96,
+          "f1": 0.30720474207601756
+        },
+        "4": {
+          "n": 299,
+          "f1": 0.7337579108172813
+        }
+      }
+    }
+  },
+  "counterfactual_deployment_usage": {
+    "always_thinking_reasoning_tokens": 311210,
+    "selective_reasoning_tokens": 128217,
+    "reasoning_token_reduction": 0.58800488416182,
+    "always_thinking_total_tokens": 3382142,
+    "selective_total_tokens": 3185623,
+    "total_token_reduction": 0.058104893289518844,
+    "note": "Estimated deployment usage from observed branch usage. Both branches were actually generated in the research run; this is not an invoice saving."
+  }
+}

@@ -1,0 +1,199 @@
+{
+  "complete": true,
+  "n": 80,
+  "new_generations": 27,
+  "reused_outputs": 53,
+  "metrics": {
+    "calendar": {
+      "n": 80,
+      "f1": 0.5981076637734246,
+      "macro_f1": 0.5797788912128378,
+      "evidence_recall": 0.9258547008547009,
+      "context_tokens": 2988.25,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.6961180124223603
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.5883838383838385
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.4297830374753452
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.6048306765698069
+        }
+      }
+    },
+    "plain": {
+      "n": 80,
+      "f1": 0.5840420072077681,
+      "macro_f1": 0.5671566210806861,
+      "evidence_recall": 0.9258547008547009,
+      "context_tokens": 2996.0625,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.6816252587991719
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.5523875114784205
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.4297830374753452
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.6048306765698069
+        }
+      }
+    }
+  },
+  "delta": 0.014065656565656568,
+  "wins": 5,
+  "losses": 2,
+  "ties": 73,
+  "truncated_outputs": [],
+  "config": {
+    "model": "/home/wqshen/models/Qwen3-30B-A3B-Instruct-2507",
+    "alpha": 0.5,
+    "max_new_tokens": 192,
+    "dtype": "bfloat16",
+    "methods": [
+      "calendar"
+    ],
+    "question_ids": [
+      "conv-26:62",
+      "conv-30:32",
+      "conv-26:33",
+      "conv-26:45",
+      "conv-30:31",
+      "conv-26:20",
+      "conv-26:63",
+      "conv-26:41",
+      "conv-30:21",
+      "conv-30:8",
+      "conv-26:90",
+      "conv-30:0",
+      "conv-26:12",
+      "conv-26:76",
+      "conv-26:21",
+      "conv-30:16",
+      "conv-26:8",
+      "conv-26:5",
+      "conv-26:151",
+      "conv-26:67",
+      "conv-30:15",
+      "conv-26:31",
+      "conv-26:118",
+      "conv-26:17",
+      "conv-26:35",
+      "conv-26:49",
+      "conv-30:22"
+    ],
+    "seed": 20261111,
+    "inputs_hash": "d99435af7da4b1e97871b93187724849b09f123cbbdf1f17abe8a311923b73ca",
+    "memory_sha256": {
+      "conv-26": "499886ffc8474c8088b219e16b9e6a21e5d7a0ae82f104686db4daa8ab005f55",
+      "conv-30": "f1fbb6408076d505495037d331e97b31de320d212cea019a54af3de5514cbb52"
+    },
+    "context_budget": 3000,
+    "model_config_sha256": "a1ee086a68d0cbfc87316da00ba4b8507bd1292978108e2496201a30a450f438",
+    "tokenizer_config_sha256": "a62ff0a2472a0fa1b8eaabcb57c59b58afa42a22831dc141400b6e0cf2b65ce3",
+    "provider": "local; no network",
+    "writer": "frozen v2 Luna",
+    "split": "development",
+    "decoding": "greedy; explicit do_sample=False override",
+    "routing_execution": "original expert order, empty experts skipped",
+    "baseline_run": "local_cad_greedy_dev",
+    "original_question_ids": [
+      "conv-26:78",
+      "conv-26:62",
+      "conv-26:22",
+      "conv-26:95",
+      "conv-26:37",
+      "conv-30:32",
+      "conv-26:14",
+      "conv-30:70",
+      "conv-26:71",
+      "conv-26:33",
+      "conv-26:30",
+      "conv-30:75",
+      "conv-26:56",
+      "conv-26:45",
+      "conv-26:2",
+      "conv-26:105",
+      "conv-30:31",
+      "conv-26:20",
+      "conv-26:46",
+      "conv-26:141",
+      "conv-26:66",
+      "conv-26:63",
+      "conv-26:59",
+      "conv-26:103",
+      "conv-26:48",
+      "conv-26:41",
+      "conv-26:42",
+      "conv-26:148",
+      "conv-26:39",
+      "conv-30:21",
+      "conv-26:50",
+      "conv-26:114",
+      "conv-26:4",
+      "conv-30:8",
+      "conv-26:64",
+      "conv-26:90",
+      "conv-26:40",
+      "conv-30:0",
+      "conv-26:81",
+      "conv-30:48",
+      "conv-30:25",
+      "conv-26:12",
+      "conv-26:27",
+      "conv-26:139",
+      "conv-26:76",
+      "conv-26:21",
+      "conv-26:69",
+      "conv-30:52",
+      "conv-30:27",
+      "conv-30:16",
+      "conv-26:77",
+      "conv-30:77",
+      "conv-26:23",
+      "conv-26:8",
+      "conv-26:131",
+      "conv-26:3",
+      "conv-26:5",
+      "conv-26:151",
+      "conv-26:55",
+      "conv-26:67",
+      "conv-30:62",
+      "conv-26:18",
+      "conv-30:15",
+      "conv-26:117",
+      "conv-30:18",
+      "conv-26:31",
+      "conv-26:118",
+      "conv-26:15",
+      "conv-26:17",
+      "conv-26:116",
+      "conv-30:3",
+      "conv-26:35",
+      "conv-30:81",
+      "conv-30:29",
+      "conv-26:49",
+      "conv-26:137",
+      "conv-26:61",
+      "conv-30:22",
+      "conv-26:146",
+      "conv-26:52"
+    ],
+    "intervention": "question-only temporal gate; deterministic calendar offsets; same 3000-token final budget"
+  }
+}

@@ -104,3 +104,56 @@ bound by UUID in `CUDA_VISIBLE_DEVICES`. The exact UUID binding and generation
 overrides are recorded in the run's `runtime.json`. The two local decoding
 regressions can be run with that Python using
 `-m unittest discover -s tests -p test_local_cad_torch.py`.
+
+## A cached-output cost/accuracy check
+
+`scripts/evaluate_selective_reasoning.py` evaluates one fixed question-operator
+rule on the 924 completed DeepSeek pairs. It routes explicit time, count,
+comparison and inference language to thinking, using only the question text.
+This rule was proposed after observing prior error patterns: its result is
+**post-hoc and exploratory**, not independent confirmation.
+
+F1 is 60.5473 with thinking off, 64.8421 with thinking always on, and 63.7455
+under this rule (388/924 routed to thinking). Selected reasoning tokens fall
+from 311210 to 128217, but total prompt-plus-completion tokens fall only 5.81%.
+These are hypothetical deployment token counts from saved branches, not invoice
+savings; both branches were actually generated and cache behavior could differ
+in deployment. No new requests were sent. Decision: do not replace the stronger
+always-thinking configuration or tune the rule to these same answers. Artifact:
+`reports/selective_reasoning_exploratory.json`.
+
+## CAD result and next decision
+
+The complete 80-question local trial gives plain F1 **58.4042**, CAD **59.2501**
+(+0.8459 points), with 12 wins / 11 losses / 57 ties and no truncated outputs.
+Temporal and multi-hop scores decline; inference improves. This is weak selection
+evidence for the requested larger breakthrough, so alpha is not tuned and the
+trial is not expanded. `reports/local_cad_dev.json` contains model/runtime scope.
+
+The next single change supplies deterministic calendar offsets beside unchanged
+relative-date words, anchored to the original session date. It preserves month/year
+precision, skips unknown expressions and generated image captions, and keeps the
+final context within 3000 tokens by dropping the lowest-priority sources if needed.
+Only questions with a temporal operator are eligible. No labels enter the calendar
+parser or preparation. Exactly 27 inputs change; the other 53 original outputs are
+reused. This tests date computation rather than stronger preference for context.
+Preparation: `scripts/prepare_calendar_study.py`; generation: the same local
+runner with `--run local_calendar_dev`; scoring: `scripts/score_calendar_study.py`.
+The original memory ledger is not edited.
+
+Calendar result: all 27 changed inputs completed without truncation. Across the
+original 80-question scope, F1 rises **58.4042 → 59.8108 (+1.4066 points)**,
+with 5 wins / 2 losses / 73 ties. Temporal F1 rises 55.2388 → 58.8384, while
+evidence recall stays 92.5855. The 53 unchanged outputs were reused exactly.
+`reports/local_calendar_dev.json` records the full development scope. This is a
+modest arithmetic aid, not evidence of a broad memory breakthrough. Do not expand
+a calendar grammar grid merely to accumulate more small development gains.
+
+The next active research hypothesis is a bounded local evidence-first reading
+protocol: bind source observations and the requested operation before emitting a
+short answer. This is motivated by the independently larger native DeepSeek
+reasoning effect and the limited gains from CAD/calendar arithmetic. Keep the same
+local model, retrieved context and original answer format; isolate any extra
+generation compute, use no gold in the generator, and perform a separate-conversation
+check only if the development gain is materially useful. No result for this next
+hypothesis is claimed yet. The missing DeepSeek full outputs still require funding.
