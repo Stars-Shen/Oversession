@@ -1,0 +1,7 @@
+.private/
+.venv/
+__pycache__/
+.pytest_cache/
+data/
+runs/
+third_party/

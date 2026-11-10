@@ -1,0 +1,21 @@
+{
+  "selected_after_development": true,
+  "date": "2026-11-10",
+  "heldout_conversations": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "methods": [
+    "hybrid",
+    "hybrid_facts"
+  ],
+  "reader": "compact",
+  "context_budget": 3000,
+  "selection": "Facts plus raw evidence won on development (57.03 vs 55.28). Naive adjacency closure and fact-only rendering did not help, so they will not be expanded. No heldout question outputs examined before this selection."
+}
