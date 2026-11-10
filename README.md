@@ -21,14 +21,25 @@ All answerers and current internal judges use `gpt-6-luna`, low reasoning. LongM
 | LongMemEval-S condition | Development, 24 questions | Validation, 48 disjoint questions |
 |---|---:|---:|
 | Raw BM25 | 18/24 | 29/48 |
+| BM25 + Qwen3 hybrid | — | 35/48 |
 | Facts + attribute histories | 19/24 | 37/48 |
 | + request-specific evidence state | 23/24 | 39/48 |
 
-The validation set was frozen before its predictions, with eight questions per task type. Full 500-question indexing and evaluation are running. A stronger BM25 + Qwen3 baseline is also being measured; final selection uses only the 72 development/validation questions, leaving 428 questions for the full test comparison.
+The validation set was frozen before its predictions, with eight questions per task type. Full 500-question indexing and candidate evaluation are running. The selected sparse track/state system leads the stronger hybrid baseline on validation (39/48 vs 35/48); dense fusion into the track pipeline did not improve validation. Selection uses only the 72 development/validation questions, leaving 428 questions for the full test comparison. The completed official GPT-4o-2024-08-06 baselines on all 500 questions are 70.8% for raw BM25 and 76.0% for hybrid retrieval. Candidate official scores remain pending.
 
-On 80 LoCoMo development questions with official captions and 3,000 evidence tokens, raw hybrid retrieval scores 57.15 token F1 and source-level fusion/packing scores 59.23. The full 1,540-question comparison is running. Uniform evidence-state compilation reduced LoCoMo F1 and is not selected for that comparison.
+On all 1,540 LoCoMo nonadversarial questions with official captions and 3,000 evidence tokens, raw hybrid retrieval scores **58.71 micro F1 / 50.86 macro F1** and source-level fusion/packing scores **61.78 / 53.49**. Evidence source recall rises from 85.21% to 92.74%. On the eight heldout conversations (1,307 questions), micro F1 rises from 58.74 to 61.42. Full results and protocol details are in `reports/locomo_full_v2.json`. Uniform evidence-state compilation reduced LoCoMo F1 and is not selected for this comparison.
 
 Earlier LoCoMo runs omitted `blip_caption`; they are text-only ablations, retained in `reports/round1.json`. Standard-input results use official automatic captions and exclude image-search `query` hints. `reports/round2.json` contains the completed second-round results. The eight heldout LoCoMo conversations have been evaluated across revisions; report their scores separately from development without treating repeated use as an untouched final test.
+
+## Mechanism and interpretation
+
+Each fact carries its original source IDs, subject, attribute, scope, observation time and optional event time. Raw evidence remains immutable. Consolidation groups semantically equivalent attributes into histories; it does not overwrite observations or assert that every later mention invalidates earlier facts. This prototype consolidates at memory checkpoints rather than claiming a constant-time online graph update.
+
+For source-level retrieval, each lexical or semantic view contributes `1 / (40 + best_source_rank)` once per original turn, even if several fact keys point to that turn. The final values are original turns. Shared session date headers and chronological ordering reduce duplicated metadata within the fixed evidence budget.
+
+For the state-aware profile, a request state identifies the target attribute, time scope, operation and the applicability of cited observations. Unknown source IDs are rejected. The compiled state is limited to 1,000 tokens; original evidence is repacked into the remaining reader budget. It is advisory, with original evidence retaining authority. This improves memory use without claiming that provenance checks eliminate semantic extraction errors.
+
+The two evaluated read profiles are explicitly configured. The source-packing profile was selected for LoCoMo, and attribute histories plus the evidence compiler for LongMemEval. An automatic universal profile selector or a trained RL evolution policy has not been implemented or claimed.
 
 ## Reproduce
 
@@ -52,3 +63,5 @@ LoCoMo uses unchanged official Porter-stemmed F1 functions, categories 1-4, comm
 LongMemEval uses cleaned S histories rather than oracle histories. `has_answer`, answer-session labels and original IDs are excluded from memory inputs. Local position IDs replace upstream IDs that can contain answer/noans prefixes. Gold evidence is accessed only after retrieval to calculate recall.
 
 Run configs, predictions, API outputs and usage are in `runs/`; successful calls and extracted sessions are cached for resumption. A run-config mismatch requires a new run name. Model, dataset, scorer, prompt and memory fingerprints support reproduction. Default switches preserve the original variants.
+
+For overlapping stages during the long index run, `src/materialize.py` converts only fully cached sessions into the same immutable memory format without API calls. Run consolidation over those memories, then evaluate with `--ready-only`. The frozen configuration still contains all 500 IDs; partial summaries state `expected_n=500` and `complete=false`. Resume the same run as more memories become available. Use `src/official_judge.py RUN_NAME` on completed prediction batches to obtain official-snapshot judgments; its cache prevents repeated scoring.

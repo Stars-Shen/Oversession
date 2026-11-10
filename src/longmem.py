@@ -57,6 +57,7 @@ def main():
     p.add_argument('--run',default='longmem_dev_v1')
     p.add_argument('--split',choices=['development','validation','full'],default='development')
     p.add_argument('--state-reader',action='store_true')
+    p.add_argument('--ready-only',action='store_true',help='Schedule available memories; keep the full frozen evaluation scope')
     args=p.parse_args()
     path=ROOT/'data/longmemeval_s_cleaned.json'
     data=json.loads(path.read_text())
@@ -156,8 +157,15 @@ def main():
                     judge_api_hash=evaluation['request_hash'],answer_usage=response['usage'],
                     state_reader=state)
 
+    def ready(e,method):
+        if not args.ready_only:return True
+        if 'hybrid' in method and not (ROOT/'runs/longmem_embeddings'/(e['question_id']+'.npz')).exists():return False
+        if method in ('raw','hybrid'):return True
+        memory_dir='longmem_consolidated' if method.startswith('consolidated') else 'longmem_memories'
+        return (ROOT/'runs'/memory_dir/(e['question_id']+'.json')).exists()
+
     with ThreadPoolExecutor(max_workers=args.workers) as pool,pf.open('a') as out:
-        jobs=[pool.submit(work,e,m) for e in chosen for m in methods if (e['question_id'],m) not in completed]
+        jobs=[pool.submit(work,e,m) for e in chosen for m in methods if (e['question_id'],m) not in completed and ready(e,m)]
         for job in as_completed(jobs):
             row=job.result();records.append(row);out.write(json.dumps(row)+'\n');out.flush()
             print(len(records),'/',len(chosen)*len(methods),row['qid'],row['method'],row.get('correct'),flush=True)
@@ -169,6 +177,9 @@ def main():
                         by_type={k:dict(n=sum(r['question_type']==k for r in rows),
                                       accuracy=float(np.mean([r['correct'] for r in rows if r['question_type']==k])) if args.command=='evaluate' else None)
                                  for k in sorted({r['question_type'] for r in rows})})
+        if args.ready_only:
+            summary[m]['expected_n']=len(chosen)
+            summary[m]['complete']=len(rows)==len(chosen)
     atomic_json(run/'summary.json',summary);print(json.dumps(summary,indent=2))
 
 

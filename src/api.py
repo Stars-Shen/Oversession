@@ -5,6 +5,7 @@ import os
 import random
 from pathlib import Path
 import time
+import threading
 import requests
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -21,7 +22,7 @@ def digest(value):
 def atomic_json(path, data):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_suffix('.tmp')
+    tmp = path.with_name(path.name + '.{}.{}.tmp'.format(os.getpid(), threading.get_ident()))
     tmp.write_text(json.dumps(data, ensure_ascii=False, indent=2))
     tmp.replace(path)
 
