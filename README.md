@@ -136,3 +136,8 @@ improves conversation 1 by 2.85 points but falls **46.25 → 45.37** on the
 160-question separate-conversation check, versus 51.58 for the existing 30B reader.
 That adapter is rejected. See the [native-capacity protocol](notes/phase3/local_native_capacity.md)
 and [learned-reader results](notes/phase3/learned_reader_hypothesis.md).
+
+One fixed [30B source-supervised reader study](notes/phase3/source_supervised_reader.md)
+is now running, using only conversation 0's 131 fully supported questions for
+training and unchanged evidence/answer decoding for comparison. Validation is
+pending; no new performance gain is claimed.

@@ -124,7 +124,7 @@ normalization also changes how much long answers influence learning.
 
 This identifies a more concrete next hypothesis than another rank/epoch sweep:
 learn complete evidence/list coverage, and distinguish it from learning short
-answer style. Any future test should start from a competitive baseline and
-preserve the fixed dialogue split. No changed loss or evidence-supervised model
-has been trained in this study. Diagnostic target lengths are saved at
+answer style. The separate [30B source-supervised follow-up](source_supervised_reader.md)
+now tests that hypothesis with the fixed dialogue split; it does not retune this
+rejected 4B adapter. Diagnostic target lengths are saved at
 `runs/phase3/reader_adapter/length_bias_diagnostic.json`.

@@ -106,6 +106,13 @@ def generate(args,folder):
     runtime=dict(torch=torch.__version__,transformers=transformers.__version__,
                  device_map={k:str(v) for k,v in model.hf_device_map.items()},
                  cuda_visible_devices=os.environ.get('CUDA_VISIBLE_DEVICES'))
+    if config.get('adapter_file'):
+        from reader_adapter import load_adapter
+        adapter=ROOT/config['adapter_file']
+        checksum=hashlib.sha256(adapter.read_bytes()).hexdigest()
+        assert checksum==config['adapter_sha256']
+        load_adapter(model,adapter,config['adapter_config'])
+        runtime['adapter_sha256']=checksum
     if 'cad' in config['methods']:runtime.update(alpha=config['alpha'],guidance_scale=1+config['alpha'])
     if compiler is not None:runtime['source_repair']='one xgrammar constrained retry on contract failure'
     atomic_json(folder/'runtime.json',runtime)

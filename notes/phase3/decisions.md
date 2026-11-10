@@ -77,3 +77,11 @@ separate-conversation manifest: **46.25 → 45.37**, versus **51.58** for the
 existing 30B reader. Reject this adapter; do not tune epochs/rank/temperature or
 expand it to the full benchmark. All these jobs have finished. The broader goal
 of a larger absolute breakthrough remains unmet.
+
+A separate [30B source-supervised reader study](source_supervised_reader.md)
+is active. It combines final-answer learning with training-only positive-source
+attention coverage and token-normalized CE. QEMem, EviCover and explanation
+regularization motivate the mechanism; E-mem supplies an adjacent intact-episode
+alternative. No inference-time evidence-output schema is added. One final
+adapter and one validation are scheduled, with no parameter search. Its real
+maximum-length backward smoke passed; answer metrics remain pending.
