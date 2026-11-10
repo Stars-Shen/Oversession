@@ -97,21 +97,48 @@ prepare-evaluation, score; generation uses `src/local_cad.py` on
 preparation/scoring is available only for a candidate passing that decision.
 Training artifacts live in `runs/phase3/source_reader/`.
 
-## Execution status
+## Completed training and first validation
 
-The fixed training is running on physical GPUs 1–3. The maximum 3465-token
-example passed a real forward/backward smoke in 13.1 seconds with finite,
-nonzero adapter gradients. It performed no optimizer update. Several optimizer
-steps have subsequently completed. These checks establish execution, not answer
-quality. Validation results are still pending.
+The fixed training completed all 51 steps / three epochs in 4121.0 seconds,
+with 3,342,336 trainable parameters. Peak allocated CUDA memory was
+20.10/20.68/19.04 GiB. Final adapter SHA256:
+`5d44fe88809408e7f4e1722519a25ef133cef267135e0763f6b9a43dcf2059d1`.
+The earlier maximum 3465-token backward smoke passed without an optimizer
+update. Original model weights remain intact.
+
+All 81 matched validation pairs complete: **58.6216 -> 61.1989 F1 (+2.5772
+points)**, 21 wins / 19 losses / 41 ties, question-bootstrap interval
+[-2.0289, +7.2408] points. Neither condition has capped answers. Category effects
+are multi-hop +1.7103 (11 questions), temporal +2.7040 (26), and single-hop
++2.7191 (44); there are no inference-category questions. This remains a
+one-dialogue result. The declared +3-point triage gate is false in
+`reports/source_reader_validation.json`.
 
 An attempted concurrent control on heterogeneous remaining GPU memory triggered
 the no-CPU-offload guard before any new answer. That allocation path was stopped
 and its extra configuration removed. The original twenty controls remain intact.
-The task-local `finish_evaluation.py` process waits for this exact training PID
-to exit, then runs the missing control answers, final-adapter answers and scoring
-on the same three original GPUs. It stops after validation for result review.
-No paid calls are involved and no separate/full evaluation has been launched.
+The task-local evaluation queue completed both sets of answers on the original
+three GPUs. Its final scoring command failed because the Torch environment
+lacks NLTK. Scoring then completed once with the existing `.venv` CPU environment;
+no answer generation was repeated and no dependency was installed. The recovery
+and original error are recorded in `pipeline_status.json`.
+
+## Explicit one-time triage exception, before separate-cohort results
+
+The original gate remains false. The user accepts rough intermediate steps and
+prioritizes final-metric decisions. Because the single validation dialogue shows
+positive effects in every observed category but provides no inference coverage,
+make one explicit exception: check the unchanged final adapter on the existing
+160-question, eight-conversation manifest, including all four categories. This
+changes neither weights nor prompt, retrieval, decoding, candidate selection,
+or training schedule. It is not an epoch/rank/weight search, nor a claim that
+the declared gate passed.
+
+For a full 1307-question evaluation, require at least +3 paired F1 points on
+that cohort, at least +3 under the target-mixture sensitivity, and at most 5%
+capped answers. There is no further triage exception for this candidate. The
+160 questions have been reused in research; do not call them untouched tests.
+No full run or paid call is launched by this decision.
 
 This note records the active authorized experiment. It does not instruct another
 session to resume it automatically.

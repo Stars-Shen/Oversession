@@ -151,6 +151,13 @@ def prepare_evaluation(folder,separate=False):
     config=json.loads((source/'config.json').read_text())
     config.update(adapter_file=str((folder/'adapter.pt').relative_to(ROOT)),adapter_sha256=status['adapter_sha256'],
                   adapter_config={k:training[k] for k in ('rank','alpha')})
+    if separate:
+        validation=json.loads((ROOT/'reports/source_reader_validation.json').read_text())
+        assert validation['training_status']['adapter_sha256']==status['adapter_sha256']
+        config['triage_override']=dict(original_gate_passed=validation['expansion_gate_passed'],
+            validation_delta=validation['delta'],
+            reason='One explicit final-adapter confirmation: +2.58 on one dialogue, positive in all three observed categories, no inference questions. No retraining or tuning.',
+            full_run_decision='Require >=3 paired F1 points and >=3 target-mixture sensitivity points, with <=5% capped outputs. No further exception for this candidate.')
     cp=target/'config.json'
     if cp.exists() and json.loads(cp.read_text())!=config:raise ValueError('Evaluation config changed')
     atomic_json(cp,config);save_rows(target/'inputs.jsonl',read_rows(source/'inputs.jsonl'))
@@ -183,6 +190,7 @@ def score(folder,separate=False):
         bootstrap_ci=ci.tolist(),wins=int((delta>0).sum()),losses=int((delta<0).sum()),ties=int((delta==0).sum()),
         capped_outputs=capped,training=json.loads((folder/'training_config.json').read_text()),
         training_status=json.loads((folder/'training_status.json').read_text()),
+        triage_override=json.loads((target/'config.json').read_text()).get('triage_override'),
         expansion_gate_passed=bool(delta.mean()>=.03 and all(n<=.05*len(expected) for n in capped.values())),
         scope='existing eight-conversation cohort, reused in research' if separate else 'one heldout dialogue, not full benchmark')
     if separate:

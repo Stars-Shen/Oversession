@@ -137,7 +137,9 @@ improves conversation 1 by 2.85 points but falls **46.25 → 45.37** on the
 That adapter is rejected. See the [native-capacity protocol](notes/phase3/local_native_capacity.md)
 and [learned-reader results](notes/phase3/learned_reader_hypothesis.md).
 
-One fixed [30B source-supervised reader study](notes/phase3/source_supervised_reader.md)
-is now running, using only conversation 0's 131 fully supported questions for
-training and unchanged evidence/answer decoding for comparison. Validation is
-pending; no new performance gain is claimed.
+One fixed [30B source-supervised reader study](notes/phase3/source_supervised_reader.md),
+trained on conversation 0's 131 fully supported questions, improves the other
+dialogue's 81-question validation **58.62 -> 61.20 F1 (+2.58)**. This misses the
+original +3-point triage gate, which remains false. One explicit exception checks
+the unchanged final adapter on 160 questions across eight conversations; that
+comparison is pending. No full-benchmark breakthrough is claimed.

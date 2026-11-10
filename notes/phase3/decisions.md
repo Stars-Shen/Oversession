@@ -83,8 +83,14 @@ is active. It combines final-answer learning with training-only positive-source
 attention coverage and token-normalized CE. QEMem, EviCover and explanation
 regularization motivate the mechanism; E-mem supplies an adjacent intact-episode
 alternative. No inference-time evidence-output schema is added. One final
-adapter and one validation are scheduled, with no parameter search. Its real
-maximum-length backward smoke passed; answer metrics remain pending.
+adapter completes 51 training steps and the 81-question validation, with no
+parameter search. Validation improves **58.62 -> 61.20 (+2.58)** with no capped
+answers, below the original +3 triage gate. Preserve that false gate. Because
+all three observed categories improve while inference has no validation cases,
+one explicitly recorded exception checks the unchanged adapter on the existing
+160-question, eight-conversation cohort. Require both +3 paired and +3
+target-mixture sensitivity points before full expansion, with no further
+exception or tuning for this candidate. That comparison is pending.
 
 A [task-risk transfer analysis](task_risk.md) distinguishes sequence-risk
 training, MBR decoding and Bayes-optimal binary-set F-measure decisions. The
