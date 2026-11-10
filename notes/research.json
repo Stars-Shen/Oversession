@@ -2,25 +2,101 @@
   "date": "2026-11-10",
   "objective": "Improve end-to-end long-dialog memory on mainstream benchmarks with a five-stage, evidence-grounded evolving memory mechanism.",
   "sources": [
-    {"paper": "A-MEM: Agentic Memory for LLM Agents", "url": "https://arxiv.org/html/2502.12110v1", "read": "sections 3.1-3.4", "transfer": "Atomic contextual facts and links", "difference": "Keep immutable source evidence; avoid replacing factual history with rewritten contextual notes."},
-    {"paper": "Zep: A Temporal Knowledge Graph Architecture for Agent Memory", "url": "https://arxiv.org/html/2501.13956v1", "read": "sections 2.1-2.2.3", "transfer": "Separate observed time and event time; retain historical state versions", "difference": "Conservative state chains rather than LLM invalidation; no unsupported validity interval claims."},
-    {"paper": "SimpleMem: Efficient Lifelong Memory for LLM Agents", "url": "https://arxiv.org/html/2601.02553v1", "read": "abstract and section 2.2", "transfer": "Self-contained facts with pronoun and date resolution", "difference": "Attach original source turns and use evidence closure within a fixed token budget; no recursive lossy replacement."},
-    {"paper": "Hindsight is 20/20", "url": "https://arxiv.org/html/2512.12818v1", "read": "sections 4.1.5 and 4.2", "transfer": "Separate source facts and synthesized retrieval views; multi-strategy recall", "difference": "Initial prototype uses no agent opinions or disposition system. Strong published system to compare later, not reproduced yet."}
+    {
+      "paper": "A-MEM: Agentic Memory for LLM Agents",
+      "url": "https://arxiv.org/html/2502.12110v1",
+      "read": "sections 3.1-3.4",
+      "transfer": "Atomic contextual facts and links",
+      "difference": "Keep immutable source evidence; avoid replacing factual history with rewritten contextual notes."
+    },
+    {
+      "paper": "Zep: A Temporal Knowledge Graph Architecture for Agent Memory",
+      "url": "https://arxiv.org/html/2501.13956v1",
+      "read": "sections 2.1-2.2.3",
+      "transfer": "Separate observed time and event time; retain historical state versions",
+      "difference": "Conservative state chains rather than LLM invalidation; no unsupported validity interval claims."
+    },
+    {
+      "paper": "SimpleMem: Efficient Lifelong Memory for LLM Agents",
+      "url": "https://arxiv.org/html/2601.02553v1",
+      "read": "abstract and section 2.2",
+      "transfer": "Self-contained facts with pronoun and date resolution",
+      "difference": "Attach original source turns and use evidence closure within a fixed token budget; no recursive lossy replacement."
+    },
+    {
+      "paper": "Hindsight is 20/20",
+      "url": "https://arxiv.org/html/2512.12818v1",
+      "read": "sections 4.1.5 and 4.2",
+      "transfer": "Separate source facts and synthesized retrieval views; multi-strategy recall",
+      "difference": "Initial prototype uses no agent opinions or disposition system. Strong published system to compare later, not reproduced yet."
+    },
+    {
+      "paper": "EvoMemState: Evolving Memory State for Personal Agents",
+      "url": "https://arxiv.org/html/2611.03743v1",
+      "read": "sections 3.1-3.4",
+      "transfer": "Separate persistent relational state from request-specific evidence applicability and role",
+      "difference": "Zero-shot API evidence compiler with immutable provenance and bounded final reader context; no RL policy training or ontology copying."
+    },
+    {
+      "paper": "JustMem: Just-Enough Memory Access for Long-Term Conversations",
+      "url": "https://arxiv.org/html/2609.19877v1",
+      "read": "sections 3.1-3.2.3",
+      "transfer": "Separate memory keys from recoverable source values; avoid uniform context expansion",
+      "difference": "Fuse lexical and semantic views at immutable source IDs; deduplicate and pack original source turns chronologically. The selected prototype does not use their access-mode planner."
+    },
+    {
+      "paper": "EverMemOS: A Self-Organizing Memory Operating System",
+      "url": "https://arxiv.org/html/2601.02163v1",
+      "read": "sections 3.3-3.5 and evaluation protocol",
+      "transfer": "Consolidated semantic structures and source-aware reconstruction",
+      "difference": "Track-specific canonical attributes retain individual observations; no full MemScene lifecycle or foresight system. Published accuracy is not directly comparable to token F1."
+    }
   ],
   "hypotheses": [
-    {"id": "H1", "claim": "Question-blind atomic facts increase multi-hop evidence recall under a fixed context budget.", "decision": "raw vs facts on development conversations before a heldout evaluation"},
-    {"id": "H2", "claim": "Evidence and state-chain closure improves reference resolution and current-state correctness.", "decision": "facts vs evolved; LongMemEval knowledge-update needed because first LoCoMo conversation has zero state-chain edges"}
+    {
+      "id": "H1",
+      "claim": "Question-blind atomic facts increase multi-hop evidence recall under a fixed context budget.",
+      "decision": "raw vs facts on development conversations before a heldout evaluation"
+    },
+    {
+      "id": "H2",
+      "claim": "Evidence and state-chain closure improves reference resolution and current-state correctness.",
+      "decision": "facts vs evolved; LongMemEval knowledge-update needed because first LoCoMo conversation has zero state-chain edges"
+    }
   ],
   "evaluation": {
-    "development_locomo_conversations": ["conv-26", "conv-30"],
-    "heldout_locomo_conversations": ["conv-41", "conv-42", "conv-43", "conv-44", "conv-47", "conv-48", "conv-49", "conv-50"],
+    "development_locomo_conversations": [
+      "conv-26",
+      "conv-30"
+    ],
+    "heldout_locomo_conversations": [
+      "conv-41",
+      "conv-42",
+      "conv-43",
+      "conv-44",
+      "conv-47",
+      "conv-48",
+      "conv-49",
+      "conv-50"
+    ],
     "locomo_metric": "Unchanged official Porter-stemmed F1 functions, categories 1-4; adversarial category 5 reported separately if run.",
-    "answer_model": "gpt-6-luna", "budget": 3000,
+    "answer_model": "gpt-6-luna",
+    "budget": 3000,
     "status": "Development only; no SOTA claim. Published scores with different backbones, metrics, data versions or budgets are not controlled comparisons."
   },
   "data": {
-    "locomo": {"url": "https://raw.githubusercontent.com/snap-research/locomo/main/data/locomo10.json", "sha256": "79fa87e90f04081343b8c8debecb80a9a6842b76a7aa537dc9fdf651ea698ff4", "license": "CC BY-NC 4.0, see upstream LICENSE.txt"},
-    "longmemeval_s": {"official_url": "https://huggingface.co/datasets/xiaowu0162/longmemeval-cleaned/resolve/main/longmemeval_s_cleaned.json", "local_source": "/home/wqshen/memory-extract/data/raw/longmemeval_s_cleaned.json", "sha256": "d6f21ea9d60a0d56f34a05b609c79c88a451d2ae03597821ea3d5a9678c3a442", "note": "Copied read-only from local cache; direct upstream download was slow and stopped. No prior experimental outputs reused."},
+    "locomo": {
+      "url": "https://raw.githubusercontent.com/snap-research/locomo/main/data/locomo10.json",
+      "sha256": "79fa87e90f04081343b8c8debecb80a9a6842b76a7aa537dc9fdf651ea698ff4",
+      "license": "CC BY-NC 4.0, see upstream LICENSE.txt"
+    },
+    "longmemeval_s": {
+      "official_url": "https://huggingface.co/datasets/xiaowu0162/longmemeval-cleaned/resolve/main/longmemeval_s_cleaned.json",
+      "local_source": "/home/wqshen/memory-extract/data/raw/longmemeval_s_cleaned.json",
+      "sha256": "d6f21ea9d60a0d56f34a05b609c79c88a451d2ae03597821ea3d5a9678c3a442",
+      "note": "Copied read-only from local cache; direct upstream download was slow and stopped. No prior experimental outputs reused."
+    },
     "longmemeval_code_commit": "9e0b455f4ef0e2ab8f2e582289761153549043fc"
-  }
+  },
+  "protocol_update": "Initial text-only LoCoMo results omit captions and remain ablations. Standard-input runs use blip_caption and exclude image search query. Evidence annotations are normalized to Dn:m IDs, including compound labels."
 }

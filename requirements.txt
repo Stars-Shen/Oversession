@@ -3,3 +3,6 @@ numpy==2.4.6
 pytest==9.2.0
 tiktoken==0.14.0
 nltk==3.10.4
+openai==3.46.0
+backoff==2.2.1
+tqdm==4.70.1

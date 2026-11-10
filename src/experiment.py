@@ -8,6 +8,7 @@ import json
 import os
 from pathlib import Path
 import random
+import re
 import string
 import numpy as np
 import regex
@@ -15,6 +16,7 @@ from nltk.stem import PorterStemmer
 import tiktoken
 from api import API, ROOT, atomic_json, digest
 from memory import Memory, locomo_sessions, build_memory
+from state_reader import compile_state, PROMPT as STATE_PROMPT
 
 ANSWER = '''Answer the question using the supplied dated conversation memories.
 Give only the concise answer, without explanation, citations, preamble, or repetition of the question.
@@ -77,6 +79,7 @@ def summarize(records):
         rows = [r for r in records if r['method'] == method]
         cats = sorted({r['category'] for r in rows})
         result[method] = dict(n=len(rows), f1=float(np.mean([r['f1'] for r in rows])),
+                             macro_f1=float(np.mean([np.mean([r['f1'] for r in rows if r['category'] == c]) for c in cats])),
                              evidence_recall=float(np.mean([r['evidence_recall'] for r in rows if r['evidence_recall'] is not None])),
                              context_tokens=float(np.mean([r['context_tokens'] for r in rows])),
                              by_category={c:dict(n=sum(r['category'] == c for r in rows),
@@ -105,8 +108,13 @@ def main():
     p.add_argument('--run', default='pilot_v1')
     p.add_argument('--seed', type=int, default=20261110)
     p.add_argument('--reader', choices=['original', 'compact'], default='original')
+    p.add_argument('--reasoning', choices=['low', 'medium'], default='low')
+    p.add_argument('--captions', action='store_true')
+    p.add_argument('--state-reader', action='store_true')
     args = p.parse_args()
     answer_prompt = ANSWER + (COMPACT if args.reader == 'compact' else '')
+    memory_dir = ROOT / ('runs/memories_captions' if args.captions else 'runs/memories')
+    embedding_dir = ROOT / ('runs/embeddings_captions' if args.captions else 'runs/embeddings')
     data_path = ROOT / 'data/locomo10.json'
     data = json.loads(data_path.read_text())
     convs = [int(x) for x in args.convs.split(',')]
@@ -114,11 +122,11 @@ def main():
     run.mkdir(parents=True, exist_ok=True)
     if args.command == 'build':
         # A schema allowlist prevents QA, evidence labels, and gold answers entering the writer.
-        sessions_by_conv = {ci:locomo_sessions({'conversation':data[ci]['conversation']}) for ci in convs}
+        sessions_by_conv = {ci:locomo_sessions({'conversation':data[ci]['conversation']}, args.captions) for ci in convs}
         for ci, sessions in sessions_by_conv.items():
             memory = build_memory(sessions, args.workers)
             memory['sample_id'] = data[ci]['sample_id']
-            atomic_json(ROOT / 'runs/memories' / (data[ci]['sample_id'] + '.json'), memory)
+            atomic_json(memory_dir / (data[ci]['sample_id'] + '.json'), memory)
             print('built', ci, 'facts', len(memory['facts']), 'version edges',sum(len(f['previous']) for f in memory['facts']), flush=True)
         return
     if args.command == 'summarize':
@@ -133,14 +141,14 @@ def main():
     memories = {}
     embeddings = {}
     for ci in convs:
-        mp = ROOT / 'runs/memories' / (data[ci]['sample_id'] + '.json')
+        mp = memory_dir / (data[ci]['sample_id'] + '.json')
         if methods == ['raw'] or methods == ['full']:
-            memories[ci] = Memory(dict(sessions=locomo_sessions(data[ci]), facts=[]))
+            memories[ci] = Memory(dict(sessions=locomo_sessions(data[ci], args.captions), facts=[]))
         else:
             memories[ci] = Memory(json.loads(mp.read_text()))
             memory_hashes[data[ci]['sample_id']] = hashlib.sha256(mp.read_bytes()).hexdigest()
         if any(m.startswith('hybrid') for m in methods):
-            ep = ROOT / 'runs/embeddings' / (data[ci]['sample_id'] + '.npz')
+            ep = embedding_dir / (data[ci]['sample_id'] + '.npz')
             embeddings[ci] = np.load(ep)
             if list(embeddings[ci]['document_ids']) != [t['id'] for t in memories[ci].turns]:
                 raise ValueError('Embedding document IDs do not match memory')
@@ -151,12 +159,18 @@ def main():
                   model='gpt-6-luna', answer_prompt_hash=digest(answer_prompt), convs=convs,
                   question_ids=[data[ci]['sample_id'] + ':' + str(qi) for ci,qi,q in chosen],
                   methods=methods, budget=args.budget, seed=args.seed, memory_sha256=memory_hashes,
-                  split='development' if set(convs) <= {0,1} else 'heldout',
+                  split='development' if set(convs) <= {0,1} else ('full_mixed' if set(convs) & {0,1} else 'heldout'),
                   metric='official LoCoMo stemmed F1, categories 1-4; category 3 first answer before semicolon',
                   tokenizer='cl100k_base')
     if embeddings:
         config['embedding_model'] = 'Qwen3-Embedding-0.6B, float16 normalized, max_seq_length=2048'
-        config['embedding_sha256'] = {data[ci]['sample_id']:hashlib.sha256((ROOT / 'runs/embeddings' / (data[ci]['sample_id'] + '.npz')).read_bytes()).hexdigest() for ci in convs}
+        config['embedding_sha256'] = {data[ci]['sample_id']:hashlib.sha256((embedding_dir / (data[ci]['sample_id'] + '.npz')).read_bytes()).hexdigest() for ci in convs}
+    if args.captions:
+        config['caption_protocol'] = 'official blip_caption appended to dialogue; image search query excluded'
+    if args.reasoning != 'low':
+        config['reasoning_effort'] = args.reasoning
+    if args.state_reader:
+        config['state_reader_prompt_hash'] = digest(STATE_PROMPT)
     config_path = run / 'config.json'
     if config_path.exists() and json.loads(config_path.read_text()) != config:
         raise ValueError('Run config changed; choose a new --run name')
@@ -178,15 +192,23 @@ def main():
             vector = emb['queries'][qi].astype(np.float32)
             dense = {key:sorted(enumerate(emb[key].astype(np.float32) @ vector), key=lambda item: (-item[1], item[0])) for key in ('raw','facts')}
         context = memories[ci].retrieve(q['question'], method, args.budget, encoder, dense)
-        result = api.call(answer_prompt, 'Memories:\n' + context['text'] + '\n\nQuestion: ' + q['question'], max_tokens=768)
-        gold = set(str(e).strip() for e in q.get('evidence', []) if str(e).strip())
+        state = None
+        if args.state_reader:
+            state = compile_state(api, q['question'], memories[ci].data['sessions'][-1]['date'],
+                                  context, args.budget, encoder)
+            context = memories[ci].retrieve(q['question'], method, args.budget-state['tokens']-32, encoder, dense)
+            context['tokens'] += state['tokens']
+        state_text = ('\nCompiled evidence state (advisory; original turns are authoritative):\n' + state['text']) if state else ''
+        result = api.call(answer_prompt, 'Memories:\n' + context['text'] + state_text + '\n\nQuestion: ' + q['question'],
+                          max_tokens=768 if args.reasoning == 'low' else 4096, effort=args.reasoning)
+        gold = {mid for e in q.get('evidence', []) for mid in re.findall(r'D\d+:\d+', str(e))}
         recalled = set(context['source_ids'])
         return dict(qid=data[ci]['sample_id'] + ':' + str(qi), method=method, category=q['category'],
                     question=q['question'], hypothesis=result['text'].strip(), answer=q.get('answer'),
                     f1=metric(result['text'].strip(), q), context_tokens=context['tokens'],
                     evidence_recall=len(gold & recalled) / len(gold) if gold else None,
                     all_evidence=gold <= recalled if gold else None, source_ids=context['source_ids'],
-                    fact_ids=context['facts'], api_hash=result['request_hash'], usage=result['usage'])
+                    fact_ids=context['facts'], api_hash=result['request_hash'], usage=result['usage'], state_reader=state)
 
     with ThreadPoolExecutor(max_workers=args.workers) as pool, predfile.open('a') as out:
         jobs = [pool.submit(answer_one,ci,qi,q,m) for ci,qi,q in chosen for m in methods

@@ -49,12 +49,14 @@ class BM25:
         return sorted(scores.items(), key=lambda x: (-x[1], x[0]))[:limit]
 
 
-def locomo_sessions(sample):
+def locomo_sessions(sample, include_captions=False):
     conv = sample['conversation']
     sessions = []
     for key in sorted((k for k in conv if re.fullmatch(r'session_\d+', k)), key=lambda x: int(x.split('_')[1])):
         date = conv[key + '_date_time']
-        turns = [dict(id=t['dia_id'], speaker=t['speaker'], text=t['text'], date=date,
+        turns = [dict(id=t['dia_id'], speaker=t['speaker'],
+                      text=t['text'] + (' [Shared image caption (automatic): ' + str(t['blip_caption']) + ']'
+                                        if include_captions and t.get('blip_caption') else ''), date=date,
                       session=key, order=len(sessions)) for t in conv[key]]
         sessions.append(dict(id=key, date=date, turns=turns))
     return sessions
@@ -135,15 +137,22 @@ class Memory:
         self.by_fact = {f['id']: f for f in self.facts}
         self.raw_index = BM25([t['speaker'] + ' ' + t['text'] for t in self.turns])
         self.fact_index = BM25([f['subject'] + ' ' + f['slot'] + ' ' + f['text'] for f in self.facts])
+        self.tracks = [t for t in data.get('tracks', [])
+                       if isinstance(t.get('entity'), str) and isinstance(t.get('attribute'), str)]
+        self.track_index = BM25([t['entity'] + ' ' + t['attribute'] + ' ' +
+                                 ' '.join(self.by_fact[mid]['text'] for mid in t['members'])
+                                 for t in self.tracks])
 
     def retrieve(self, question, method, budget, encoder, dense=None):
+        if method == 'hybrid_packed':
+            return self.retrieve_packed(question, budget, encoder, dense)
         if method == 'full':
             parts = [self.render_turn(t) for t in self.turns]
             text = '\n'.join(parts)
             return dict(text=text, source_ids=list(self.by_turn), facts=[], tokens=len(encoder.encode(text)))
         raw_rank = self.raw_index.rank(question)
         fact_rank = self.fact_index.rank(question)
-        if method in ('hybrid', 'hybrid_facts', 'hybrid_notes'):
+        if method in ('hybrid', 'hybrid_facts', 'hybrid_notes', 'consolidated_hybrid'):
             def fuse(lexical, semantic):
                 scores = defaultdict(float)
                 for ranking in (lexical, semantic):
@@ -194,6 +203,11 @@ class Memory:
             if kind == 'fact':
                 fact_ids.append(mid)
 
+        if method in ('consolidated', 'consolidated_hybrid') and re.search(r'\b(current|currently|latest|now)\b|most recent', question.lower()):
+            # Updated track membership exposes newer witnesses even if their wording differs.
+            for ti, score in self.track_index.rank(question, 2):
+                for mid in reversed(self.tracks[ti]['members'][-6:]):
+                    add('fact', mid)
         for rank, (kind, mid) in enumerate(candidates):
             add(kind, mid, method == 'evolved')
             if method == 'evolved' and rank < 16:
@@ -210,6 +224,41 @@ class Memory:
                             add('turn', self.turns[p]['id'])
         text = '\n'.join(parts)
         return dict(text=text, source_ids=sorted(source_ids), facts=fact_ids, tokens=len(encoder.encode(text)))
+
+    def retrieve_packed(self, question, budget, encoder, dense):
+        # Rank every view at its immutable source, rather than spending context on duplicates.
+        scores = defaultdict(float)
+        rankings = [(self.raw_index.rank(question), False), (dense['raw'], False),
+                    (self.fact_index.rank(question), True), (dense['facts'], True)]
+        for ranking, is_fact in rankings:
+            seen = set()
+            for rank, (i, score) in enumerate(ranking):
+                refs = self.facts[i]['sources'] if is_fact else [self.turns[i]['id']]
+                for reference in refs:
+                    if reference not in seen:
+                        scores[reference] += 1 / (40 + rank)
+                        seen.add(reference)
+        selected, sessions = [], set()
+        used = 0
+        for reference in sorted(scores, key=lambda mid: (-scores[mid], self.turn_pos[mid])):
+            t = self.by_turn[reference]
+            line = '[{}] {}: {}'.format(reference, t['speaker'], t['text'])
+            header = ('Session {} | {}\n'.format(t['session'], t['date'])
+                      if t['session'] not in sessions else '')
+            cost = len(encoder.encode(header + line + '\n'))
+            if used + cost <= budget:
+                selected.append(reference)
+                sessions.add(t['session'])
+                used += cost
+        parts, current_session = [], None
+        for reference in sorted(selected, key=self.turn_pos.get):
+            t = self.by_turn[reference]
+            if current_session != t['session']:
+                current_session = t['session']
+                parts.append('Session {} | {}'.format(t['session'], t['date']))
+            parts.append('[{}] {}: {}'.format(reference, t['speaker'], t['text']))
+        text = '\n'.join(parts)
+        return dict(text=text, source_ids=selected, facts=[], tokens=len(encoder.encode(text)))
 
     @staticmethod
     def render_turn(t):

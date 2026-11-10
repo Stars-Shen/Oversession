@@ -1,0 +1,19 @@
+{
+  "scope": {
+    "longmemeval_s": 500,
+    "previously_unseen_test_questions": 428,
+    "dev": 24,
+    "validation": 48,
+    "locomo_nonadversarial": 1540
+  },
+  "longmem_final_evidence_budget": 6000,
+  "locomo_final_evidence_budget": 3000,
+  "reader_model": "gpt-6-luna",
+  "reader_reasoning": "low",
+  "selection_rule": "Choose sparse tracks+state or hybrid tracks+state using only the 72 development/validation questions. No full-test outputs used for selection.",
+  "strong_baseline": "BM25 + local Qwen3 semantic raw-evidence RRF, same final reader budget and answer prompt",
+  "locomo_input": "official blip_caption included; image search query excluded",
+  "locomo_candidate": "source-level key/value fusion, deduplication and chronological packing",
+  "primary_locomo_metric": "official stemmed F1 on categories 1-4, report micro and macro",
+  "caveat": "LoCoMo 8 conversation evaluation has been reused across revisions; report development and heldout conversations separately without claiming an untouched final test."
+}

@@ -1,0 +1,13 @@
+{
+  "selected": "consolidated + state_reader, sparse raw/fact retrieval",
+  "validation_accuracy": 0.8125,
+  "strong_hybrid_baseline_validation_accuracy": 0.7291666666666666,
+  "rejected_dense_candidate_accuracy": 0.7083333333333334,
+  "selection_uses_only_development_validation": true,
+  "full_unseen_test_count": 428,
+  "answer_model": "gpt-6-luna",
+  "final_evidence_budget": 6000,
+  "state_reader_source_sha256": "448ed8c1819a5dd2206940287b0ffa8db957902bbc5b9d424fdfcfcc6fcb648a",
+  "memory_source_sha256": "426cbe4aa90ca5f970ce9265b33557ed88b693450ce4d0ca3c7502a3445a0ce2",
+  "official_judge_planned": "gpt-4o-2024-08-06, unchanged official rubric and chat completion parameters"
+}

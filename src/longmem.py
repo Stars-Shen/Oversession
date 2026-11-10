@@ -12,6 +12,7 @@ import tiktoken
 from api import API, ROOT, atomic_json, digest
 from memory import Memory, extract_session, evolve
 from experiment import ANSWER
+from state_reader import compile_state, PROMPT as STATE_PROMPT
 
 
 def sessions_for(entry):
@@ -53,12 +54,18 @@ def main():
     p.add_argument('--budget',type=int,default=6000)
     p.add_argument('--methods',default='raw,facts')
     p.add_argument('--run',default='longmem_dev_v1')
+    p.add_argument('--split',choices=['development','validation','full'],default='development')
+    p.add_argument('--state-reader',action='store_true')
     args=p.parse_args()
     path=ROOT/'data/longmemeval_s_cleaned.json'
     data=json.loads(path.read_text())
-    chosen=select(data,args.per_type)
+    if args.split=='validation':
+        dev_ids=set(json.loads((ROOT/'runs/longmem_dev_ids.json').read_text()))
+        data=[e for e in data if e['question_id'] not in dev_ids]
+    chosen=data if args.split=='full' else select(data,args.per_type)
     run=ROOT/'runs'/args.run;run.mkdir(parents=True,exist_ok=True)
-    split=ROOT/'runs/longmem_dev_ids.json'
+    split=ROOT/'runs'/({'development':'longmem_dev_ids.json','validation':'longmem_validation_ids.json',
+                       'full':'longmem_full_ids.json'}[args.split])
     selected_ids=[e['question_id'] for e in chosen]
     if split.exists() and json.loads(split.read_text()) != selected_ids:
         raise ValueError('Development split already frozen with different IDs')
@@ -92,9 +99,14 @@ def main():
     encoder=tiktoken.get_encoding('cl100k_base')
     methods=args.methods.split(',')
     config=dict(dataset_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),question_ids=selected_ids,
-                methods=methods,budget=args.budget,model=api.model,split='development',
+                methods=methods,budget=args.budget,model=api.model,split=args.split,
                 judge_model=api.model,judge_protocol='unchanged official LongMemEval prompts, substitute Luna judge; NOT official GPT-4o leaderboard score',
                 answer_prompt_hash=digest(ANSWER),tokenizer='cl100k_base')
+    if args.state_reader:
+        config['state_reader_prompt_hash']=digest(STATE_PROMPT)
+        config['state_reader_budget']='same total final evidence budget; one extra compiler call'
+    if any('hybrid' in m for m in methods):
+        config['embedding_model']='Qwen3-Embedding-0.6B local, float16, normalized, max_seq_length=2048'
     cp=run/'config.json'
     if cp.exists() and json.loads(cp.read_text())!=config:raise ValueError('Choose a new run name')
     atomic_json(cp,config)
@@ -104,11 +116,28 @@ def main():
     judge=judge_prompt()
 
     def work(e,method):
-        if method=='raw':
+        if method in ('raw','hybrid'):
             memory=Memory(dict(sessions=sessions_for(e),facts=[]))
         else:
-            memory=Memory(json.loads((ROOT/'runs/longmem_memories'/(e['question_id']+'.json')).read_text()))
-        ctx=memory.retrieve(e['question'],method,args.budget,encoder)
+            memory_dir='longmem_consolidated' if method.startswith('consolidated') else 'longmem_memories'
+            memory=Memory(json.loads((ROOT/'runs'/memory_dir/(e['question_id']+'.json')).read_text()))
+        dense=None
+        if 'hybrid' in method:
+            emb=np.load(ROOT/'runs/longmem_embeddings'/(e['question_id']+'.npz'))
+            if list(emb['document_ids'])!=[t['id'] for t in memory.turns]:raise ValueError('Embedding source IDs do not match')
+            similarities=emb['raw'].astype(np.float32)@emb['query'].astype(np.float32)
+            dense=dict(raw=sorted(enumerate(similarities),key=lambda item:(-item[1],item[0])),facts=[])
+        ctx=memory.retrieve(e['question'],method,args.budget,encoder,dense)
+        state=None
+        if args.state_reader:
+            state=compile_state(api,e['question'],e['question_date'],ctx,args.budget,encoder)
+            ctx=memory.retrieve(e['question'],method,args.budget-state['tokens']-32,encoder,dense)
+            state_sources=set(ctx['source_ids'])
+            for observation in json.loads(state['text']).get('observations',[]):
+                for reference in observation['sources']:
+                    state_sources.update(memory.by_fact[reference]['sources'] if reference in memory.by_fact else [reference])
+            ctx['source_ids']=sorted(state_sources)
+            ctx['tokens']+=state['tokens']
         # Gold evidence is accessed only after retrieval; never passed to the writer or answerer.
         recovered={int(t.split(':')[0][1:]) for t in ctx['source_ids']}
         gold={i for i,sid in enumerate(e['haystack_session_ids']) if sid in e['answer_session_ids']}
@@ -116,13 +145,15 @@ def main():
                   evidence_session_recall=len(recovered&gold)/len(gold) if gold else None,
                   all_evidence=gold<=recovered if gold else None,context_tokens=ctx['tokens'],source_ids=ctx['source_ids'])
         if args.command=='recall':return base
-        response=api.call(ANSWER,'Current date: '+e['question_date']+'\nMemories:\n'+ctx['text']+'\n\nQuestion: '+e['question'],max_tokens=1536)
+        state_text=('\nCompiled evidence state (advisory; original turns are authoritative):\n'+state['text']) if state else ''
+        response=api.call(ANSWER,'Current date: '+e['question_date']+'\nMemories:\n'+ctx['text']+state_text+'\n\nQuestion: '+e['question'],max_tokens=1536)
         prompt=judge(e['question_type'],e['question'],e['answer'],response['text'],abstention=e['question_id'].endswith('_abs'))
         evaluation=api.call('Evaluate using the rubric. Return yes or no only.',prompt,max_tokens=256)
         value=evaluation['text'].strip().lower().rstrip('.')
         if value not in ('yes','no'):raise ValueError('Invalid judge output: '+value)
         return dict(base,hypothesis=response['text'],correct=value=='yes',answer_api_hash=response['request_hash'],
-                    judge_api_hash=evaluation['request_hash'],answer_usage=response['usage'])
+                    judge_api_hash=evaluation['request_hash'],answer_usage=response['usage'],
+                    state_reader=state)
 
     with ThreadPoolExecutor(max_workers=args.workers) as pool,pf.open('a') as out:
         jobs=[pool.submit(work,e,m) for e in chosen for m in methods if (e['question_id'],m) not in completed]

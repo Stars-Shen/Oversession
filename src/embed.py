@@ -13,7 +13,7 @@ MODEL = '/home/wqshen/models/Qwen3-Embedding-0.6B'
 QUERY = 'Instruct: Given a question about a conversation, retrieve relevant memories that answer it\nQuery: '
 
 
-def encode_locomo(convs, memories):
+def encode_locomo(convs, memories, include_captions=False):
     data = json.loads((ROOT / 'data/locomo10.json').read_text())
     model = SentenceTransformer(MODEL, device='cuda:0', model_kwargs={'torch_dtype':torch.float16}, local_files_only=True)
     model.max_seq_length = 2048
@@ -26,7 +26,7 @@ def encode_locomo(convs, memories):
         queries = [QUERY + q['question'] for q in sample['qa']]
         texts = docs + facts + queries
         fingerprint = hashlib.sha256(json.dumps(texts,ensure_ascii=False).encode()).hexdigest()
-        path = ROOT / 'runs/embeddings' / (sample['sample_id'] + '.npz')
+        path = ROOT / ('runs/embeddings_captions' if include_captions else 'runs/embeddings') / (sample['sample_id'] + '.npz')
         path.parent.mkdir(parents=True,exist_ok=True)
         if path.exists():
             cached = np.load(path)
@@ -43,5 +43,7 @@ def encode_locomo(convs, memories):
 if __name__ == '__main__':
     p=argparse.ArgumentParser()
     p.add_argument('--convs',default='0,1')
+    p.add_argument('--captions',action='store_true')
     args=p.parse_args()
-    encode_locomo([int(x) for x in args.convs.split(',')],ROOT/'runs/memories')
+    encode_locomo([int(x) for x in args.convs.split(',')],
+                  ROOT/('runs/memories_captions' if args.captions else 'runs/memories'),args.captions)

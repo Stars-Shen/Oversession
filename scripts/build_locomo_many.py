@@ -9,7 +9,8 @@ from memory import locomo_sessions,extract_session,evolve,EXTRACT
 
 data=json.loads((ROOT/'data/locomo10.json').read_text())
 convs=[int(x) for x in sys.argv[1].split(',')]
-sessions={ci:locomo_sessions(data[ci]) for ci in convs}
+captions='--captions' in sys.argv
+sessions={ci:locomo_sessions(data[ci],captions) for ci in convs}
 results={ci:{} for ci in convs}
 api=API()
 with ThreadPoolExecutor(max_workers=24) as pool:
@@ -22,5 +23,5 @@ with ThreadPoolExecutor(max_workers=24) as pool:
             facts=[f for s in sessions[ci] for f in results[ci][s['id']]['facts']]
             memory=dict(sessions=sessions[ci],facts=evolve(facts),extraction=results[ci],schema='vem-0.1',
                         sample_id=data[ci]['sample_id'],extraction_prompt_hash=digest(EXTRACT))
-            atomic_json(ROOT/'runs/memories'/(data[ci]['sample_id']+'.json'),memory)
+            atomic_json(ROOT/('runs/memories_captions' if captions else 'runs/memories')/(data[ci]['sample_id']+'.json'),memory)
             print('built',ci,len(facts),flush=True)
