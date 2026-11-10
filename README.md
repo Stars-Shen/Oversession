@@ -109,3 +109,15 @@ the first 402. All caches support resumption with the same configuration after f
 See [scope-audited report](reports/phase3.json) and
 [SiliconFlow reproduction instructions](notes/phase3/reproduce.md). The earlier
 completed v2 benchmark results above are preserved separately.
+
+Local follow-up studies use Qwen3-30B-A3B-Instruct-2507 with the same frozen writer,
+source retrieval and 3000-token evidence budget. Source-bound structured reading
+with one constrained repair changes development F1 only 58.40 → 58.51. Uniform
+canonical fact values reduce it to 56.93. Selecting canonical values only for
+time questions gives 62.52 in development, but just **51.58 → 53.05** on the
+160-question separate-conversation cohort (paired question-bootstrap interval
+for the gain: **[−1.54, +4.50] points**). These weak candidates are not expanded
+or selected as breakthroughs. No new paid calls were made. See
+[research decisions](notes/phase3/decisions.md),
+[value-layer protocol](notes/phase3/canonical_values.md), and
+[completed local comparison](reports/local_selective_canonical_validation.json).

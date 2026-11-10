@@ -1,0 +1,152 @@
+{
+  "complete": true,
+  "n": 160,
+  "new_generations": 47,
+  "reused_outputs": 113,
+  "selection_scope": "separate-conversation evaluation; these conversations were used in earlier research revisions",
+  "metrics": {
+    "canonical": {
+      "n": 160,
+      "f1": 0.5304871571750851,
+      "macro_f1": 0.5304871571750851,
+      "evidence_recall": 0.8731685012484124,
+      "context_tokens": 2996.4875,
+      "by_category": {
+        "1": {
+          "n": 40,
+          "f1": 0.5879153782725212
+        },
+        "2": {
+          "n": 40,
+          "f1": 0.5782936507936508
+        },
+        "3": {
+          "n": 40,
+          "f1": 0.29591809889548515
+        },
+        "4": {
+          "n": 40,
+          "f1": 0.6598215007386834
+        }
+      }
+    },
+    "plain": {
+      "n": 160,
+      "f1": 0.5157518703171202,
+      "macro_f1": 0.5157518703171202,
+      "evidence_recall": 0.8710720651897121,
+      "context_tokens": 2996.975,
+      "by_category": {
+        "1": {
+          "n": 40,
+          "f1": 0.5629153782725211
+        },
+        "2": {
+          "n": 40,
+          "f1": 0.5348611111111111
+        },
+        "3": {
+          "n": 40,
+          "f1": 0.29591809889548515
+        },
+        "4": {
+          "n": 40,
+          "f1": 0.6693128929893636
+        }
+      }
+    }
+  },
+  "delta": 0.01473528685796488,
+  "bootstrap_ci": [
+    -0.015437153803905932,
+    0.04502565906745472
+  ],
+  "wins": 16,
+  "losses": 11,
+  "ties": 133,
+  "truncated_outputs": [],
+  "config": {
+    "model": "/home/wqshen/models/Qwen3-30B-A3B-Instruct-2507",
+    "alpha": 0.5,
+    "max_new_tokens": 192,
+    "dtype": "bfloat16",
+    "methods": [
+      "canonical"
+    ],
+    "question_ids": [
+      "conv-49:72",
+      "conv-50:2",
+      "conv-42:66",
+      "conv-47:48",
+      "conv-48:47",
+      "conv-42:22",
+      "conv-43:44",
+      "conv-49:40",
+      "conv-48:31",
+      "conv-49:80",
+      "conv-47:65",
+      "conv-42:3",
+      "conv-42:31",
+      "conv-48:81",
+      "conv-41:53",
+      "conv-41:27",
+      "conv-44:93",
+      "conv-47:13",
+      "conv-49:119",
+      "conv-47:14",
+      "conv-49:145",
+      "conv-42:72",
+      "conv-43:34",
+      "conv-49:73",
+      "conv-43:23",
+      "conv-43:69",
+      "conv-42:6",
+      "conv-48:45",
+      "conv-47:114",
+      "conv-48:9",
+      "conv-47:56",
+      "conv-43:12",
+      "conv-47:57",
+      "conv-42:36",
+      "conv-41:54",
+      "conv-50:10",
+      "conv-41:109",
+      "conv-48:66",
+      "conv-41:55",
+      "conv-41:38",
+      "conv-44:99",
+      "conv-48:44",
+      "conv-42:51",
+      "conv-50:8",
+      "conv-43:108",
+      "conv-50:62",
+      "conv-41:58"
+    ],
+    "seed": 20261111,
+    "inputs_hash": "95a259eb517cfc1a126455c9a48ad753589c3c45d1772b8cbb4a8beb20022ae1",
+    "memory_sha256": {
+      "conv-49": "f88d7c9029cd4df80c567303f160fea8a2038dcb0ea91d8665fd335c7fee0593",
+      "conv-50": "a02b3fd6782755122836aa3588bb6b66ce57c3279997da1abb4c05820bdf653a",
+      "conv-42": "ee46c88e8fa249ea91989c3ebe8da2888453ad1882b8988ceea2c0fac7fe432e",
+      "conv-43": "e666a3fbfb1d0cff403487fbda34cc55e2caa100af7b7817dc605dd5ad9a3448",
+      "conv-47": "7234c5a67831efe539fb07d1c96bf136c3255f3a7288e51198ddd243d5482d70",
+      "conv-41": "5ac880515e94906560d74a61192763df25a180b66ea9de3ab3ea173b8f3e24c6",
+      "conv-48": "1054de96696edb48568db5ec5ff37bc913d51728ae9347526e991937ace03b68",
+      "conv-44": "607bcb0d7e52552d5cbe03431f3637530bb1b1ba381e550f5aba307eaac59ecc"
+    },
+    "context_budget": 3000,
+    "model_config_sha256": "a1ee086a68d0cbfc87316da00ba4b8507bd1292978108e2496201a30a450f438",
+    "tokenizer_config_sha256": "a62ff0a2472a0fa1b8eaabcb57c59b58afa42a22831dc141400b6e0cf2b65ce3",
+    "provider": "local; no network",
+    "writer": "frozen v2 Luna",
+    "split": "evaluation",
+    "decoding": "greedy; explicit do_sample=False override",
+    "routing_execution": "original expert order, empty experts skipped",
+    "baseline_run": "local_plain_validation",
+    "temporal_only": true,
+    "question_rule": "\\bwhen\\b|\\bhow (?:long|old)\\b|\\b(?:before|after|year|month|week|date|since)\\b",
+    "intervention": "same four-view source priority; canonical teacher facts replace represented source text; raw fallback for sources with no extracted facts",
+    "evidence_recall_definition": "provenance-root coverage, not visibility of complete original turns",
+    "decision": "One fixed value-layer test; no fact-count or mixing-weight sweep."
+  }
+}

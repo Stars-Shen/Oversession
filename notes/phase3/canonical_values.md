@@ -109,3 +109,20 @@ Preparation:
 Generate both runs using the unchanged local HF backend, score the plain baseline
 with `src/local_cad.py score --run local_plain_validation`, then score the candidate
 with `scripts/canonical_value_study.py score --run local_selective_canonical_validation`.
+
+## Separate-conversation result: stop expansion
+
+All 160 raw baselines and 47 changed candidate outputs completed without
+truncation; the other 113 candidate answers reuse their baseline literally.
+F1 is **51.5752 → 53.0487 (+1.4735 points)**, 16 wins / 11 losses / 133 ties.
+The paired question-bootstrap 95% interval is **[−1.5437, +4.5026] points**.
+Temporal category F1 is 53.4861 → 57.8294 (+4.3433), substantially smaller than
+the development effect. This does not support the requested larger, reliable
+breakthrough. Stop without rule tuning, alternate packing mixtures, or a full
+local benchmark run. Report: `reports/local_selective_canonical_validation.json`.
+
+The useful conclusion is narrower: canonical time facts help some questions,
+but that effect does not justify replacing original evidence uniformly or
+assuming a broad benefit from the selected query rule. The successful DeepSeek
+native-thinking comparison remains separate and stronger. No new paid API calls
+were made in this study; it does not fill missing DeepSeek full-run outputs.

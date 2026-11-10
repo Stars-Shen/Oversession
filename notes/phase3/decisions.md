@@ -43,8 +43,16 @@ so its interpretation must include both effects. Uniform replacement fails:
 improves by 12.89 points. One post-hoc selection uses the already fixed calendar
 question rule to choose canonical values only for time questions, giving 62.52
 overall (+4.12) without new generation calls. Freeze this rule for the existing
-160-question separate-conversation comparison; do not tune it after seeing those
-answers. This development gain is not confirmation. Details: `canonical_values.md`.
+160-question separate-conversation comparison. Its completed result is
+51.58 → 53.05 (+1.47), with a paired question-bootstrap interval [−1.54, +4.50]
+points. The larger development gain did not sufficiently transfer. Stop this
+rule without tuning or full-run expansion. Details: `canonical_values.md`.
+
+Further cross-field reading includes static-analysis abstract interpretation
+(`abstract_interpretation.md`). It supplies a useful precision/soundness distinction,
+not a formal guarantee for extracted language-model facts or another experiment
+to launch automatically. All local studies listed here have finished; their
+baseline caches and original ledgers are preserved.
 
 This file records decisions in the active authorized research task. It does not
 instruct a future session to resume experiments or launch jobs automatically.
