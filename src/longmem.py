@@ -6,7 +6,6 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import hashlib
 import json
 import os
-from pathlib import Path
 from types import SimpleNamespace
 import numpy as np
 import tiktoken

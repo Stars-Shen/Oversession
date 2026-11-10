@@ -1,0 +1,189 @@
+{
+  "status": "complete benchmark evidence",
+  "longmemeval": {
+    "judge": "gpt-4o-2024-08-06, official rubric and generation settings",
+    "full_vs_hybrid": {
+      "n": 500,
+      "baseline": 0.76,
+      "candidate": 0.804,
+      "delta_pp": 4.3999999999999995,
+      "wins": 59,
+      "losses": 37,
+      "ties": 404
+    },
+    "unseen_428_vs_hybrid": {
+      "n": 428,
+      "baseline": 0.764018691588785,
+      "candidate": 0.7990654205607477,
+      "delta_pp": 3.5046728971962615,
+      "wins": 49,
+      "losses": 34,
+      "ties": 345
+    },
+    "full_vs_bm25": {
+      "n": 500,
+      "baseline": 0.708,
+      "candidate": 0.804,
+      "delta_pp": 9.6,
+      "wins": 70,
+      "losses": 22,
+      "ties": 408
+    },
+    "per_type": {
+      "knowledge-update": {
+        "n": 78,
+        "baseline": 0.8461538461538461,
+        "candidate": 0.9358974358974359,
+        "delta_pp": 8.974358974358974,
+        "wins": 9,
+        "losses": 2,
+        "ties": 67
+      },
+      "multi-session": {
+        "n": 133,
+        "baseline": 0.6541353383458647,
+        "candidate": 0.6917293233082706,
+        "delta_pp": 3.7593984962406015,
+        "wins": 17,
+        "losses": 12,
+        "ties": 104
+      },
+      "single-session-assistant": {
+        "n": 56,
+        "baseline": 0.9464285714285714,
+        "candidate": 0.9464285714285714,
+        "delta_pp": 0.0,
+        "wins": 2,
+        "losses": 2,
+        "ties": 52
+      },
+      "single-session-preference": {
+        "n": 30,
+        "baseline": 0.3333333333333333,
+        "candidate": 0.6333333333333333,
+        "delta_pp": 30.0,
+        "wins": 9,
+        "losses": 0,
+        "ties": 21
+      },
+      "single-session-user": {
+        "n": 70,
+        "baseline": 0.9857142857142858,
+        "candidate": 0.9142857142857143,
+        "delta_pp": -7.142857142857142,
+        "wins": 0,
+        "losses": 5,
+        "ties": 65
+      },
+      "temporal-reasoning": {
+        "n": 133,
+        "baseline": 0.7142857142857143,
+        "candidate": 0.7593984962406015,
+        "delta_pp": 4.511278195488721,
+        "wins": 22,
+        "losses": 16,
+        "ties": 95
+      }
+    },
+    "preserved_facts": 153656,
+    "attribute_histories": 23298
+  },
+  "locomo": {
+    "metric": "official stemmed F1, nonadversarial categories 1-4, captions included",
+    "full": {
+      "n": 1540,
+      "baseline": 0.5871083430470435,
+      "candidate": 0.6177792855287594,
+      "delta_pp": 3.067094248171597,
+      "wins": 388,
+      "losses": 300,
+      "ties": 852
+    },
+    "heldout_conversations": {
+      "n": 1307,
+      "baseline": 0.5874170318596394,
+      "candidate": 0.6141744446926007,
+      "delta_pp": 2.675741283296119,
+      "wins": 325,
+      "losses": 254,
+      "ties": 728
+    },
+    "summary": {
+      "hybrid": {
+        "n": 1540,
+        "f1": 0.5871083430470434,
+        "macro_f1": 0.508554491203379,
+        "evidence_recall": 0.8521036045997347,
+        "context_tokens": 2991.2675324675324,
+        "by_category": {
+          "1": {
+            "n": 282,
+            "f1": 0.4976770768768122
+          },
+          "2": {
+            "n": 321,
+            "f1": 0.6307676716859977
+          },
+          "3": {
+            "n": 96,
+            "f1": 0.2690332682749844
+          },
+          "4": {
+            "n": 841,
+            "f1": 0.636739947975722
+          }
+        },
+        "delta_vs_hybrid": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "wins": 0,
+          "losses": 0,
+          "ties": 1540
+        }
+      },
+      "hybrid_packed": {
+        "n": 1540,
+        "f1": 0.6177792855287595,
+        "macro_f1": 0.534866712043551,
+        "evidence_recall": 0.9274363102206925,
+        "context_tokens": 2996.448051948052,
+        "by_category": {
+          "1": {
+            "n": 282,
+            "f1": 0.5430393598533837
+          },
+          "2": {
+            "n": 321,
+            "f1": 0.6441549450895245
+          },
+          "3": {
+            "n": 96,
+            "f1": 0.28106301475922374
+          },
+          "4": {
+            "n": 841,
+            "f1": 0.6712095284720719
+          }
+        },
+        "delta_vs_hybrid": {
+          "mean": 0.030670942481715976,
+          "ci95": [
+            0.017399741653984346,
+            0.04435442244559879
+          ],
+          "wins": 388,
+          "losses": 300,
+          "ties": 852
+        }
+      }
+    }
+  },
+  "limitations": [
+    "LoCoMo conversations were evaluated across revisions.",
+    "The memory writer and final evidence compiler add inference cost; final reader evidence budgets are matched.",
+    "These same-backbone comparisons do not establish a global SOTA rank."
+  ]
+}

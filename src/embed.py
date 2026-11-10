@@ -3,7 +3,6 @@ import argparse
 import json
 import hashlib
 from pathlib import Path
-import sys
 import numpy as np
 import torch
 from sentence_transformers import SentenceTransformer

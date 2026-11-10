@@ -1,6 +1,6 @@
 # Versioned Evidence Memory
 
-Research workspace for a five-stage long-dialog memory system. Full benchmark runs are in progress; current results do not establish a SOTA claim.
+A five-stage long-dialog memory framework with completed LoCoMo and LongMemEval-S comparisons against the same-backbone hybrid retrieval baseline. Full results and scope checks are in `reports/final_v2.json`; these comparisons do not establish a global SOTA rank.
 
 | Stage | Implementation |
 |---|---|
@@ -14,9 +14,22 @@ The evidence compiler never sees answers, labels or judge feedback. It records a
 
 The source-level retrieval variant uses facts as search keys and original turns as values. Each retrieval view contributes at most once per source, duplicate content is removed, and selected sources are presented chronologically with one date header per session. This separates source recovery from memory compression, informed by [JustMem](https://arxiv.org/html/2609.19877v1).
 
-## Results so far
+## Benchmark results
 
-All answerers and current internal judges use `gpt-6-luna`, low reasoning. LongMemEval uses the unchanged official rubric with a Luna judge, so these are not official GPT-4o-judge leaderboard scores.
+| Benchmark | Hybrid retrieval baseline | VEM | Improvement |
+|---|---:|---:|---:|
+| LoCoMo, 1,540 nonadversarial questions, micro F1 | 58.71 | **61.78** | **+3.07 points** |
+| LongMemEval-S, 500 questions, official judge accuracy | 76.00% | **80.40%** | **+4.40 points** |
+
+All final readers use `gpt-6-luna` with low reasoning. Final evidence budgets are 3,000 tokens for LoCoMo and 6,000 for LongMemEval, counted with `cl100k_base`. The evidence compiler adds one model call; total inference compute is not claimed to be matched.
+
+On the 428 LongMemEval questions excluded from development and validation, official accuracy rises from **76.40% to 79.91% (+3.50 points)**. All 500 original memory ledgers retain their original turns and facts through consolidation. The full index contains 153,656 fact entries and 23,298 usable attribute histories. Three of 23,867 session extractions failed; original evidence remained available for retrieval.
+
+Single-session-user accuracy falls from 69/70 to 64/70. Knowledge updates improve from 66/78 to 73/78, and preference use from 10/30 to 19/30; all task-type results are retained in the final report.
+
+### Development trace
+
+The following development/validation trace uses a Luna substitute judge with unchanged official rubrics. The full scores above use the official `gpt-4o-2024-08-06` snapshot, rubric, temperature 0 and 10-token judge output setting.
 
 | LongMemEval-S condition | Development, 24 questions | Validation, 48 disjoint questions |
 |---|---:|---:|
@@ -25,7 +38,7 @@ All answerers and current internal judges use `gpt-6-luna`, low reasoning. LongM
 | Facts + attribute histories | 19/24 | 37/48 |
 | + request-specific evidence state | 23/24 | 39/48 |
 
-The validation set was frozen before its predictions, with eight questions per task type. Full 500-question indexing and candidate evaluation are running. The selected sparse track/state system leads the stronger hybrid baseline on validation (39/48 vs 35/48); dense fusion into the track pipeline did not improve validation. Selection uses only the 72 development/validation questions, leaving 428 questions for the full test comparison. The completed official GPT-4o-2024-08-06 baselines on all 500 questions are 70.8% for raw BM25 and 76.0% for hybrid retrieval. Candidate official scores remain pending.
+The validation set was frozen before its predictions, with eight questions per task type. The sparse track/state profile was selected using only the 72 development/validation questions. Dense fusion into the track pipeline did not improve validation and was not expanded. Complete official baselines are 70.8% for raw BM25 and 76.0% for hybrid retrieval; the selected candidate achieves 80.4%.
 
 On all 1,540 LoCoMo nonadversarial questions with official captions and 3,000 evidence tokens, raw hybrid retrieval scores **58.71 micro F1 / 50.86 macro F1** and source-level fusion/packing scores **61.78 / 53.49**. Evidence source recall rises from 85.21% to 92.74%. On the eight heldout conversations (1,307 questions), micro F1 rises from 58.74 to 61.42. Full results and protocol details are in `reports/locomo_full_v2.json`. Uniform evidence-state compilation reduced LoCoMo F1 and is not selected for this comparison.
 
@@ -65,3 +78,5 @@ LongMemEval uses cleaned S histories rather than oracle histories. `has_answer`,
 Run configs, predictions, API outputs and usage are in `runs/`; successful calls and extracted sessions are cached for resumption. A run-config mismatch requires a new run name. Model, dataset, scorer, prompt and memory fingerprints support reproduction. Default switches preserve the original variants.
 
 For overlapping stages during the long index run, `src/materialize.py` converts only fully cached sessions into the same immutable memory format without API calls. Run consolidation over those memories, then evaluate with `--ready-only`. The frozen configuration still contains all 500 IDs; partial summaries state `expected_n=500` and `complete=false`. Resume the same run as more memories become available. Use `src/official_judge.py RUN_NAME` on completed prediction batches to obtain official-snapshot judgments; its cache prevents repeated scoring.
+
+To regenerate the completed scope, provenance and score comparison from saved artifacts, run `.venv/bin/python scripts/report_full.py`. It requires exact coverage of all 500 LongMemEval and 1,540 LoCoMo questions, checks actual response models and official judgments, verifies evidence budgets, and compares the original and consolidated memory ledgers.

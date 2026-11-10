@@ -20,7 +20,7 @@ def consolidate(path,api):
     original=json.loads(path.read_text())
     facts=original['facts']
     aliases={'F'+str(i):f['id'] for i,f in enumerate(facts)}
-    inputs=[dict(id='F'+str(i),subject=f['subject'],slot=f['slot'],scope=f.get('scope',''),
+    inputs=[dict(id='F'+str(i),subject=f.get('subject',''),slot=f.get('slot',''),scope=f.get('scope',''),
                  text=f['text'],observed_at=f['observed_at'],event_date=f.get('event_date'),kind=f['kind'])
             for i,f in enumerate(facts)]
     signature=digest(dict(prompt=PROMPT,facts=inputs,model=api.model))

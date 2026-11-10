@@ -61,3 +61,11 @@ def test_caption_protocol_keeps_search_queries_and_qa_out_of_writer_input():
     assert 'a cup with a dog face' not in original
     assert 'a cup with a dog face' in captions
     assert 'SECRET_' not in original + captions
+
+
+def test_fact_statement_remains_retrievable_when_model_omits_metadata():
+    turn=dict(id='S0:T0',speaker='user',text='The piano has a punchy tone.',date='2023-01-01',session='S0',order=0)
+    fact=dict(id='f0',text=turn['text'],kind='state',single=False,sources=[turn['id']],observed_at=turn['date'],order=0)
+    memory=Memory(dict(sessions=[dict(turns=[turn])],facts=[fact]))
+    assert memory.fact_index.rank('piano punchy')[0][0]==0
+    assert memory.by_fact['f0']==fact

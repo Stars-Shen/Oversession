@@ -3,7 +3,6 @@ from collections import Counter, defaultdict
 import json
 import math
 import re
-from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from api import API, ROOT, digest, atomic_json
 
@@ -136,7 +135,7 @@ class Memory:
         self.facts = data.get('facts', [])
         self.by_fact = {f['id']: f for f in self.facts}
         self.raw_index = BM25([t['speaker'] + ' ' + t['text'] for t in self.turns])
-        self.fact_index = BM25([f['subject'] + ' ' + f['slot'] + ' ' + f['text'] for f in self.facts])
+        self.fact_index = BM25([f.get('subject','') + ' ' + f.get('slot','') + ' ' + f['text'] for f in self.facts])
         self.tracks = [t for t in data.get('tracks', [])
                        if isinstance(t.get('entity'), str) and isinstance(t.get('attribute'), str)]
         self.track_index = BM25([t['entity'] + ' ' + t['attribute'] + ' ' +
