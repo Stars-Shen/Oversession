@@ -80,3 +80,32 @@ Run configs, predictions, API outputs and usage are in `runs/`; successful calls
 For overlapping stages during the long index run, `src/materialize.py` converts only fully cached sessions into the same immutable memory format without API calls. Run consolidation over those memories, then evaluate with `--ready-only`. The frozen configuration still contains all 500 IDs; partial summaries state `expected_n=500` and `complete=false`. Resume the same run as more memories become available. Use `src/official_judge.py RUN_NAME` on completed prediction batches to obtain official-snapshot judgments; its cache prevents repeated scoring.
 
 To regenerate the completed scope, provenance and score comparison from saved artifacts, run `.venv/bin/python scripts/report_full.py`. It requires exact coverage of all 500 LongMemEval and 1,540 LoCoMo questions, checks actual response models and official judgments, verifies evidence budgets, and compares the original and consolidated memory ledgers.
+
+## SiliconFlow research phase: full evaluation incomplete
+
+Broader reading of PreCoMem, RGMem, HippoRAG 2, A-Mem, Zep, database provenance,
+truth maintenance and Bayesian change detection is recorded in
+[phase-3 research notes](notes/phase3/research.md). Several structural experiments
+were rejected; the cross-encoder's small development gain failed separate validation.
+
+With the same frozen v2 memory, evidence, prompts and 3000-token final context,
+`deepseek-ai/DeepSeek-V4.1-Flash` native thinking produced:
+
+| LoCoMo cohort | Thinking disabled | Thinking enabled | Difference |
+|---|---:|---:|---:|
+| Separate validation, 160 questions | 59.68 | 65.40 | +5.72 F1 points |
+| Available confirmation pairs excluding development/validation, 603 questions | 60.04 | 63.94 | +3.90 F1 points |
+
+The confirmation paired bootstrap interval is [+1.59, +6.33] points. Single-hop
+performance declines in that cohort; this is not a uniform improvement. Thinking
+uses extra inference compute and a larger completion limit, and the writer remains
+the frozen Luna writer. This is a reader-compute result, not a new memory algorithm.
+
+The full run stopped on SiliconFlow HTTP 402 (insufficient balance), with 1855/3080
+outputs and 924 complete pairs saved. **There is no completed 1540-question phase-3
+score.** No new OpenAI calls were made. A balance guard now stops the queued run on
+the first 402. All caches support resumption with the same configuration after funding.
+
+See [scope-audited report](reports/phase3.json) and
+[SiliconFlow reproduction instructions](notes/phase3/reproduce.md). The earlier
+completed v2 benchmark results above are preserved separately.
