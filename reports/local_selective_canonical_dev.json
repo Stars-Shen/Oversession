@@ -1,0 +1,125 @@
+{
+  "complete": true,
+  "n": 80,
+  "new_generations": 27,
+  "reused_outputs": 53,
+  "metrics": {
+    "canonical": {
+      "n": 80,
+      "f1": 0.6252267252674861,
+      "macro_f1": 0.6044325834801664,
+      "evidence_recall": 0.9258547008547009,
+      "context_tokens": 2996.325,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.6961180124223603
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.6812770562770564
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.4297830374753452
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.6105522277459036
+        }
+      }
+    },
+    "plain": {
+      "n": 80,
+      "f1": 0.5840420072077681,
+      "macro_f1": 0.5671566210806861,
+      "evidence_recall": 0.9258547008547009,
+      "context_tokens": 2996.0625,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.6816252587991719
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.5523875114784205
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.4297830374753452
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.6048306765698069
+        }
+      }
+    }
+  },
+  "delta": 0.041184718059718066,
+  "bootstrap_ci": [
+    -0.014317649364524359,
+    0.09938558836996332
+  ],
+  "wins": 12,
+  "losses": 6,
+  "ties": 62,
+  "truncated_outputs": [],
+  "config": {
+    "model": "/home/wqshen/models/Qwen3-30B-A3B-Instruct-2507",
+    "alpha": 0.5,
+    "max_new_tokens": 192,
+    "dtype": "bfloat16",
+    "methods": [
+      "canonical"
+    ],
+    "question_ids": [
+      "conv-26:62",
+      "conv-30:32",
+      "conv-26:33",
+      "conv-26:45",
+      "conv-30:31",
+      "conv-26:20",
+      "conv-26:63",
+      "conv-26:41",
+      "conv-30:21",
+      "conv-30:8",
+      "conv-26:90",
+      "conv-30:0",
+      "conv-26:12",
+      "conv-26:76",
+      "conv-26:21",
+      "conv-30:16",
+      "conv-26:8",
+      "conv-26:5",
+      "conv-26:151",
+      "conv-26:67",
+      "conv-30:15",
+      "conv-26:31",
+      "conv-26:118",
+      "conv-26:17",
+      "conv-26:35",
+      "conv-26:49",
+      "conv-30:22"
+    ],
+    "seed": 20261111,
+    "inputs_hash": "f635b47394174f5a3b0a287a9b58ac36380d72d25ee53506f92ab461715dbb94",
+    "memory_sha256": {
+      "conv-26": "499886ffc8474c8088b219e16b9e6a21e5d7a0ae82f104686db4daa8ab005f55",
+      "conv-30": "f1fbb6408076d505495037d331e97b31de320d212cea019a54af3de5514cbb52"
+    },
+    "context_budget": 3000,
+    "model_config_sha256": "a1ee086a68d0cbfc87316da00ba4b8507bd1292978108e2496201a30a450f438",
+    "tokenizer_config_sha256": "a62ff0a2472a0fa1b8eaabcb57c59b58afa42a22831dc141400b6e0cf2b65ce3",
+    "provider": "local; no network",
+    "writer": "frozen v2 Luna",
+    "split": "development",
+    "decoding": "greedy; explicit do_sample=False override",
+    "routing_execution": "original expert order, empty experts skipped",
+    "baseline_run": "local_cad_greedy_dev",
+    "temporal_only": true,
+    "question_rule": "\\bwhen\\b|\\bhow (?:long|old)\\b|\\b(?:before|after|year|month|week|date|since)\\b",
+    "intervention": "same four-view source priority; canonical teacher facts replace represented source text; raw fallback for sources with no extracted facts",
+    "evidence_recall_definition": "provenance-root coverage, not visibility of complete original turns",
+    "decision": "One fixed value-layer test; no fact-count or mixing-weight sweep."
+  }
+}

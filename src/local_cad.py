@@ -59,7 +59,7 @@ def prepare(args,folder):
         rows.append(dict(qid=name+':'+str(qi),question=q['question'],system=ANSWER+COMPACT,
                          context=ctx['text'],source_ids=ctx['source_ids'],context_tokens=ctx['tokens']))
     config=dict(model=str(MODEL_PATH),alpha=.5,max_new_tokens=192,dtype='bfloat16',
-                methods=['plain','cad'],question_ids=[r['qid'] for r in rows],seed=20261111,
+                methods=['plain'] if args.plain_only else ['plain','cad'],question_ids=[r['qid'] for r in rows],seed=20261111,
                 inputs_hash=digest(rows),memory_sha256=hashes,context_budget=3000,
                 model_config_sha256=hashlib.sha256((MODEL_PATH/'config.json').read_bytes()).hexdigest(),
                 tokenizer_config_sha256=hashlib.sha256((MODEL_PATH/'tokenizer_config.json').read_bytes()).hexdigest(),
@@ -153,7 +153,7 @@ def generate(args,folder):
 def main():
     p=argparse.ArgumentParser();p.add_argument('command',choices=['prepare','generate','score'])
     p.add_argument('--convs',default='0,1');p.add_argument('--limit',type=int,default=80)
-    p.add_argument('--run',default='local_cad_greedy_dev');args=p.parse_args()
+    p.add_argument('--run',default='local_cad_greedy_dev');p.add_argument('--plain-only',action='store_true');args=p.parse_args()
     folder=ROOT/'runs/phase3'/args.run;folder.mkdir(parents=True,exist_ok=True)
     if args.command=='prepare':prepare(args,folder)
     elif args.command=='generate':generate(args,folder)
@@ -163,7 +163,8 @@ def main():
         import re
         data=json.loads((ROOT/'data/locomo10.json').read_text());by_name={s['sample_id']:s for s in data};metric=scorer()
         rows=[json.loads(l) for l in (folder/'predictions.jsonl').read_text().splitlines()]
-        expected={(qid,m) for qid in json.loads((folder/'config.json').read_text())['question_ids'] for m in ('plain','cad')}
+        config=json.loads((folder/'config.json').read_text())
+        expected={(qid,m) for qid in config['question_ids'] for m in config['methods']}
         assert {(r['qid'],r['method']) for r in rows}==expected and len(rows)==len(expected)
         for row in rows:
             name,qi=row['qid'].rsplit(':',1);q=by_name[name]['qa'][int(qi)]
@@ -171,11 +172,12 @@ def main():
             row.update(category=q['category'],f1=metric(row['hypothesis'],q),
                        evidence_recall=len(gold&set(row['source_ids']))/len(gold) if gold else None)
         # Both modes use exactly the same retrieved evidence, already audited at preparation.
-        by_method={m:{r['qid']:r for r in rows if r['method']==m} for m in ('plain','cad')}
-        delta=np.array([by_method['cad'][qid]['f1']-by_method['plain'][qid]['f1'] for qid in sorted(by_method['plain'])])
-        result=dict(complete=True,metrics=summarize(rows),delta=float(delta.mean()),
-                    wins=int((delta>0).sum()),losses=int((delta<0).sum()),ties=int((delta==0).sum()),
+        result=dict(complete=True,metrics=summarize(rows),
                     truncated_outputs=[dict(qid=r['qid'],method=r['method']) for r in rows if not r['stopped_with_eos']])
+        if {'plain','cad'}<=set(config['methods']):
+            by_method={m:{r['qid']:r for r in rows if r['method']==m} for m in ('plain','cad')}
+            delta=np.array([by_method['cad'][qid]['f1']-by_method['plain'][qid]['f1'] for qid in sorted(by_method['plain'])])
+            result.update(delta=float(delta.mean()),wins=int((delta>0).sum()),losses=int((delta<0).sum()),ties=int((delta==0).sum()))
         atomic_json(folder/'scored.json',rows);atomic_json(folder/'summary.json',result);print(json.dumps(result,indent=2))
 
 

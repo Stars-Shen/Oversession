@@ -56,3 +56,56 @@ fallback turns, and 89.5625 provenance sources. Artifacts:
 The existing HF generator is used with method `canonical`; CAD and structured
 repair are disabled. This is a local reader experiment, separate from the
 incomplete SiliconFlow full evaluation.
+
+## Computational sufficiency, rather than information creation
+
+Let X be the immutable conversation, Q the question, W the frozen writer, and
+M its question-blind extracted facts. Conditional on W, the Markov chain
+Y — (X,Q,W) — M gives the data-processing inequality
+`I(Y; M | Q,W) <= I(Y; X | Q,W)`. Extraction cannot create information about the
+conversation's target answer that an unrestricted ideal reader could not obtain
+from X with the same fixed writer knowledge. This is an explanatory derivation,
+not a new theorem or a measured calibration guarantee.
+
+The actual reader has limited compute, context and learned decoding behavior.
+A smaller representation can therefore reduce its error even though it loses
+information in the Shannon sense. The empirical question is whether the facts
+preserve the question-relevant distinctions while removing inference burdens.
+The current test checks that end-task utility directly; it does not assume M is
+a sufficient statistic. If lost details outweigh easier interpretation, stop
+rather than claiming that compression should work by information theory.
+
+## Development result and one selected confirmation
+
+Uniform canonical values complete all 80 questions without truncation:
+**58.4042 → 56.9302 F1** (−1.4740 points), 19 wins / 23 losses / 38 ties.
+Temporal category F1 improves **55.2388 → 68.1277**, while multi-hop falls
+68.1625 → 61.1491 and single-hop 60.4831 → 49.5082. Provenance-root recall rises
+92.5855 → 93.8675, illustrating why root coverage alone is not answer utility.
+Reject uniform replacement and do not tune packing mixtures.
+
+One post-hoc development selection uses exactly the question-only `TIME_QUERY`
+regex already fixed in `src/calendar_memory.py` before this trial. No category
+labels, candidate scores or answers enter routing. It selects canonical values
+for 27 questions and reuses raw-source outputs on the other 53, producing
+**62.5227 F1** (+4.1185), 12 wins / 6 losses / 62 ties. This representation choice
+was made after seeing category results; the development score is exploratory.
+`reports/local_selective_canonical_exploratory.json` records that status explicitly.
+
+Freeze this one rule and check the existing 160-question, separate-conversation
+manifest on conversations 2–9 (seed 20261111). It chooses 47 canonical contexts;
+113 candidate outputs reuse the unchanged raw-source branch. Generate the 160
+local-model raw baselines once, then the 47 changed inputs. Keep weights, greedy
+decoding, answer prompt and 3000-token context budget identical. This is a new
+local-model comparison, not a substitution for missing DeepSeek outputs. Those
+conversations have been evaluated in earlier research revisions; they are not
+an untouched final test. Do not tune the rule after this comparison.
+
+Preparation:
+`src/local_cad.py prepare --run local_plain_validation --convs 2,3,4,5,6,7,8,9
+--limit 160 --plain-only`, then
+`scripts/canonical_value_study.py prepare --run local_selective_canonical_validation
+--baseline-run local_plain_validation --temporal-only`.
+Generate both runs using the unchanged local HF backend, score the plain baseline
+with `src/local_cad.py score --run local_plain_validation`, then score the candidate
+with `scripts/canonical_value_study.py score --run local_selective_canonical_validation`.
