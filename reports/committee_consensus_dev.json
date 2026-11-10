@@ -1,0 +1,139 @@
+{
+  "config": {
+    "candidate_order": [
+      "deliberate",
+      "v2",
+      "local_plain"
+    ],
+    "tie_break": "first; strongest existing deliberate reader",
+    "utility": "mean symmetric Porter token F1 against other two model answers, no gold categories",
+    "scope": "heterogeneous finite committee, not iid posterior samples or exact Bayes optimality",
+    "source_files_sha256": {
+      "runs/phase3/sf_deliberate_dev/predictions.jsonl": "c82d9bef5b07fa0c3a455228d55a2d1002650ee180b08aa87b45521f0ba10bb4",
+      "runs/phase3/local_cad_greedy_dev/predictions.jsonl": "1fa7f1fc1f0ba2ef601b1d0366d0d56f6c8017028cac8aa3d2a335bb5ccece32"
+    },
+    "selection_hash": "34993da9d28558807ba5a9e5d4ce6bcc28d52fa66f6aa40eeae871e1fc595794",
+    "n": 80,
+    "decision": "Require >=3 paired F1 points above deliberate on development before one existing validation comparison; no weights or utility search."
+  },
+  "metrics": {
+    "committee": {
+      "n": 80,
+      "f1": 0.6707125201098986,
+      "macro_f1": 0.652691509575642,
+      "evidence_recall": 0.9258547008547009,
+      "context_tokens": 2996.0625,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.6805037957211869
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.7560704447068083
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.495595003287311
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.6785967945872619
+        }
+      }
+    },
+    "deliberate": {
+      "n": 80,
+      "f1": 0.655747535756727,
+      "macro_f1": 0.6392902200359769,
+      "evidence_recall": 0.9258547008547009,
+      "context_tokens": 2996.0625,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.6154503105590061
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.7591007477371113
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.4903540903540904
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.6922557314936995
+        }
+      }
+    },
+    "local_plain": {
+      "n": 80,
+      "f1": 0.5840420072077681,
+      "macro_f1": 0.5671566210806861,
+      "evidence_recall": 0.9258547008547009,
+      "context_tokens": 2996.0625,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.6816252587991719
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.5523875114784205
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.4297830374753452
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.6048306765698069
+        }
+      }
+    },
+    "v2": {
+      "n": 80,
+      "f1": 0.6416494486784061,
+      "macro_f1": 0.6224934249764236,
+      "evidence_recall": 0.9258547008547009,
+      "context_tokens": 2996.0625,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.666735679779158
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.7028466483011937
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.45713346482577244
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.6632579069995704
+        }
+      }
+    }
+  },
+  "delta_vs_strongest": 0.014964984353171696,
+  "bootstrap_ci": [
+    -0.02789985670477398,
+    0.05637435704081721
+  ],
+  "wins": 12,
+  "losses": 9,
+  "ties": 59,
+  "selected_reader_counts": {
+    "deliberate": 51,
+    "v2": 19,
+    "local_plain": 10
+  },
+  "oracle_pool_f1": 0.7389050900080312,
+  "oracle_interpretation": "Gold-only diagnostic ceiling; not an executable selector or achieved performance.",
+  "expansion_gate_passed": false,
+  "new_model_calls": 0,
+  "compute_interpretation": "This cached analysis adds zero calls. Deployment needs both DeepSeek modes plus one local answer; no cost-reduction claim."
+}

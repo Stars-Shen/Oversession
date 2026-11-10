@@ -85,3 +85,12 @@ regularization motivate the mechanism; E-mem supplies an adjacent intact-episode
 alternative. No inference-time evidence-output schema is added. One final
 adapter and one validation are scheduled, with no parameter search. Its real
 maximum-length backward smoke passed; answer metrics remain pending.
+
+A [task-risk transfer analysis](task_risk.md) distinguishes sequence-risk
+training, MBR decoding and Bayes-optimal binary-set F-measure decisions. The
+official multi-hop comma metric is not the latter objective. One cache-only
+three-reader consensus test gives **65.57 → 67.07** on development, versus the
+strongest existing DeepSeek reasoning reader, with no new model calls. Its
+declared +3-point expansion gate fails; stop selector variants. A gold-only
+pool ceiling is diagnostic, not achieved performance. The fixed 30B training
+continues independently; no additional training or paid job is launched.
