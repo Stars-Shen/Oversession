@@ -141,5 +141,9 @@ One fixed [30B source-supervised reader study](notes/phase3/source_supervised_re
 trained on conversation 0's 131 fully supported questions, improves the other
 dialogue's 81-question validation **58.62 -> 61.20 F1 (+2.58)**. This misses the
 original +3-point triage gate, which remains false. One explicit exception checks
-the unchanged final adapter on 160 questions across eight conversations; that
-comparison is pending. No full-benchmark breakthrough is claimed.
+the unchanged final adapter on 160 questions across eight conversations:
+**51.58 -> 55.70 (+4.12)**, with a question-bootstrap interval of [-0.88, +9.23]
+points and zero capped outputs. Target-mixture sensitivity is +4.29 points;
+multi-hop declines by 3.97 points. A fixed 1307-question paired comparison is
+now running, reusing the existing 160 answers in each condition. Its full result
+is pending; no full-benchmark breakthrough is claimed.

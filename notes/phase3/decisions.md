@@ -90,7 +90,12 @@ all three observed categories improve while inference has no validation cases,
 one explicitly recorded exception checks the unchanged adapter on the existing
 160-question, eight-conversation cohort. Require both +3 paired and +3
 target-mixture sensitivity points before full expansion, with no further
-exception or tuning for this candidate. That comparison is pending.
+exception or tuning for this candidate. That comparison completes **51.58 ->
+55.70 (+4.12)**; target-mixture sensitivity is +4.29 points and neither reader
+has capped outputs. Multi-hop nevertheless declines by 3.97 points; do not
+claim a multi-source composition improvement. The same adapter now enters a
+complete 1307-question paired comparison, reusing 160 answers per condition
+and separately reporting the remaining 1147. Full-benchmark results are pending.
 
 A [task-risk transfer analysis](task_risk.md) distinguishes sequence-risk
 training, MBR decoding and Bayes-optimal binary-set F-measure decisions. The

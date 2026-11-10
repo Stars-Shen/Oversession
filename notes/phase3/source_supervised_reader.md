@@ -140,5 +140,37 @@ capped answers. There is no further triage exception for this candidate. The
 160 questions have been reused in research; do not call them untouched tests.
 No full run or paid call is launched by this decision.
 
+## Separate-conversation result and full evaluation
+
+All 160 paired questions across eight conversations complete: **51.5752 ->
+55.6961 F1 (+4.1209 points)**, 36 wins / 38 losses / 86 ties. The question-bootstrap
+interval is [-0.8788, +9.2284] points; both readers have zero capped answers.
+The prespecified target-mixture sensitivity is **+4.2851 points**, not an
+observed full score. Both expansion point criteria pass, so evaluate the same
+final adapter on all 1307 eligible questions. There is no retraining or routing
+change. `reports/source_reader_separate.json` records this decision's evidence.
+
+Effects are heterogeneous: multi-hop **-3.9657**, temporal **+3.5604**, inference
+**+10.3233**, single-hop **+6.5654** points, with 40 questions per category.
+The result does not support a claim of improved multi-source composition.
+It supports an overall gain for this joint reader update on this cohort;
+the auxiliary loss, answer supervision and normalization are not isolated.
+
+The full comparison excludes both training/validation dialogues. Its
+`local_source_control_full` and `local_source_full` manifests use identical
+original prompts, 3000-token evidence and greedy 192-token answer decoding.
+Each reuses its 160 existing answers after exact input equality checks; only
+1147 additional answers per condition are generated. Report both all 1307
+pairs and the remaining 1147 after excluding the expansion cohort. Those
+remaining questions were not used to choose this adapter, although this dataset
+was used in earlier project research. Do not call them globally untouched.
+
+`src/source_supervised_reader.py prepare-full|run-full|score-full` implements
+the finite comparison. Run the orchestration with the existing CPU `.venv`;
+it uses the existing Torch interpreter only for generation. Physical GPUs 1–3
+are reused sequentially, with no new paid calls. Progress is stored in
+`runs/phase3/source_reader/full_pipeline.log` and the two full-run generation
+logs. The full result is pending; this is not yet a full-benchmark breakthrough.
+
 This note records the active authorized experiment. It does not instruct another
 session to resume it automatically.

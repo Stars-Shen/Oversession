@@ -1,0 +1,194 @@
+{
+  "complete": true,
+  "n": 160,
+  "metrics": {
+    "adapted": {
+      "n": 160,
+      "f1": 0.556960526674529,
+      "macro_f1": 0.556960526674529,
+      "evidence_recall": 0.8710720651897121,
+      "context_tokens": 2996.975,
+      "by_category": {
+        "1": {
+          "n": 40,
+          "f1": 0.5232582381243095
+        },
+        "2": {
+          "n": 40,
+          "f1": 0.570465367965368
+        },
+        "3": {
+          "n": 40,
+          "f1": 0.39915149393090565
+        },
+        "4": {
+          "n": 40,
+          "f1": 0.734967006677533
+        }
+      }
+    },
+    "base": {
+      "n": 160,
+      "f1": 0.5157518703171202,
+      "macro_f1": 0.5157518703171202,
+      "evidence_recall": 0.8710720651897121,
+      "context_tokens": 2996.975,
+      "by_category": {
+        "1": {
+          "n": 40,
+          "f1": 0.5629153782725211
+        },
+        "2": {
+          "n": 40,
+          "f1": 0.5348611111111111
+        },
+        "3": {
+          "n": 40,
+          "f1": 0.29591809889548515
+        },
+        "4": {
+          "n": 40,
+          "f1": 0.6693128929893636
+        }
+      }
+    }
+  },
+  "delta": 0.041208656357408814,
+  "bootstrap_ci": [
+    -0.008788451704702304,
+    0.09228361077594288
+  ],
+  "wins": 36,
+  "losses": 38,
+  "ties": 86,
+  "capped_outputs": {
+    "base": 0,
+    "adapted": 0
+  },
+  "training": {
+    "base_run": "local_cad_greedy_dev",
+    "train_dialogue": "conv-26",
+    "validation_dialogue": "conv-30",
+    "train_n": 131,
+    "validation_n": 81,
+    "train_hash": "6d0e3f86df2f3944dd34aef9a1bd85949247417b4c7d48efa432ee413db9b05c",
+    "validation_hash": "8ca03efabb90d48640af13e66bb090f28e6da11b5b0e1c9cfe349fbb97cba412",
+    "rank": 8,
+    "alpha": 16,
+    "targets": [
+      "q_proj",
+      "v_proj"
+    ],
+    "epochs": 3,
+    "learning_rate": 0.0001,
+    "gradient_accumulation": 8,
+    "gradient_clip": 1.0,
+    "seed": 20261111,
+    "source_loss_weight": 0.1,
+    "answer_loss": "token-normalized within each accumulated batch, including EOS",
+    "source_loss": "mean positive-source negative log of maximum head content mass at last prompt token",
+    "decision": "Fixed final adapter only; no epoch, rank or weight search. Require +3 paired F1 points and <=5% capped outputs on validation before separate-conversation evaluation.",
+    "interpretation": "Joint supervised-reader update; does not isolate attention regularization from answer supervision or token normalization. Attention is not a faithfulness certificate."
+  },
+  "training_status": {
+    "complete": true,
+    "steps": 51,
+    "epochs": 3,
+    "adapter_sha256": "5d44fe88809408e7f4e1722519a25ef133cef267135e0763f6b9a43dcf2059d1",
+    "trainable_parameters": 3342336,
+    "torch": "2.5.1+cu121",
+    "transformers": "4.51.3",
+    "max_cuda_memory_gib": [
+      20.100505828857422,
+      20.68166732788086,
+      19.043562412261963
+    ],
+    "elapsed_seconds": 4121.034902572632,
+    "device_map": {
+      "model.embed_tokens": "0",
+      "model.layers.0": "0",
+      "model.layers.1": "0",
+      "model.layers.2": "0",
+      "model.layers.3": "0",
+      "model.layers.4": "0",
+      "model.layers.5": "0",
+      "model.layers.6": "0",
+      "model.layers.7": "0",
+      "model.layers.8": "0",
+      "model.layers.9": "0",
+      "model.layers.10": "0",
+      "model.layers.11": "0",
+      "model.layers.12": "0",
+      "model.layers.13": "0",
+      "model.layers.14": "0",
+      "model.layers.15": "0",
+      "model.layers.16": "1",
+      "model.layers.17": "1",
+      "model.layers.18": "1",
+      "model.layers.19": "1",
+      "model.layers.20": "1",
+      "model.layers.21": "1",
+      "model.layers.22": "1",
+      "model.layers.23": "1",
+      "model.layers.24": "1",
+      "model.layers.25": "1",
+      "model.layers.26": "1",
+      "model.layers.27": "1",
+      "model.layers.28": "1",
+      "model.layers.29": "1",
+      "model.layers.30": "1",
+      "model.layers.31": "1",
+      "model.layers.32": "1",
+      "model.layers.33": "2",
+      "model.layers.34": "2",
+      "model.layers.35": "2",
+      "model.layers.36": "2",
+      "model.layers.37": "2",
+      "model.layers.38": "2",
+      "model.layers.39": "2",
+      "model.layers.40": "2",
+      "model.layers.41": "2",
+      "model.layers.42": "2",
+      "model.layers.43": "2",
+      "model.layers.44": "2",
+      "model.layers.45": "2",
+      "model.layers.46": "2",
+      "model.layers.47": "2",
+      "model.norm": "2",
+      "model.rotary_emb": "2",
+      "lm_head": "2"
+    },
+    "cuda_visible_devices": "GPU-2e9192d0-c0a1-0348-c7e8-52b80e9a200c,GPU-0308be3a-5294-9333-56c7-8bb232d051ba,GPU-12ada14a-1f3f-21c7-76a5-327ed2db11e2"
+  },
+  "triage_override": {
+    "original_gate_passed": false,
+    "validation_delta": 0.025772495981038077,
+    "reason": "One explicit final-adapter confirmation: +2.58 on one dialogue, positive in all three observed categories, no inference questions. No retraining or tuning.",
+    "full_run_decision": "Require >=3 paired F1 points and >=3 target-mixture sensitivity points, with <=5% capped outputs. No further exception for this candidate."
+  },
+  "expansion_gate_passed": true,
+  "scope": "existing eight-conversation cohort, reused in research",
+  "target_mix_sensitivity": {
+    "target_n": 1307,
+    "target_category_counts": {
+      "2": 258,
+      "1": 239,
+      "3": 83,
+      "4": 727
+    },
+    "observed_category_counts": {
+      "2": 40,
+      "1": 40,
+      "3": 40,
+      "4": 40
+    },
+    "category_deltas": {
+      "2": 0.03560425685425683,
+      "1": -0.039657140148211645,
+      "3": 0.1032333950354205,
+      "4": 0.06565411368816942
+    },
+    "delta": 0.042851380422505546,
+    "interpretation": "Assumes within-category effects transfer to the complete target cohort. Sensitivity only, not measured full-benchmark F1. The original triage gate is unchanged."
+  }
+}

@@ -163,11 +163,45 @@ def prepare_evaluation(folder,separate=False):
     atomic_json(cp,config);save_rows(target/'inputs.jsonl',read_rows(source/'inputs.jsonl'))
 
 
-def score(folder,separate=False):
+def prepare_full(folder):
+    from types import SimpleNamespace
+    from local_cad import prepare as prepare_inputs
+    report=json.loads((ROOT/'reports/source_reader_separate.json').read_text())
+    assert report['expansion_gate_passed'] and report['target_mix_sensitivity']['delta']>=.03
+    status=json.loads((folder/'training_status.json').read_text());assert status['complete']
+    assert status['adapter_sha256']==report['training_status']['adapter_sha256']
+    training=json.loads((folder/'training_config.json').read_text())
+    baseline=ROOT/'runs/phase3/local_source_control_full';baseline.mkdir(exist_ok=True)
+    if not (baseline/'inputs.jsonl').exists():
+        prepare_inputs(SimpleNamespace(convs='2,3,4,5,6,7,8,9',limit=0,plain_only=True),baseline)
+    rows=read_rows(baseline/'inputs.jsonl');by_id={r['qid']:r for r in rows}
+    assert len(rows)==len(by_id)==1307
+    config=json.loads((baseline/'config.json').read_text());assert digest(rows)==config['inputs_hash']
+    adapted=ROOT/'runs/phase3/local_source_full';adapted.mkdir(exist_ok=True)
+    config.update(adapter_file=str((folder/'adapter.pt').relative_to(ROOT)),adapter_sha256=status['adapter_sha256'],
+        adapter_config={k:training[k] for k in ('rank','alpha')},
+        triage_override=report['triage_override'],
+        expansion_evidence=dict(n=report['n'],delta=report['delta'],target_mix_sensitivity=report['target_mix_sensitivity']['delta']),
+        decision='Complete 1307-question paired evaluation of the unchanged final adapter. Reuse identical 160-case outputs; additionally report the remaining 1147. No category routing or tuning.')
+    cp=adapted/'config.json'
+    if cp.exists() and json.loads(cp.read_text())!=config:raise ValueError('Full evaluation config changed')
+    atomic_json(cp,config);save_rows(adapted/'inputs.jsonl',rows)
+    for target,old_name in [(baseline,'local_plain_validation'),(adapted,'local_source_separate')]:
+        old=ROOT/'runs/phase3'/old_name;previous=read_rows(old/'inputs.jsonl')
+        assert len(previous)==160 and all(by_id[r['qid']]==r for r in previous)
+        outputs=[r for r in read_rows(old/'predictions.jsonl') if r['method']=='plain']
+        assert len(outputs)==160 and {r['qid'] for r in outputs}=={r['qid'] for r in previous}
+        if not (target/'predictions.jsonl').exists():save_rows(target/'predictions.jsonl',outputs)
+        atomic_json(target/'reused.json',dict(source=str(old.relative_to(ROOT)),n=160,
+            predictions_sha256=hashlib.sha256((old/'predictions.jsonl').read_bytes()).hexdigest()))
+    print('prepared 1307 paired questions, reusing 160 outputs per condition; 1147 new per condition',flush=True)
+
+
+def score(folder,separate=False,full=False):
     import numpy as np
     from experiment import scorer,summarize
-    suffix='separate' if separate else 'validation'
-    source=ROOT/'runs/phase3'/('local_plain_validation' if separate else 'local_source_control_validation')
+    suffix='full' if full else 'separate' if separate else 'validation'
+    source=ROOT/'runs/phase3'/('local_source_control_full' if full else 'local_plain_validation' if separate else 'local_source_control_validation')
     target=ROOT/'runs/phase3'/('local_source_'+suffix)
     data={s['sample_id']:s for s in json.loads((ROOT/'data/locomo10.json').read_text())};metric=scorer()
     inputs=read_rows(source/'inputs.jsonl');expected={r['qid'] for r in inputs};combined=[];by={}
@@ -192,7 +226,8 @@ def score(folder,separate=False):
         training_status=json.loads((folder/'training_status.json').read_text()),
         triage_override=json.loads((target/'config.json').read_text()).get('triage_override'),
         expansion_gate_passed=bool(delta.mean()>=.03 and all(n<=.05*len(expected) for n in capped.values())),
-        scope='existing eight-conversation cohort, reused in research' if separate else 'one heldout dialogue, not full benchmark')
+        scope='complete conversations 2-9; training/validation dialogues excluded; dataset reused in research' if full else
+              'existing eight-conversation cohort, reused in research' if separate else 'one heldout dialogue, not full benchmark')
     if separate:
         from collections import Counter
         training=result['training'];excluded={training['train_dialogue'],training['validation_dialogue']}
@@ -204,6 +239,13 @@ def score(folder,separate=False):
             observed_category_counts={c:before[c]['n'] for c in counts},category_deltas=effects,
             delta=sum(counts[c]/sum(counts.values())*effects[c] for c in counts),
             interpretation='Assumes within-category effects transfer to the complete target cohort. Sensitivity only, not measured full-benchmark F1. The original triage gate is unchanged.')
+    if full:
+        selected={r['qid'] for r in read_rows(ROOT/'runs/phase3/local_source_separate/inputs.jsonl')}
+        remaining=expected-selected;assert len(expected)==1307 and len(remaining)==1147
+        confirmation=[r for r in combined if r['qid'] in remaining]
+        result['selection_cohort_excluded']=dict(n=1147,metrics=summarize(confirmation),
+            delta=float(np.mean([by['adapted'][qid]['f1']-by['base'][qid]['f1'] for qid in sorted(remaining)])),
+            scope='The 160-question expansion cohort excluded. These questions were not used to train or choose this adapter; dataset was used in earlier research.')
     atomic_json(target/'scored.json',combined);atomic_json(target/'summary.json',result)
     atomic_json(ROOT/'reports'/('source_reader_'+suffix+'.json'),result)
     print(json.dumps({k:result[k] for k in ('n','delta','bootstrap_ci','wins','losses','ties','capped_outputs','expansion_gate_passed')}))
@@ -211,9 +253,26 @@ def score(folder,separate=False):
 
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('command',choices=['prepare','train','prepare-evaluation','score','prepare-separate','score-separate'])
+    p=argparse.ArgumentParser();p.add_argument('command',choices=['prepare','train','prepare-evaluation','score','prepare-separate','score-separate','prepare-full','run-full','score-full'])
     args=p.parse_args();folder=ROOT/'runs/phase3/source_reader';folder.mkdir(exist_ok=True)
-    if args.command=='prepare-separate':prepare_evaluation(folder,True)
+    if args.command=='prepare-full':prepare_full(folder)
+    elif args.command=='run-full':
+        import subprocess
+        torch_python='/home/wqshen/anaconda3-new/envs/user-memory-study/bin/python'
+        try:
+            for name in ('local_source_control_full','local_source_full'):
+                run=ROOT/'runs/phase3'/name
+                print('Running',name,flush=True)
+                with (run/'generation_stdout.log').open('a') as log:
+                    subprocess.run([torch_python,'-u','src/local_cad.py','generate','--run',name],
+                                   cwd=ROOT,stdout=log,stderr=subprocess.STDOUT,check=True)
+            score(folder,full=True)
+            atomic_json(folder/'full_pipeline_status.json',dict(complete=True,scoring_environment='existing CPU .venv',new_paid_calls=0))
+        except Exception as error:
+            atomic_json(folder/'full_pipeline_status.json',dict(complete=False,error=str(error)))
+            raise
+    elif args.command=='score-full':score(folder,full=True)
+    elif args.command=='prepare-separate':prepare_evaluation(folder,True)
     elif args.command=='score-separate':score(folder,True)
     else:{'prepare':prepare,'train':train,'prepare-evaluation':prepare_evaluation,'score':score}[args.command](folder)
 
