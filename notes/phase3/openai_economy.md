@@ -82,3 +82,8 @@ Two targeted no-network checks pass: legacy cache reuse sends no paid request,
 and cost arithmetic partitions input buckets without charging reasoning twice.
 The original shared API and baseline paths remain unchanged. The new client
 is opt-in via `src/openai_flex.py`; research calls in this workflow use it.
+
+The user's subsequent model restriction is explicit: **gpt-6-luna only**.
+The request method rejects other models before opening a session. A targeted
+no-network check confirms the restriction. Historical alternative-model prices
+are accounting records and do not authorize new calls.

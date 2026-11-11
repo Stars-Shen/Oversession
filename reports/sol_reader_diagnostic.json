@@ -1,0 +1,163 @@
+{
+  "scope": "Six purposeful cached cases, not a prevalence estimate or independent evaluation. No new model calls.",
+  "cases": [
+    {
+      "qid": "conv-26:21",
+      "category": 2,
+      "question": "When did Caroline have a picnic?",
+      "gold": "The week before 6 July 2023",
+      "luna": "The week before 6 July 2023",
+      "sol": "Late June 2023",
+      "luna_f1": 1.0,
+      "sol_f1": 0.25,
+      "evidence_recall": 1.0,
+      "annotated_source_quotes": [
+        {
+          "id": "D6:11",
+          "speaker": "Caroline",
+          "text": "Wow, that's great! It sure shows how important friendship and compassion are. It's made me appreciate how lucky I am to have my friends and family helping with my transition. They make all the difference. We even had a picnic last week! [Shared image caption (automatic): a photo of a group of women sitting on a blanket in a park]",
+          "date": "8:18 pm on 6 July, 2023",
+          "session": "session_6",
+          "order": 5
+        }
+      ]
+    },
+    {
+      "qid": "conv-26:148",
+      "category": 4,
+      "question": "What was Melanie's reaction to her children enjoying the Grand Canyon?",
+      "gold": "She was happy and thankful",
+      "luna": "She was thankful they enjoyed it.",
+      "sol": "Joy and gratitude for her family",
+      "luna_f1": 0.6,
+      "sol_f1": 0.0,
+      "evidence_recall": 1.0,
+      "annotated_source_quotes": [
+        {
+          "id": "D18:5",
+          "speaker": "Melanie",
+          "text": "Yeah, you're right, Caroline. Family's super important to me. Especially after the accident, I've thought a lot about how much I need them. They mean the world to me and I'm so thankful to have them. Thankfully, they enjoyed the Grand Canyon a lot! [Shared image caption (automatic): a photo of two children standing on a rocky cliff overlooking a canyon]",
+          "date": "6:55 pm on 20 October, 2023",
+          "session": "session_18",
+          "order": 17
+        }
+      ]
+    },
+    {
+      "qid": "conv-26:71",
+      "category": 1,
+      "question": "What book did Melanie read from Caroline's suggestion?",
+      "gold": "\"Becoming Nicole\"",
+      "luna": "Becoming Nicole by Amy Ellis Nutt",
+      "sol": "“Becoming Nicole” by Amy Ellis Nutt",
+      "luna_f1": 0.5,
+      "sol_f1": 0.0,
+      "evidence_recall": 1.0,
+      "annotated_source_quotes": [
+        {
+          "id": "D17:10",
+          "speaker": "Melanie",
+          "text": "Thanks, Caroline. It was tough, but I'm doing ok. Been reading that book you recommended a while ago and painting to keep busy.",
+          "date": "10:31 am on 13 October, 2023",
+          "session": "session_17",
+          "order": 16
+        },
+        {
+          "id": "D7:11",
+          "speaker": "Caroline",
+          "text": "I loved \"Becoming Nicole\" by Amy Ellis Nutt. It's a real inspiring true story about a trans girl and her family. It made me feel connected and gave me a lot of hope for my own path. Highly recommend it for sure! [Shared image caption (automatic): a photo of a dog sitting in a boat on the water]",
+          "date": "4:33 pm on 12 July, 2023",
+          "session": "session_7",
+          "order": 6
+        }
+      ]
+    },
+    {
+      "qid": "conv-26:66",
+      "category": 1,
+      "question": "What does Melanie do with her family on hikes?",
+      "gold": "Roast marshmallows, tell stories",
+      "luna": "Explore nature and forests.",
+      "sol": "Explore nature and forests, enjoy mountain views, learn about nature, bond with each other",
+      "luna_f1": 0.0,
+      "sol_f1": 0.0,
+      "evidence_recall": 1.0,
+      "annotated_source_quotes": [
+        {
+          "id": "D10:12",
+          "speaker": "Melanie",
+          "text": "We always look forward to our family camping trip. We roast marshmallows, tell stories around the campfire and just enjoy each other's company. It's the highlight of our summer! [Shared image caption (automatic): a photo of a fire pit with a lot of fire and sparks]",
+          "date": "8:56 pm on 20 July, 2023",
+          "session": "session_10",
+          "order": 9
+        },
+        {
+          "id": "D16:4",
+          "speaker": "Melanie",
+          "text": "Thanks, Caroline! It's awesome seeing the kids get excited learning something new about nature. Those moments make being a parent worth it. We roasted marshmallows and shared stories around the campfire. Those simple moments make the best memories. What inspires you with your volunteering?",
+          "date": "12:09 am on 13 September, 2023",
+          "session": "session_16",
+          "order": 15
+        }
+      ]
+    },
+    {
+      "qid": "conv-26:59",
+      "category": 3,
+      "question": "Would Caroline be considered religious?",
+      "gold": "Somewhat, but not extremely religious",
+      "luna": "No information available",
+      "sol": "No information available",
+      "luna_f1": 0.0,
+      "sol_f1": 0.0,
+      "evidence_recall": 1.0,
+      "annotated_source_quotes": [
+        {
+          "id": "D12:1",
+          "speaker": "Caroline",
+          "text": "Hey Mel! How're ya doin'? Recently, I had a not-so-great experience on a hike. I ran into a group of religious conservatives who said something that really upset me. It made me think how much work we still have to do for LGBTQ rights. It's been so helpful to have people around me who accept and support me, so I know I'll be ok!",
+          "date": "1:50 pm on 17 August, 2023",
+          "session": "session_12",
+          "order": 11
+        },
+        {
+          "id": "D14:19",
+          "speaker": "Caroline",
+          "text": "Thanks! It was made for a local church and shows time changing our lives. I made it to show my own journey as a transgender woman and how we should accept growth and change. [Shared image caption (automatic): a photo of a large stained glass window in a church]",
+          "date": "1:33 pm on 25 August, 2023",
+          "session": "session_14",
+          "order": 13
+        }
+      ]
+    },
+    {
+      "qid": "conv-26:40",
+      "category": 1,
+      "question": "How many times has Melanie gone to the beach in 2023?",
+      "gold": 2,
+      "luna": "Once or twice a year",
+      "sol": "Once or twice.",
+      "luna_f1": 0.0,
+      "sol_f1": 0.0,
+      "evidence_recall": 1.0,
+      "annotated_source_quotes": [
+        {
+          "id": "D10:8",
+          "speaker": "Melanie",
+          "text": "Wow, fantastic, Caroline! Bet the atmosphere was incredible. Oh yeah, we went to the beach recently. It was awesome! The kids had such a blast. [Shared image caption (automatic): a photo of three children playing on the beach with a kite]",
+          "date": "8:56 pm on 20 July, 2023",
+          "session": "session_10",
+          "order": 9
+        },
+        {
+          "id": "D6:16",
+          "speaker": "Melanie",
+          "text": "Glad you have support, Caroline! Unconditional love is so important. Here's a pic of my family camping at the beach. We love it, it brings us closer! [Shared image caption (automatic): a photo of a family sitting around a campfire on the beach]",
+          "date": "8:18 pm on 6 July, 2023",
+          "session": "session_6",
+          "order": 5
+        }
+      ]
+    }
+  ]
+}

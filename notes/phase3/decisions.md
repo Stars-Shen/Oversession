@@ -164,3 +164,11 @@ the released reward/data/compute differences. Reuse the outcome signal only
 after the current fixed candidate has an actual validation result; do not
 install or launch the full public RL stack as an automatic response to a weak
 SFT result. The ongoing training and evaluation queue remain unchanged.
+
+The [Sol probe](sol_reader_probe.md) finishes **62.4512 F1**, below Luna medium's
+65.9598, estimated cost $0.332399. Reject expansion. The user explicitly
+clarifies **gpt-6-luna only, do not use Sol**. Lock the Flex request entry point
+to Luna before network setup; archive the Sol script and retire its generation
+command. No Sol job or queue remains. Subsequent research must use Luna and
+preserve the cheaper-API preference. The broader goal remains unmet; this
+rejection does not authorize a sibling-model sweep.

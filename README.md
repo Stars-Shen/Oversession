@@ -173,3 +173,7 @@ with no capped outputs. Its estimated new API cost is **$0.01745**, with no
 automatic Standard fallback or paid-response retries. The small accuracy gain
 fails the expansion gate; stop this candidate. The cheaper transport remains
 available for further research, with old baselines reused at zero new cost.
+
+The user explicitly restricts subsequent research to **gpt-6-luna only**.
+The Flex entry point enforces this before sending a request. The rejected Sol
+probe is archived with no live job or queued expansion.

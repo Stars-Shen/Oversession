@@ -240,7 +240,7 @@
   "incomplete_outputs": [],
   "expansion_gate_passed": false,
   "interpretation": "Same Luna model and 3K evidence; medium/4096 versus cached low/768. Flex transport records actual served tier. Reused development; no memory-algorithm claim.",
-  "new_paid_calls": 0,
+  "new_paid_calls": 80,
   "new_api_cost_estimate_usd": 0.017452937499999998,
   "actual_new_paid_calls": 80,
   "usage": {

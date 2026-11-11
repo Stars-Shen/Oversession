@@ -83,6 +83,7 @@ def score():
     pilot=json.loads((ROOT/'runs/phase3/openai_flex_pilot.json').read_text());records=read_rows(FOLDER/'predictions.jsonl')
     summary['new_api_cost_estimate_usd']=pilot['estimated_new_cost_usd']+sum(r['estimated_new_cost_usd'] for r in records)
     summary['actual_new_paid_calls']=int(pilot['new_paid_call'])+sum(r['new_paid_call'] for r in records)
+    summary['new_paid_calls']=summary['actual_new_paid_calls']
     summary['usage']={k:sum(r['usage'][k] for r in records) for k in ('input_tokens','output_tokens','total_tokens')}
     summary['cost_comparison']=dict(same_medium_usage_at_standard_usd=sum(luna_cost(r['usage'],False) for r in records),
         old_low_completed_usage_at_standard_usd=sum(luna_cost(r['usage'],False) for r in low),old_low_reuse_new_cost_usd=0.,

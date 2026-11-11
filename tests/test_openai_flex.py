@@ -2,8 +2,9 @@ import json
 from pathlib import Path
 import sys
 from unittest.mock import patch
+import pytest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
-from openai_flex import FlexAPI,luna_cost,request_body
+from openai_flex import FlexAPI,luna_cost,model_cost,request_body
 from api import digest
 
 
@@ -25,3 +26,14 @@ def test_reprice_partitions_input_and_counts_reasoning_only_once():
     standard=(200*.1+200*.01+600*.125+100*.5)/1e6
     assert luna_cost(usage,False)==standard
     assert luna_cost(usage,True)==standard/2
+
+
+def test_sol_has_its_own_cached_read_rate():
+    usage=dict(input_tokens=1000,input_tokens_details=dict(cached_tokens=200,cache_write_tokens=600),output_tokens=100)
+    assert model_cost(usage,'gpt-6.1-sol',True)==(200*2+200*.1+600*2.5+100*10)/2e6
+
+
+def test_only_luna_is_allowed_before_request_setup():
+    client=object.__new__(FlexAPI);client.model='gpt-6.1-sol'
+    with pytest.raises(AssertionError,match='gpt-6-luna only'):
+        client.call('system','input')

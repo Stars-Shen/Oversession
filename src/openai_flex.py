@@ -12,19 +12,27 @@ def request_body(model,instructions,content,max_tokens=4096,json_output=False,ef
     return body
 
 
-def luna_cost(usage,flex):
+PRICES={'gpt-6-luna':(.1,.01,.125,.5),'gpt-6.1-sol':(2.,.1,2.5,10.)}
+
+
+def model_cost(usage,model,flex):
     """2026-11-11 public USD estimate; output already includes reasoning tokens."""
     details=usage.get('input_tokens_details') or {}
     read=details.get('cached_tokens',0);write=details.get('cache_write_tokens',0)
     ordinary=usage['input_tokens']-read-write
     assert ordinary>=0
+    input_rate,read_rate,write_rate,output_rate=PRICES[model]
     multiplier=.5 if flex else 1.;long=usage['input_tokens']>272000
-    return multiplier*((ordinary*.1+read*.01+write*.125)*(2 if long else 1)+usage['output_tokens']*.5*(1.5 if long else 1))/1e6
+    return multiplier*((ordinary*input_rate+read*read_rate+write*write_rate)*(2 if long else 1)+usage['output_tokens']*output_rate*(1.5 if long else 1))/1e6
+
+
+def luna_cost(usage,flex):
+    return model_cost(usage,'gpt-6-luna',flex)
 
 
 class FlexAPI(API):
     def call(self,instructions,content,max_tokens=4096,json_output=False,effort='low'):
-        assert self.model=='gpt-6-luna','This price-audited transport is scoped to the existing Luna model.'
+        assert self.model=='gpt-6-luna','User requires gpt-6-luna only; reject other models before any paid request.'
         body=request_body(self.model,instructions,content,max_tokens,json_output,effort)
         signature=digest(body);folder=ROOT/'runs/api_flex_cache';path=folder/(signature+'.json')
         # Transport tier does not change the requested model/instructions/input.
@@ -50,7 +58,7 @@ class FlexAPI(API):
             complete=complete,incomplete_details=data.get('incomplete_details'),raw_output_text=text,
             request_hash=signature,served_request_hash=digest(sent),requested_service_tier='flex',
             served_service_tier=served,elapsed_seconds=time.time()-start,new_paid_call=True,
-            estimated_new_cost_usd=luna_cost(data['usage'],served=='flex'),price_date='2026-11-11')
+            estimated_new_cost_usd=model_cost(data['usage'],self.model,served=='flex'),price_date='2026-11-11')
         if json_output and complete:
             import json
             result['parsed']=json.loads(text)
