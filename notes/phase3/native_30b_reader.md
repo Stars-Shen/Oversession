@@ -53,5 +53,16 @@ Artifacts: `src/native_30b_reader.py`, `runs/phase3/native_30b_dev/` and eventua
 metadata, before any model execution. `scripts/fetch_qwen30b_thinking.py` uses
 verified streaming GET instead; this is infrastructure recovery, not an F1 retry.
 
+A finite coordinator is running at `runs/phase3/native_30b_dev/pipeline.py`.
+It waits on the confirmed-live pinned download, checks the current free memory
+of the six specified GPU UUIDs, launches exactly the two 40-question generation
+processes, and calls the existing CPU scorer once both succeed. Its current
+phase, coordinator PID and generation PIDs are in `pipeline_status.json`;
+logs are `pipeline.log` and `generation.0.log` / `generation.1.log`. It queues
+no separate-conversation or full-evaluation expansion. SIGTERM to that owned
+coordinator stops its owned generation children while preserving saved batches.
+No unrelated GPU job is stopped. A download/generation failure is recorded as
+infrastructure failure, with no automatic model restart or F1-policy change.
+
 This note documents the active authorized task, not an instruction for another
 session to resume it automatically.
