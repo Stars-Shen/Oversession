@@ -1,0 +1,216 @@
+{
+  "complete": true,
+  "n": 80,
+  "config": {
+    "model": "/home/wqshen/models/Qwen3-30B-A3B-Instruct-2507",
+    "max_new_tokens": 192,
+    "dtype": "bfloat16",
+    "model_config_sha256": "a1ee086a68d0cbfc87316da00ba4b8507bd1292978108e2496201a30a450f438",
+    "tokenizer_config_sha256": "a62ff0a2472a0fa1b8eaabcb57c59b58afa42a22831dc141400b6e0cf2b65ce3",
+    "seed": 20261111,
+    "question_ids": [
+      "conv-26:78",
+      "conv-26:62",
+      "conv-26:22",
+      "conv-26:95",
+      "conv-26:37",
+      "conv-30:32",
+      "conv-26:14",
+      "conv-30:70",
+      "conv-26:71",
+      "conv-26:33",
+      "conv-26:30",
+      "conv-30:75",
+      "conv-26:56",
+      "conv-26:45",
+      "conv-26:2",
+      "conv-26:105",
+      "conv-30:31",
+      "conv-26:20",
+      "conv-26:46",
+      "conv-26:141",
+      "conv-26:66",
+      "conv-26:63",
+      "conv-26:59",
+      "conv-26:103",
+      "conv-26:48",
+      "conv-26:41",
+      "conv-26:42",
+      "conv-26:148",
+      "conv-26:39",
+      "conv-30:21",
+      "conv-26:50",
+      "conv-26:114",
+      "conv-26:4",
+      "conv-30:8",
+      "conv-26:64",
+      "conv-26:90",
+      "conv-26:40",
+      "conv-30:0",
+      "conv-26:81",
+      "conv-30:48",
+      "conv-30:25",
+      "conv-26:12",
+      "conv-26:27",
+      "conv-26:139",
+      "conv-26:76",
+      "conv-26:21",
+      "conv-26:69",
+      "conv-30:52",
+      "conv-30:27",
+      "conv-30:16",
+      "conv-26:77",
+      "conv-30:77",
+      "conv-26:23",
+      "conv-26:8",
+      "conv-26:131",
+      "conv-26:3",
+      "conv-26:5",
+      "conv-26:151",
+      "conv-26:55",
+      "conv-26:67",
+      "conv-30:62",
+      "conv-26:18",
+      "conv-30:15",
+      "conv-26:117",
+      "conv-30:18",
+      "conv-26:31",
+      "conv-26:118",
+      "conv-26:15",
+      "conv-26:17",
+      "conv-26:116",
+      "conv-30:3",
+      "conv-26:35",
+      "conv-30:81",
+      "conv-30:29",
+      "conv-26:49",
+      "conv-26:137",
+      "conv-26:61",
+      "conv-30:22",
+      "conv-26:146",
+      "conv-26:52"
+    ],
+    "inputs_hash": "aa0e1145b014ad43899e621c3c6de25368aa1421ff4b00e91aef2c3d4098cd14",
+    "memory_sha256": {
+      "conv-26": "499886ffc8474c8088b219e16b9e6a21e5d7a0ae82f104686db4daa8ab005f55",
+      "conv-30": "f1fbb6408076d505495037d331e97b31de320d212cea019a54af3de5514cbb52"
+    },
+    "original_inputs_hash": "0cbe2258fc185deb88f3c0e3ed560357e34b1e1d51f7fb8d4fb860ee86ff519f",
+    "context_budget": "all raw turns; no truncation",
+    "split": "fixed 80 development questions from conversations 0 and 1",
+    "adapter": null,
+    "decoding": "original greedy, max 192 new tokens, same answer instructions",
+    "cache": "question-independent causal memory prefix; crop after each answer; no previous question or answer retained",
+    "device_layers": [
+      16,
+      23,
+      9
+    ],
+    "provider": "local; no paid calls",
+    "hypothesis": "The 3K retrieval budget hides information needed by the original reader.",
+    "decision": "Expand once only if paired F1 exceeds the existing strongest DeepSeek deliberate reader by >=3 points; no prompt, cache or layer-profile grid."
+  },
+  "metrics": {
+    "deepseek_deliberate": {
+      "n": 80,
+      "f1": 0.655747535756727,
+      "macro_f1": 0.6392902200359769,
+      "evidence_recall": 0.9258547008547009,
+      "context_tokens": 2996.0625,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.6154503105590061
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.7591007477371113
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.4903540903540904
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.6922557314936995
+        }
+      }
+    },
+    "full_history": {
+      "n": 80,
+      "f1": 0.5096681340460365,
+      "macro_f1": 0.4949218498737512,
+      "evidence_recall": 1.0,
+      "context_tokens": 17710.25,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.4784851621808143
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.5709595959595959
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.36201746970977744
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.568225171644817
+        }
+      }
+    },
+    "retrieved_plain": {
+      "n": 80,
+      "f1": 0.5840420072077681,
+      "macro_f1": 0.5671566210806861,
+      "evidence_recall": 0.9258547008547009,
+      "context_tokens": 2996.0625,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.6816252587991719
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.5523875114784205
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.4297830374753452
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.6048306765698069
+        }
+      }
+    }
+  },
+  "comparisons": {
+    "retrieved_plain": {
+      "delta": -0.07437387316173155,
+      "bootstrap_ci": [
+        -0.1347004831898408,
+        -0.012838608652269632
+      ],
+      "wins": 12,
+      "losses": 23,
+      "ties": 45
+    },
+    "deepseek_deliberate": {
+      "delta": -0.14607940171069042,
+      "bootstrap_ci": [
+        -0.2165411609710057,
+        -0.07596489167759488
+      ],
+      "wins": 16,
+      "losses": 40,
+      "ties": 24
+    }
+  },
+  "capped_outputs": [],
+  "expansion_gate_passed": false,
+  "interpretation": "Full history changes the information budget; cache reuse is compute optimization. Development is reused, not an untouched benchmark.",
+  "new_paid_calls": 0
+}

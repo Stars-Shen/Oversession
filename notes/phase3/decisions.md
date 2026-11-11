@@ -115,6 +115,22 @@ strongest existing 80-question development reader (65.5748), not merely over
 the weaker local control. No prompt or memory-profile grid is authorized by
 that protocol. Existing 3K full evaluation continues on its original GPUs.
 
+The full-history test completes at **50.97** versus local 3K retrieval's 58.40
+and DeepSeek deliberate's 65.57, with no capped outputs. Reject this candidate
+and stop expansion; do not sweep context order or length. Prefix reuse works
+as a computation mechanism, but does not make the additional information useful
+to the original reader. The next bounded feasibility assessment concerns the
+same-size native-thinking checkpoint, not another summary/retrieval heuristic.
+
+After the strongest-reference comparison, cancel the queued remaining 1147
+source-adapter generations. Preserve existing outputs and checkpoint and allow
+the original 1307-question control to finish as a reusable baseline. Pause the
+orchestrator to prevent the adapted child from launching, then terminate that
+paused parent once the control ends. This is an intentionally incomplete paired
+study, not a completed full score. The next [fixed native 30B reader policy](native_30b_reader.md)
+uses unchanged 3K evidence and a single model-card sampling policy, with a hard
+4096-token budget and no prompt/temperature/budget grid. Generation is pending.
+
 The [Memory-R1 final paper and pinned release assessment](memory_r1_release.md)
 replaces stale assumptions that author code is unavailable. It distinguishes
 trajectory cloning, final-answer supervision and outcome learning, and records

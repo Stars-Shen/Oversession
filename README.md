@@ -144,14 +144,21 @@ original +3-point triage gate, which remains false. One explicit exception check
 the unchanged final adapter on 160 questions across eight conversations:
 **51.58 -> 55.70 (+4.12)**, with a question-bootstrap interval of [-0.88, +9.23]
 points and zero capped outputs. Target-mixture sensitivity is +4.29 points;
-multi-hop declines by 3.97 points. A fixed 1307-question paired comparison is
-now running, reusing the existing 160 answers in each condition. Its full result
-is pending; no full-benchmark breakthrough is claimed.
+multi-hop declines by 3.97 points. A 1307-question paired comparison was started,
+but the queued adapter expansion is cancelled after the stronger-reader check
+below. The original control finishes independently; all cached answers and the
+adapter are preserved. There is no completed 1307-question paired adapter score.
 
 The stronger same-context DeepSeek deliberate reference on those 160 questions
 is **65.40 F1**, 9.70 points above the adapted local reader. A gain against the
 weaker local control therefore does not establish the broader research goal.
 One [full-history development test](notes/phase3/full_history.md) now examines
 whether the 3K information budget is the bottleneck, with the original unadapted
-reader and causal prefix reuse. Expansion requires an improvement over the
-strongest existing development reader; results are pending.
+reader and causal prefix reuse. It completes at **50.97 F1**, below the same
+reader's 3K retrieval score of 58.40 and the strongest development reader's
+65.57. This candidate is stopped without an ordering or length sweep.
+
+A fixed [same-size native reader replacement](notes/phase3/native_30b_reader.md)
+now assesses Qwen3-30B-A3B-Thinking-2507 using the exact original 3K evidence.
+Its pinned weights are downloading; generation and F1 results are pending.
+This changes reader weights and inference policy, not the memory algorithm.

@@ -209,3 +209,14 @@ for this local adapter. The latter is **9.7040 points below** the strongest
 reference, which leads in all four categories. The local paired gain does not
 constitute the desired larger absolute breakthrough. This is recorded in
 `reports/source_reader_diagnostic.json` without new model calls.
+
+## Expansion cancelled after strongest-reference comparison
+
+Cancel the queued remaining 1147 adapted generations: the same-context candidate
+trails DeepSeek deliberate in every category, so extending that comparison has
+low decision value for the larger-breakthrough goal. The original full control
+is allowed to finish as a reusable baseline. Its orchestrator is paused solely
+to prevent launching the queued adapted child; terminate that parent after the
+control finishes. Preserve the 160 adapted outputs, checkpoint and all baseline
+outputs. `full_pipeline_status.json` explicitly records intentional cancellation,
+not successful full pairing. No completed full adapter result is claimed.

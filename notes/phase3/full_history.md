@@ -73,3 +73,21 @@ Duplicating the query before/after context helps synthetic key retrieval much
 more than natural QA. Thus neither more tokens nor a question-placement trick
 is guaranteed to improve this different 2025 Qwen backbone on LoCoMo. Do not
 expand a placement/order grid automatically if this fixed test fails.
+
+## Completed development result
+
+All 80 outputs complete without capping. Original 3K retrieval scores **58.4042**;
+full history scores **50.9668**, a **−7.4374-point** paired change, bootstrap
+interval [−13.4700, −1.2839], 12 wins / 23 losses / 45 ties. Against the
+strongest DeepSeek deliberate control (65.5748), the change is **−14.6079**
+points, interval [−21.6541, −7.5965]. The expansion gate is false. Stop this
+candidate; no 160-question expansion or context-length/order/prompt search.
+This does not isolate position bias causally, but it rejects the proposed
+complete-history treatment as a useful improvement in this setting.
+
+Generation takes 459.24 seconds on the explicit shared-GPU placement. Prefixes
+are 19,579 and 15,345 Qwen tokens, with setup times 9.46 and 6.88 seconds.
+Peak allocated memory is 20.89/28.62/12.42 GiB. The CPU scoring script initially
+omitted a field required by the shared summarizer; it was repaired and scored
+the saved outputs without regenerating answers. No shared scorer was changed.
+Artifacts: `reports/full_history_dev.json` and `runs/phase3/full_history_dev/`.

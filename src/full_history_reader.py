@@ -4,6 +4,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import time
 from api import ROOT,atomic_json,digest
 from prefix_memory import raw_history,prompt_ids,memory_prefix_ids
@@ -112,11 +113,11 @@ def generate():
     atomic_json(FOLDER/'status.json',dict(complete=True,records=len(saved),expected_records=80))
 
 
-def score():
+def score(folder=FOLDER,method='full_history',interpretation=None):
     import numpy as np
     from experiment import scorer,summarize
-    config=json.loads((FOLDER/'config.json').read_text());metric=scorer()
-    full=read_rows(FOLDER/'predictions.jsonl');ids=config['question_ids']
+    config=json.loads((folder/'config.json').read_text());metric=scorer()
+    full=read_rows(folder/'predictions.jsonl');ids=config['question_ids']
     assert len(full)==80 and {r['qid'] for r in full}==set(ids)
     plain=[dict(r,method='retrieved_plain') for r in read_rows(CONTROL/'predictions.jsonl') if r['method']=='plain']
     strong=[dict(r,method='deepseek_deliberate') for r in read_rows(STRONG/'predictions.jsonl') if r['method']=='deliberate']
@@ -125,21 +126,25 @@ def score():
     scored=[]
     for r in full+plain+strong:
         name,qi=r['qid'].rsplit(':',1);q=data[name]['qa'][int(qi)]
-        scored.append(dict(r,category=q['category'],f1=metric(r['hypothesis'],q)))
+        gold={mid for evidence in q.get('evidence',[]) for mid in re.findall(r'D\d+:\d+',str(evidence))}
+        scored.append(dict(r,category=q['category'],f1=metric(r['hypothesis'],q),
+            evidence_recall=len(gold&set(r['source_ids']))/len(gold) if gold else None))
     by={m:{r['qid']:r['f1'] for r in scored if r['method']==m}
-        for m in ('full_history','retrieved_plain','deepseek_deliberate')}
+        for m in (method,'retrieved_plain','deepseek_deliberate')}
     comparisons={}
     for control in ('retrieved_plain','deepseek_deliberate'):
-        delta=np.array([by['full_history'][qid]-by[control][qid] for qid in ids])
+        delta=np.array([by[method][qid]-by[control][qid] for qid in ids])
         ci=np.quantile(np.random.default_rng(20261111).choice(delta,(5000,len(delta)),replace=True).mean(1),[.025,.975])
         comparisons[control]=dict(delta=float(delta.mean()),bootstrap_ci=ci.tolist(),wins=int((delta>0).sum()),
             losses=int((delta<0).sum()),ties=int((delta==0).sum()))
+    incomplete=[r['qid'] for r in full if not r['stopped_with_eos'] or not r.get('closed_reasoning',True)]
     summary=dict(complete=True,n=80,config=config,metrics=summarize(scored),comparisons=comparisons,
         capped_outputs=[r['qid'] for r in full if not r['stopped_with_eos']],
-        expansion_gate_passed=comparisons['deepseek_deliberate']['delta']>=.03,
-        interpretation='Full history changes the information budget; cache reuse is compute optimization. Development is reused, not an untouched benchmark.',
+        incomplete_outputs=incomplete,
+        expansion_gate_passed=comparisons['deepseek_deliberate']['delta']>=.03 and len(incomplete)<=config.get('max_incomplete_fraction',1.)*len(full),
+        interpretation=interpretation or 'Full history changes the information budget; cache reuse is compute optimization. Development is reused, not an untouched benchmark.',
         new_paid_calls=0)
-    atomic_json(FOLDER/'scored.json',scored);atomic_json(ROOT/'reports/full_history_dev.json',summary)
+    atomic_json(folder/'scored.json',scored);atomic_json(ROOT/'reports'/(folder.name+'.json'),summary)
     print(json.dumps({k:summary[k] for k in ('comparisons','capped_outputs','expansion_gate_passed')},indent=2))
     print({m:r['f1'] for m,r in summary['metrics'].items()})
 
