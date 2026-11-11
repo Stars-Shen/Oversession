@@ -185,5 +185,17 @@ original support groups. On the fixed 80 development questions, matched Luna
 low F1 falls **65.45 -> 63.92**, with no incomplete outputs. Source recall also
 falls **92.59 -> 91.30%**. The build plus answer cost estimate is **$0.05308**;
 19 exact old answer requests are reused. Reject expansion and gate/prompt
-sweeps. The user also raises [turn-triggered writing](notes/phase3/turn_granularity.md)
-as a separate candidate; no turn-level performance result exists yet.
+sweeps. The user also requests a separate comparison of
+[turn-triggered writing](notes/phase3/turn_granularity.md), reported below.
+
+The user subsequently authorizes **Standard**. The opt-in Luna client supports
+explicit `service_tier=default`, with semantic cache reuse, separate new-response
+caches and actual served-tier accounting; its default Flex behavior is preserved.
+The [turn-anchored writer experiment](notes/phase3/turn_writer.md) completes all
+788 targets (62 Flex, then 726 Standard), with 934 facts versus the old 490.
+Raw/query embeddings and the original reader remain fixed. On the same 80
+development questions, F1 falls **65.45 -> 63.55**, source recall falls
+**92.59 -> 91.15%**, and exclusive-state version links remain zero. No writer
+or reader response is capped. Estimated build plus answer cost: **$0.39022**.
+Stop this fixed strategy without a window/top-k/prompt sweep or 160-question
+expansion. It is not a test of PreCoMem's full online feedback lifecycle.

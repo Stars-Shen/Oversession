@@ -1,8 +1,11 @@
 # Turn-triggered writing versus session extraction
 
-User asks whether a PreCoMem-like turn-level path has been considered. Yes as
-a candidate, but no turn-level extraction experiment has been completed here.
-Do not describe the current implementation as turn-level: extract_session sends
+User asks whether a PreCoMem-like turn-level path has been considered. One
+[fixed causal turn-anchored backfill experiment](turn_writer.md) now completes,
+at 63.5546 F1 versus session writing's 65.4549 on the fixed 80 development
+questions. Stop it without a window/prompt sweep; this is not a reproduction
+of PreCoMem's online confidence lifecycle.
+Do not describe the baseline implementation as turn-level: extract_session sends
 one whole dated session and returns atomic facts with one or more turn sources.
 
 Primary check: [PreCoMem v1, sections 2.2 and B.4](https://arxiv.org/html/2610.29467v1).

@@ -191,3 +191,29 @@ diagnostic shows broad relation interference, and the largest gain is just
 should be compared separately with precise source attribution; do not assume
 more facts or finer segmentation alone is progress. The overall breakthrough
 goal remains active and unmet.
+
+The [fixed turn-anchored observation study](turn_writer.md) processes all 788
+development turns with causal preceding context and frozen earlier-session facts.
+Flex explicitly rejects two requests as `flex_unavailable` after 62 successes;
+the process stops and checkpoints all successes. The user then authorizes
+Standard. Resume only 726 outstanding targets via explicit `default` tier,
+keeping Luna, prompts and experimental semantics unchanged. No ambiguous retry
+or automatic paid-tier fallback is introduced.
+
+All 788 writers and 80 readers complete without truncation; sources pass
+membership/target checks. Fact count rises **490 -> 934**, source-turn coverage
+**491 -> 649**, but exclusive-state version links remain zero. The original 80
+contexts reproduce exactly, with unchanged raw/query vectors and the same 3K
+packing/reader. Matched Luna F1 **65.4549 -> 63.5546 (-1.9003 points)**,
+bootstrap interval **[-6.5300, +2.3629]**, 12 wins / 17 losses / 51 ties.
+Source recall **92.5855 -> 91.1538%**. Estimated writer/reader costs
+**$0.35758886 / $0.03262988**, total **$0.39021874**. Stop this fixed writer
+strategy, no 160/full expansion or window/history-top-k/prompt grid. It is not
+a negative reproduction of the full PreCoMem online belief loop. The broader
+breakthrough remains unmet.
+
+A separate [Late Chunking reading](contextual_embeddings.md) considers context
+before embedding pooling, with explicit limitations: its v1 BEIR result uses
+Jina mean pooling, while the current Qwen checkpoint uses last-token pooling.
+No model is downloaded, code copied, pooling changed or new experiment launched
+for that reading.

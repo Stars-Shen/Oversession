@@ -1,4 +1,4 @@
-"""Opt-in Flex transport for the existing Luna workflow; baseline API unchanged."""
+"""Opt-in Luna transport; Flex by default, explicit Standard when authorized."""
 import time
 import requests
 from api import API,ROOT,atomic_json,digest
@@ -31,16 +31,22 @@ def luna_cost(usage,flex):
 
 
 class FlexAPI(API):
+    def __init__(self,model='gpt-6-luna',service_tier='flex'):
+        assert service_tier in ('flex','default')
+        super().__init__(model);self.service_tier=service_tier
+
     def call(self,instructions,content,max_tokens=4096,json_output=False,effort='low'):
         assert self.model=='gpt-6-luna','User requires gpt-6-luna only; reject other models before any paid request.'
         body=request_body(self.model,instructions,content,max_tokens,json_output,effort)
-        signature=digest(body);folder=ROOT/'runs/api_flex_cache';path=folder/(signature+'.json')
+        tier=getattr(self,'service_tier','flex')
+        signature=digest(body);folder=ROOT/('runs/api_flex_cache' if tier=='flex' else 'runs/api_standard_cache');path=folder/(signature+'.json')
         # Transport tier does not change the requested model/instructions/input.
-        for existing in (self.cache/(signature+'.json'),path):
+        for existing in (self.cache/(signature+'.json'),path,
+                         ROOT/'runs/api_flex_cache'/(signature+'.json'),ROOT/'runs/api_standard_cache'/(signature+'.json')):
             if existing.exists():
                 import json
-                return dict(json.loads(existing.read_text()),new_paid_call=False,estimated_new_cost_usd=0.,cache_source='legacy' if existing.parent==self.cache else 'flex')
-        sent=dict(body,service_tier='flex');start=time.time()
+                return dict(json.loads(existing.read_text()),new_paid_call=False,estimated_new_cost_usd=0.,cache_source='legacy' if existing.parent==self.cache else existing.parent.name)
+        sent=dict(body,service_tier=tier);start=time.time()
         with requests.Session() as session:
             session.trust_env=False
             import os
@@ -50,13 +56,13 @@ class FlexAPI(API):
             response=session.post('https://api.openai.com/v1/responses',
                 headers={'Authorization':'Bearer '+self.key},json=sent,timeout=(30,900))
         if response.status_code!=200:
-            raise RuntimeError('OpenAI Flex HTTP {}: {}'.format(response.status_code,response.text[:400].replace(self.key,'[REDACTED]')))
+            raise RuntimeError('OpenAI {} HTTP {}: {}'.format('Flex' if tier=='flex' else 'Standard',response.status_code,response.text[:400].replace(self.key,'[REDACTED]')))
         data=response.json();text='\n'.join(c['text'] for item in data.get('output',[])
             for c in item.get('content',[]) if c.get('type')=='output_text')
         complete=data.get('status')=='completed' and bool(text.strip());served=data.get('service_tier')
         result=dict(text=text if complete else 'No information available',model=data.get('model'),usage=data['usage'],
             complete=complete,incomplete_details=data.get('incomplete_details'),raw_output_text=text,
-            request_hash=signature,served_request_hash=digest(sent),requested_service_tier='flex',
+            request_hash=signature,served_request_hash=digest(sent),requested_service_tier=tier,
             served_service_tier=served,elapsed_seconds=time.time()-start,new_paid_call=True,
             estimated_new_cost_usd=model_cost(data['usage'],self.model,served=='flex'),price_date='2026-11-11')
         if json_output and complete:

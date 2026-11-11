@@ -1,0 +1,355 @@
+{
+  "complete": true,
+  "n": 80,
+  "config": {
+    "model": "gpt-6-luna",
+    "service_tier": "default",
+    "writer_effort": "low",
+    "writer_max_tokens": 2048,
+    "reader_effort": "low",
+    "reader_max_tokens": 768,
+    "context_budget": 3000,
+    "question_ids": [
+      "conv-26:78",
+      "conv-26:62",
+      "conv-26:22",
+      "conv-26:95",
+      "conv-26:37",
+      "conv-30:32",
+      "conv-26:14",
+      "conv-30:70",
+      "conv-26:71",
+      "conv-26:33",
+      "conv-26:30",
+      "conv-30:75",
+      "conv-26:56",
+      "conv-26:45",
+      "conv-26:2",
+      "conv-26:105",
+      "conv-30:31",
+      "conv-26:20",
+      "conv-26:46",
+      "conv-26:141",
+      "conv-26:66",
+      "conv-26:63",
+      "conv-26:59",
+      "conv-26:103",
+      "conv-26:48",
+      "conv-26:41",
+      "conv-26:42",
+      "conv-26:148",
+      "conv-26:39",
+      "conv-30:21",
+      "conv-26:50",
+      "conv-26:114",
+      "conv-26:4",
+      "conv-30:8",
+      "conv-26:64",
+      "conv-26:90",
+      "conv-26:40",
+      "conv-30:0",
+      "conv-26:81",
+      "conv-30:48",
+      "conv-30:25",
+      "conv-26:12",
+      "conv-26:27",
+      "conv-26:139",
+      "conv-26:76",
+      "conv-26:21",
+      "conv-26:69",
+      "conv-30:52",
+      "conv-30:27",
+      "conv-30:16",
+      "conv-26:77",
+      "conv-30:77",
+      "conv-26:23",
+      "conv-26:8",
+      "conv-26:131",
+      "conv-26:3",
+      "conv-26:5",
+      "conv-26:151",
+      "conv-26:55",
+      "conv-26:67",
+      "conv-30:62",
+      "conv-26:18",
+      "conv-30:15",
+      "conv-26:117",
+      "conv-30:18",
+      "conv-26:31",
+      "conv-26:118",
+      "conv-26:15",
+      "conv-26:17",
+      "conv-26:116",
+      "conv-30:3",
+      "conv-26:35",
+      "conv-30:81",
+      "conv-30:29",
+      "conv-26:49",
+      "conv-26:137",
+      "conv-26:61",
+      "conv-30:22",
+      "conv-26:146",
+      "conv-26:52"
+    ],
+    "original_inputs_hash": "0cbe2258fc185deb88f3c0e3ed560357e34b1e1d51f7fb8d4fb860ee86ff519f",
+    "writer_inputs_hash": "e4001af91736c8ab0d06a3f39b2838115fd84a0863d0a32fba26883bcfc1e213",
+    "writer_targets": 788,
+    "planning_limit_usd": 2.5,
+    "writer_prompt_hash": "f7aef7367921c0e33cd7c1ea21c9f6a2581cea565a3af8cb0595c716d284bf04",
+    "split": "reused fixed 80 development",
+    "memory_sha256": {
+      "runs/memories_captions/conv-26.json": "499886ffc8474c8088b219e16b9e6a21e5d7a0ae82f104686db4daa8ab005f55",
+      "runs/memories_captions/conv-30.json": "f1fbb6408076d505495037d331e97b31de320d212cea019a54af3de5514cbb52"
+    },
+    "embedding_sha256": {
+      "runs/embeddings_captions/conv-26.npz": "956c04361e5430f8fbd70776c17a4a3c479ee7e537af67c3670bd0d43f273d7e",
+      "runs/embeddings_captions/conv-30.npz": "afad1189261c190c65dd84699f126de287ab4fcad83cd0294f66db618819850a"
+    },
+    "implementation_sha256": {
+      "src/turn_writer.py": "bef608703d0c79ed3dbd0d9460c470893b7dce5513e501fac79d4bf019712c7e",
+      "src/turn_study.py": "00650022093d2dd6618b9fd46cc1f3da3d7f5850ab7b795befe5a5127559b823",
+      "src/openai_flex.py": "8709de4e8e6e977ff042528f30c0d49a169ddc418fe749b2c10d54e049e4ca23"
+    },
+    "policy": "Target + preceding 8 turns + up to 8 frozen earlier-session facts; no newly written belief feedback",
+    "decision": ">=3 F1 points above strongest cached reader and <=5% incomplete before separate 160",
+    "conservative_writer_quote_usd": 0.9642643124999998,
+    "transport_amendments": [
+      {
+        "reason": "User explicitly authorizes Standard after two explicit unprocessed flex_unavailable rejections",
+        "previous_implementation_sha256": {
+          "src/turn_writer.py": "bef608703d0c79ed3dbd0d9460c470893b7dce5513e501fac79d4bf019712c7e",
+          "src/turn_study.py": "734cd2ce570d0bdb836bcfa2cf6dafa67fa0313eac7d483eb29bacad4bf84418"
+        },
+        "completed_targets": 62,
+        "prior_tier": "flex",
+        "new_tier": "default"
+      }
+    ],
+    "conservative_remaining_writer_quote_usd": 1.7960727499999993,
+    "dataset_sha256": "79fa87e90f04081343b8c8debecb80a9a6842b76a7aa537dc9fdf651ea698ff4",
+    "scorer_sha256": "8e3be5d57ff2ff9ec5cd05939592f468c5f3f1fd95d13e431932bdf6bf0fd6fd",
+    "inputs_hash": "6c1b3f6e93e7916462ad221a3a039205d22bc8820bf38ca81575fec8fc5d0c1a"
+  },
+  "metrics": {
+    "deepseek_deliberate": {
+      "n": 80,
+      "f1": 0.655747535756727,
+      "macro_f1": 0.6392902200359769,
+      "evidence_recall": 0.9258547008547009,
+      "context_tokens": 2996.0625,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.6154503105590061
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.7591007477371113
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.4903540903540904
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.6922557314936995
+        }
+      }
+    },
+    "luna_low": {
+      "n": 80,
+      "f1": 0.6545488580047404,
+      "macro_f1": 0.6247206881637828,
+      "evidence_recall": 0.9258547008547009,
+      "context_tokens": 2996.0625,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.6269496204278814
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.8199724517906336
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.3598290598290598
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.6921316206075565
+        }
+      }
+    },
+    "luna_medium": {
+      "n": 80,
+      "f1": 0.6595977966345361,
+      "macro_f1": 0.6333443402107437,
+      "evidence_recall": 0.9258547008547009,
+      "context_tokens": 2996.0625,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.6653899240855763
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.7827922077922078
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.4035409035409036
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.681654325424287
+        }
+      }
+    },
+    "retrieved_plain": {
+      "n": 80,
+      "f1": 0.5840420072077681,
+      "macro_f1": 0.5671566210806861,
+      "evidence_recall": 0.9258547008547009,
+      "context_tokens": 2996.0625,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.6816252587991719
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.5523875114784205
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.4297830374753452
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.6048306765698069
+        }
+      }
+    },
+    "turn_writer": {
+      "n": 80,
+      "f1": 0.6355461760461761,
+      "macro_f1": 0.6104831951645193,
+      "evidence_recall": 0.9115384615384615,
+      "context_tokens": 2996.225,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.6211729092163875
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.8018824609733701
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.38888888888888895
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.6299885215794307
+        }
+      }
+    }
+  },
+  "comparisons": {
+    "retrieved_plain": {
+      "delta": 0.051504168838407985,
+      "bootstrap_ci": [
+        -0.015614932320095346,
+        0.12102092853553441
+      ],
+      "wins": 28,
+      "losses": 20,
+      "ties": 32
+    },
+    "deepseek_deliberate": {
+      "delta": -0.020201359710550884,
+      "bootstrap_ci": [
+        -0.07397848163886767,
+        0.03252124216163735
+      ],
+      "wins": 18,
+      "losses": 21,
+      "ties": 41
+    },
+    "luna_low": {
+      "delta": -0.01900268195856431,
+      "bootstrap_ci": [
+        -0.06530047315837757,
+        0.02362910412708201
+      ],
+      "wins": 12,
+      "losses": 17,
+      "ties": 51
+    },
+    "luna_medium": {
+      "delta": -0.02405162058836006,
+      "bootstrap_ci": [
+        -0.07153965454354093,
+        0.022638303301132867
+      ],
+      "wins": 14,
+      "losses": 19,
+      "ties": 47
+    }
+  },
+  "capped_outputs": [],
+  "incomplete_outputs": [],
+  "expansion_gate_passed": false,
+  "interpretation": "New causal turn-anchored fact view; frozen four-view source RRF, Luna low/768 and 3K raw evidence. Reused development; not full PreCoMem.",
+  "new_paid_calls": 868,
+  "cost": {
+    "estimated_new_cost_usd": 0.39021873749999997,
+    "new_paid_calls": 868
+  },
+  "post_run_metadata_fix": "Fresh prepare now declares the explicitly authorized Standard tier/rates/limit and dataset/scorer pins. Executed source/config are preserved separately; no requests, retrieval or predictions changed.",
+  "stages": {
+    "writer": {
+      "records": 788,
+      "new_paid_calls": 788,
+      "estimated_new_cost_usd": 0.3575888624999999,
+      "served_tiers": {
+        "flex": 62,
+        "default": 726
+      }
+    },
+    "reader": {
+      "records": 80,
+      "new_paid_calls": 80,
+      "estimated_new_cost_usd": 0.032629875,
+      "served_tiers": {
+        "default": 80
+      }
+    }
+  },
+  "writer_integrity": {
+    "targets": 788,
+    "incomplete": 0,
+    "rejected_proposals": 0
+  },
+  "new_memories": {
+    "conv-30": {
+      "facts": 447,
+      "source_turns": 310,
+      "version_links": 0
+    },
+    "conv-26": {
+      "facts": 487,
+      "source_turns": 339,
+      "version_links": 0
+    }
+  },
+  "embedding_runtime": {
+    "peak_allocated_gib": 1.3806209564208984,
+    "peak_reserved_gib": 1.486328125,
+    "model": "Qwen3-Embedding-0.6B",
+    "dtype": "float16"
+  },
+  "status": "Rejected fixed writer strategy; no expansion or window/top-k/prompt sweep. Broader goal remains unmet."
+}

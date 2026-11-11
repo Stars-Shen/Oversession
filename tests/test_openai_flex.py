@@ -37,3 +37,22 @@ def test_only_luna_is_allowed_before_request_setup():
     client=object.__new__(FlexAPI);client.model='gpt-6.1-sol'
     with pytest.raises(AssertionError,match='gpt-6-luna only'):
         client.call('system','input')
+
+
+def test_explicit_standard_uses_default_tier_standard_prices_and_separate_cache(tmp_path):
+    from unittest.mock import MagicMock
+    client=object.__new__(FlexAPI);client.model='gpt-6-luna';client.cache=tmp_path/'legacy'
+    client.key='dummy-test-key';client.service_tier='default'
+    usage=dict(input_tokens=1000,output_tokens=10)
+    response=MagicMock(status_code=200)
+    response.json.return_value=dict(status='completed',model='gpt-6-luna',service_tier='default',usage=usage,
+        output=[dict(content=[dict(type='output_text',text='saved')])])
+    session=MagicMock();session.post.return_value=response
+    with patch('openai_flex.ROOT',tmp_path),patch('openai_flex.requests.Session') as factory:
+        factory.return_value.__enter__.return_value=session
+        result=client.call('system','input',768)
+        assert session.post.call_args.kwargs['json']['service_tier']=='default'
+        assert result['estimated_new_cost_usd']==luna_cost(usage,False)
+        assert (tmp_path/'runs/api_standard_cache'/(result['request_hash']+'.json')).exists()
+        factory.side_effect=AssertionError('Cache must avoid a second paid call')
+        assert client.call('system','input',768)['new_paid_call'] is False
