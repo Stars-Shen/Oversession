@@ -177,3 +177,13 @@ available for further research, with old baselines reused at zero new cost.
 The user explicitly restricts subsequent research to **gpt-6-luna only**.
 The Flex entry point enforces this before sending a request. The rejected Sol
 probe is archived with no live job or queued expansion.
+
+Research now focuses on **representation, evolution and retrieval**, with the
+reader fixed. One [incremental relation-memory experiment](notes/phase3/relational_memory.md)
+stores cross-session relations, locally versions them, and retrieves complete
+original support groups. On the fixed 80 development questions, matched Luna
+low F1 falls **65.45 -> 63.92**, with no incomplete outputs. Source recall also
+falls **92.59 -> 91.30%**. The build plus answer cost estimate is **$0.05308**;
+19 exact old answer requests are reused. Reject expansion and gate/prompt
+sweeps. The user also raises [turn-triggered writing](notes/phase3/turn_granularity.md)
+as a separate candidate; no turn-level performance result exists yet.

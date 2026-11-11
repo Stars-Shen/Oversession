@@ -172,3 +172,22 @@ to Luna before network setup; archive the Sol script and retire its generation
 command. No Sol job or queue remains. Subsequent research must use Luna and
 preserve the cheaper-API preference. The broader goal remains unmet; this
 rejection does not authorize a sibling-model sweep.
+
+User directs work to representation/evolution/retrieval and asks about
+PreCoMem-like turn-level writing. Keep that granularity question explicit;
+session extraction has not been proved optimal. First complete one fixed
+[incremental relation-memory study](relational_memory.md), holding extraction
+and Luna low/768 use fixed. It creates 49 versions / 41 active relations / 8
+local revisions, and packs complete original support groups inside 3K.
+All 80 original controls reproduce exactly; the new run completes 80/80,
+with 61 new answer calls and 19 exact-cache hits.
+
+Result: **65.4549 -> 63.9217 F1 (-1.5332 points)**, 8 wins / 15 losses / 57 ties,
+source recall **92.5855 -> 91.3034%**, estimated total new build+answer cost
+**$0.05308243**. No capped answers. Expansion gate fails: stop the candidate,
+no 160/full expansion and no lexical-gate/summary-count prompt grid. The bounded
+diagnostic shows broad relation interference, and the largest gain is just
+`Twice` -> `2 times`, not newly demonstrated counting ability. A turn writer
+should be compared separately with precise source attribution; do not assume
+more facts or finer segmentation alone is progress. The overall breakthrough
+goal remains active and unmet.

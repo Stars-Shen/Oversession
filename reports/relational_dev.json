@@ -1,0 +1,222 @@
+{
+  "complete": true,
+  "n": 80,
+  "config": {
+    "question_ids": [
+      "conv-26:78",
+      "conv-26:62",
+      "conv-26:22",
+      "conv-26:95",
+      "conv-26:37",
+      "conv-30:32",
+      "conv-26:14",
+      "conv-30:70",
+      "conv-26:71",
+      "conv-26:33",
+      "conv-26:30",
+      "conv-30:75",
+      "conv-26:56",
+      "conv-26:45",
+      "conv-26:2",
+      "conv-26:105",
+      "conv-30:31",
+      "conv-26:20",
+      "conv-26:46",
+      "conv-26:141",
+      "conv-26:66",
+      "conv-26:63",
+      "conv-26:59",
+      "conv-26:103",
+      "conv-26:48",
+      "conv-26:41",
+      "conv-26:42",
+      "conv-26:148",
+      "conv-26:39",
+      "conv-30:21",
+      "conv-26:50",
+      "conv-26:114",
+      "conv-26:4",
+      "conv-30:8",
+      "conv-26:64",
+      "conv-26:90",
+      "conv-26:40",
+      "conv-30:0",
+      "conv-26:81",
+      "conv-30:48",
+      "conv-30:25",
+      "conv-26:12",
+      "conv-26:27",
+      "conv-26:139",
+      "conv-26:76",
+      "conv-26:21",
+      "conv-26:69",
+      "conv-30:52",
+      "conv-30:27",
+      "conv-30:16",
+      "conv-26:77",
+      "conv-30:77",
+      "conv-26:23",
+      "conv-26:8",
+      "conv-26:131",
+      "conv-26:3",
+      "conv-26:5",
+      "conv-26:151",
+      "conv-26:55",
+      "conv-26:67",
+      "conv-30:62",
+      "conv-26:18",
+      "conv-30:15",
+      "conv-26:117",
+      "conv-30:18",
+      "conv-26:31",
+      "conv-26:118",
+      "conv-26:15",
+      "conv-26:17",
+      "conv-26:116",
+      "conv-30:3",
+      "conv-26:35",
+      "conv-30:81",
+      "conv-30:29",
+      "conv-26:49",
+      "conv-26:137",
+      "conv-26:61",
+      "conv-30:22",
+      "conv-26:146",
+      "conv-26:52"
+    ],
+    "original_inputs_hash": "0cbe2258fc185deb88f3c0e3ed560357e34b1e1d51f7fb8d4fb860ee86ff519f",
+    "memory_sha256": {
+      "conv-26": "499886ffc8474c8088b219e16b9e6a21e5d7a0ae82f104686db4daa8ab005f55",
+      "conv-30": "f1fbb6408076d505495037d331e97b31de320d212cea019a54af3de5514cbb52"
+    },
+    "writer_prompt_hash": "de4814b216682d00137a675a6c72047cd79adfe7eca9c84bfe495cc3ffb3d23c",
+    "model": "gpt-6-luna",
+    "service_tier": "flex",
+    "reasoning": "low",
+    "max_new_tokens": 768,
+    "context_budget": 3000,
+    "planning_limit_usd": 0.5,
+    "policy": "relational-v1",
+    "split": "reused fixed 80 development questions; no held-out claim",
+    "frozen": "extraction, reader system, reasoning, output cap, raw/fact dense embeddings",
+    "decision": ">=3 F1 points above strongest cached reader, <=5% incomplete, before separate 160",
+    "dataset_sha256": "79fa87e90f04081343b8c8debecb80a9a6842b76a7aa537dc9fdf651ea698ff4",
+    "scorer_sha256": "8e3be5d57ff2ff9ec5cd05939592f468c5f3f1fd95d13e431932bdf6bf0fd6fd",
+    "implementation_sha256": {
+      "src/relational_memory.py": "d160972c113fd2c08808e6ae9d1c4090c0fd05d153f9ca84ff5bde62460fa6e1",
+      "src/relational_study.py": "2ecfd98f5d057215c9f0ccff964af060671994c0284d31b13476c7562f9c7c64"
+    },
+    "inputs_hash": "cdc4adcffdbf6f2c296b4e186ce27ed9fb7533dec7f2a028ce2d7bb75ba12dcd",
+    "ledger_hash": {
+      "conv-26": "bc018b68350bed268d86d1bdb9094fb63bbd15f988a2d4f4515eb20d6f10ba41",
+      "conv-30": "d2fb27dcc59555ddc6e43d9850a21f4ec052563bc75410faf6e3a0840c32ddbe"
+    }
+  },
+  "metrics": {
+    "luna_low": {
+      "n": 80,
+      "f1": 0.6545488580047404,
+      "macro_f1": 0.6247206881637828,
+      "evidence_recall": 0.9258547008547009,
+      "context_tokens": 2996.0625,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.6269496204278814
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.8199724517906336
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.3598290598290598
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.6921316206075565
+        }
+      }
+    },
+    "luna_medium": {
+      "n": 80,
+      "f1": 0.6595977966345361,
+      "macro_f1": 0.6333443402107437,
+      "evidence_recall": 0.9258547008547009,
+      "context_tokens": 2996.0625,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.6653899240855763
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.7827922077922078
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.4035409035409036
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.681654325424287
+        }
+      }
+    },
+    "relations": {
+      "n": 80,
+      "f1": 0.6392167954487034,
+      "macro_f1": 0.6090531778423135,
+      "evidence_recall": 0.913034188034188,
+      "context_tokens": 2995.975,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.6098947550034507
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.8295507522780249
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.34102564102564104
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.6557415630621373
+        }
+      }
+    }
+  },
+  "comparisons": {
+    "luna_low": {
+      "delta": -0.015332062556037019,
+      "bootstrap_ci": [
+        -0.05627841430531544,
+        0.0225446068881561
+      ],
+      "wins": 8,
+      "losses": 15,
+      "ties": 57
+    },
+    "luna_medium": {
+      "delta": -0.02038100118583277,
+      "bootstrap_ci": [
+        -0.07366361245436945,
+        0.031060438183665637
+      ],
+      "wins": 17,
+      "losses": 18,
+      "ties": 45
+    }
+  },
+  "incomplete_outputs": [],
+  "cost": {
+    "estimated_new_cost_usd": 0.053082425000000016,
+    "new_paid_calls": 97
+  },
+  "contexts_with_relations": 61,
+  "expansion_gate_passed": false,
+  "interpretation": "Fixed extraction and Luna low reader; reused development; relation provenance is structural, not a semantic proof. No SOTA claim."
+}
