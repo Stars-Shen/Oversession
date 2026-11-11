@@ -161,5 +161,6 @@ reader's 3K retrieval score of 58.40 and the strongest development reader's
 
 A fixed [same-size native reader replacement](notes/phase3/native_30b_reader.md)
 now assesses Qwen3-30B-A3B-Thinking-2507 using the exact original 3K evidence.
-Its pinned weights are downloading; generation and F1 results are pending.
+Its pinned weights are downloaded and verified; the fixed 80-question generation
+is running on two GPU replicas. F1 results are pending.
 This changes reader weights and inference policy, not the memory algorithm.

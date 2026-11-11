@@ -64,5 +64,11 @@ coordinator stops its owned generation children while preserving saved batches.
 No unrelated GPU job is stopped. A download/generation failure is recorded as
 infrastructure failure, with no automatic model restart or F1-policy change.
 
+All 16 weight shards subsequently finish streaming and pass their pinned LFS
+SHA256 checks. Both replicas load successfully and enter the planned first
+batch without a CUDA-memory failure. Their unchanged generation processes are
+live; no development F1 result exists yet. Sampling, token budget, batches and
+expansion criteria remain the prospective values above.
+
 This note documents the active authorized task, not an instruction for another
 session to resume it automatically.
