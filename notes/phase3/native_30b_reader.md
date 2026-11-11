@@ -70,5 +70,15 @@ batch without a CUDA-memory failure. Their unchanged generation processes are
 live; no development F1 result exists yet. Sampling, token budget, batches and
 expansion criteria remain the prospective values above.
 
+## Cancelled on the user's provider switch
+
+The user explicitly requests returning to OpenAI and saving API cost. Terminate
+the owned coordinator and its two GPU children. Four completed outputs from
+shard 0 remain; shard 1 has none. There is no 80-question score. The owned
+allocation was about 124 GiB, now released. Do not resume this local job as
+part of the OpenAI workflow. A one-layer packed-matmul probe, not deployed into
+generation, remains archived under this run directory; it is not a model-level
+throughput or answer-quality result.
+
 This note documents the active authorized task, not an instruction for another
 session to resume it automatically.

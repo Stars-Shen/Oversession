@@ -161,6 +161,15 @@ reader's 3K retrieval score of 58.40 and the strongest development reader's
 
 A fixed [same-size native reader replacement](notes/phase3/native_30b_reader.md)
 now assesses Qwen3-30B-A3B-Thinking-2507 using the exact original 3K evidence.
-Its pinned weights are downloaded and verified; the fixed 80-question generation
-is running on two GPU replicas. F1 results are pending.
-This changes reader weights and inference policy, not the memory algorithm.
+Its local generation is cancelled after the user requests returning to OpenAI;
+four outputs are preserved, with no complete 80-question score. Both owned GPU
+replicas are stopped and their approximately 124 GiB allocation released.
+
+The [OpenAI economy workflow](notes/phase3/openai_economy.md) reuses all existing
+memory and baseline responses and uses an isolated Flex client. A live Luna
+pilot confirms the served Flex tier. The fixed 80-question medium-reasoning study
+completes at **65.96 F1** versus cached Luna low's 65.45 and DeepSeek's 65.57,
+with no capped outputs. Its estimated new API cost is **$0.01745**, with no
+automatic Standard fallback or paid-response retries. The small accuracy gain
+fails the expansion gate; stop this candidate. The cheaper transport remains
+available for further research, with old baselines reused at zero new cost.

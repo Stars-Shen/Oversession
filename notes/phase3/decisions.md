@@ -140,6 +140,23 @@ token budgets as measured Shannon capacity or inventing an information-loss
 guarantee for a generated summary. Existing SF caches do not contain reasoning
 text, so offline teacher-trajectory distillation is not silently assumed.
 
+The user then requests a return to OpenAI with lower cost. Stop the two local
+native-reader children and coordinator, preserve four outputs, and release the
+owned approximately 124 GiB allocation. Do not continue local MoE execution
+work. The [OpenAI economy protocol](openai_economy.md) uses original Luna through
+Flex, preserving existing API cache and baseline code. The live pilot confirms
+Flex service; one medium/4096 reader policy enters the fixed 80-question study,
+reusing all 80 low/768 controls. Its conservative planning estimate is $0.153;
+no automatic Standard fallback, writer rebuild, output-limit doubling or
+ambiguous retry is permitted by this workflow. Full metrics are pending.
+
+The fixed OpenAI trial completes **80/80**, at estimated new cost **$0.01745**.
+Luna low/medium F1 is **65.4549 -> 65.9598**, versus strongest DeepSeek 65.5748;
+none is capped. The +3-point expansion gate fails. Stop medium-reader expansion
+and effort/budget sweeps. Retain the verified Flex transport and exact old-cache
+reuse for subsequent OpenAI research. Saving cost is achieved; the larger final
+accuracy breakthrough remains unproven.
+
 The [Memory-R1 final paper and pinned release assessment](memory_r1_release.md)
 replaces stale assumptions that author code is unavailable. It distinguishes
 trajectory cloning, final-answer supervision and outcome learning, and records

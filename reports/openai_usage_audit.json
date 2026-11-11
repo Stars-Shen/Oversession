@@ -1,0 +1,20 @@
+{
+  "cache_files": 35118,
+  "by_model": {
+    "gpt-6-luna": {
+      "responses": 35118,
+      "input_tokens": 127980702,
+      "output_tokens": 15665643,
+      "total_tokens": 143646345,
+      "cached_tokens": 1708534,
+      "cache_write_tokens": 124930757,
+      "reasoning_tokens": 3565296,
+      "current_standard_reprice_usd": 23.600392564999996,
+      "same_usage_flex_or_batch_reprice_usd": 11.800196282499998
+    }
+  },
+  "parse_errors": 0,
+  "interpretation": "Current 2026-11-11 public-rate reprice of saved completed OpenAI Responses, not historical invoice or an account balance. Missing cache files, failed/billed requests, tools, embeddings and judge endpoints are not covered.",
+  "price_source": "https://developers.openai.com/api/docs/pricing",
+  "new_model_calls": 0
+}

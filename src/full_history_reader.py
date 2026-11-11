@@ -137,9 +137,10 @@ def score(folder=FOLDER,method='full_history',interpretation=None):
         ci=np.quantile(np.random.default_rng(20261111).choice(delta,(5000,len(delta)),replace=True).mean(1),[.025,.975])
         comparisons[control]=dict(delta=float(delta.mean()),bootstrap_ci=ci.tolist(),wins=int((delta>0).sum()),
             losses=int((delta<0).sum()),ties=int((delta==0).sum()))
-    incomplete=[r['qid'] for r in full if not r['stopped_with_eos'] or not r.get('closed_reasoning',True)]
+    finished=lambda r:r.get('complete',r.get('stopped_with_eos',False))
+    incomplete=[r['qid'] for r in full if not finished(r) or not r.get('closed_reasoning',True)]
     summary=dict(complete=True,n=80,config=config,metrics=summarize(scored),comparisons=comparisons,
-        capped_outputs=[r['qid'] for r in full if not r['stopped_with_eos']],
+        capped_outputs=[r['qid'] for r in full if not finished(r)],
         incomplete_outputs=incomplete,
         expansion_gate_passed=comparisons['deepseek_deliberate']['delta']>=.03 and len(incomplete)<=config.get('max_incomplete_fraction',1.)*len(full),
         interpretation=interpretation or 'Full history changes the information budget; cache reuse is compute optimization. Development is reused, not an untouched benchmark.',

@@ -1,0 +1,258 @@
+{
+  "complete": true,
+  "n": 80,
+  "config": {
+    "model": "gpt-6-luna",
+    "reasoning": "medium",
+    "max_new_tokens": 4096,
+    "service_tier": "flex",
+    "question_ids": [
+      "conv-26:78",
+      "conv-26:62",
+      "conv-26:22",
+      "conv-26:95",
+      "conv-26:37",
+      "conv-30:32",
+      "conv-26:14",
+      "conv-30:70",
+      "conv-26:71",
+      "conv-26:33",
+      "conv-26:30",
+      "conv-30:75",
+      "conv-26:56",
+      "conv-26:45",
+      "conv-26:2",
+      "conv-26:105",
+      "conv-30:31",
+      "conv-26:20",
+      "conv-26:46",
+      "conv-26:141",
+      "conv-26:66",
+      "conv-26:63",
+      "conv-26:59",
+      "conv-26:103",
+      "conv-26:48",
+      "conv-26:41",
+      "conv-26:42",
+      "conv-26:148",
+      "conv-26:39",
+      "conv-30:21",
+      "conv-26:50",
+      "conv-26:114",
+      "conv-26:4",
+      "conv-30:8",
+      "conv-26:64",
+      "conv-26:90",
+      "conv-26:40",
+      "conv-30:0",
+      "conv-26:81",
+      "conv-30:48",
+      "conv-30:25",
+      "conv-26:12",
+      "conv-26:27",
+      "conv-26:139",
+      "conv-26:76",
+      "conv-26:21",
+      "conv-26:69",
+      "conv-30:52",
+      "conv-30:27",
+      "conv-30:16",
+      "conv-26:77",
+      "conv-30:77",
+      "conv-26:23",
+      "conv-26:8",
+      "conv-26:131",
+      "conv-26:3",
+      "conv-26:5",
+      "conv-26:151",
+      "conv-26:55",
+      "conv-26:67",
+      "conv-30:62",
+      "conv-26:18",
+      "conv-30:15",
+      "conv-26:117",
+      "conv-30:18",
+      "conv-26:31",
+      "conv-26:118",
+      "conv-26:15",
+      "conv-26:17",
+      "conv-26:116",
+      "conv-30:3",
+      "conv-26:35",
+      "conv-30:81",
+      "conv-30:29",
+      "conv-26:49",
+      "conv-26:137",
+      "conv-26:61",
+      "conv-30:22",
+      "conv-26:146",
+      "conv-26:52"
+    ],
+    "inputs_hash": "0cbe2258fc185deb88f3c0e3ed560357e34b1e1d51f7fb8d4fb860ee86ff519f",
+    "memory_sha256": {
+      "conv-26": "499886ffc8474c8088b219e16b9e6a21e5d7a0ae82f104686db4daa8ab005f55",
+      "conv-30": "f1fbb6408076d505495037d331e97b31de320d212cea019a54af3de5514cbb52"
+    },
+    "context_budget": 3000,
+    "max_incomplete_fraction": 0.05,
+    "workers": 4,
+    "conservative_planning_estimate_usd": 0.1528766875,
+    "planning_estimate_limit_usd": 0.2,
+    "decision": "One fixed policy; >=3 F1 points above strongest cached control and <=5% incomplete before expansion. No effort/model/budget grid.",
+    "cost_policy": "Exact cache first; Flex only; no automatic retries, Standard fallback or output-limit doubling.",
+    "scope": "Reused 80 development questions, frozen writer/context. All low controls reused; provider prices are estimates, not an invoice."
+  },
+  "metrics": {
+    "deepseek_deliberate": {
+      "n": 80,
+      "f1": 0.655747535756727,
+      "macro_f1": 0.6392902200359769,
+      "evidence_recall": 0.9258547008547009,
+      "context_tokens": 2996.0625,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.6154503105590061
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.7591007477371113
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.4903540903540904
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.6922557314936995
+        }
+      }
+    },
+    "luna_low": {
+      "n": 80,
+      "f1": 0.6545488580047404,
+      "macro_f1": 0.6247206881637828,
+      "evidence_recall": 0.9258547008547009,
+      "context_tokens": 2996.0625,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.6269496204278814
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.8199724517906336
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.3598290598290598
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.6921316206075565
+        }
+      }
+    },
+    "luna_medium": {
+      "n": 80,
+      "f1": 0.6595977966345361,
+      "macro_f1": 0.6333443402107437,
+      "evidence_recall": 0.9258547008547009,
+      "context_tokens": 2996.0625,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.6653899240855763
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.7827922077922078
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.4035409035409036
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.681654325424287
+        }
+      }
+    },
+    "retrieved_plain": {
+      "n": 80,
+      "f1": 0.5840420072077681,
+      "macro_f1": 0.5671566210806861,
+      "evidence_recall": 0.9258547008547009,
+      "context_tokens": 2996.0625,
+      "by_category": {
+        "1": {
+          "n": 23,
+          "f1": 0.6816252587991719
+        },
+        "2": {
+          "n": 22,
+          "f1": 0.5523875114784205
+        },
+        "3": {
+          "n": 13,
+          "f1": 0.4297830374753452
+        },
+        "4": {
+          "n": 22,
+          "f1": 0.6048306765698069
+        }
+      }
+    }
+  },
+  "comparisons": {
+    "retrieved_plain": {
+      "delta": 0.07555578942676804,
+      "bootstrap_ci": [
+        0.017045938415318568,
+        0.13566989772355884
+      ],
+      "wins": 29,
+      "losses": 16,
+      "ties": 35
+    },
+    "deepseek_deliberate": {
+      "delta": 0.0038502608778091738,
+      "bootstrap_ci": [
+        -0.0406406249692416,
+        0.04939262408764685
+      ],
+      "wins": 17,
+      "losses": 17,
+      "ties": 46
+    },
+    "luna_low": {
+      "delta": 0.005048938629795751,
+      "bootstrap_ci": [
+        -0.03888482322266731,
+        0.050825013140010734
+      ],
+      "wins": 13,
+      "losses": 15,
+      "ties": 52
+    }
+  },
+  "capped_outputs": [],
+  "incomplete_outputs": [],
+  "expansion_gate_passed": false,
+  "interpretation": "Same Luna model and 3K evidence; medium/4096 versus cached low/768. Flex transport records actual served tier. Reused development; no memory-algorithm claim.",
+  "new_paid_calls": 0,
+  "new_api_cost_estimate_usd": 0.017452937499999998,
+  "actual_new_paid_calls": 80,
+  "usage": {
+    "input_tokens": 255563,
+    "output_tokens": 5933,
+    "total_tokens": 261496
+  },
+  "strongest_cached_control_f1": 0.655747535756727,
+  "cost_comparison": {
+    "same_medium_usage_at_standard_usd": 0.034905875,
+    "old_low_completed_usage_at_standard_usd": 0.032627374999999986,
+    "old_low_reuse_new_cost_usd": 0.0,
+    "interpretation": "Current public-rate estimates, not invoices; old Standard reprice is hypothetical. Reasoning tokens are included in output; pilot counted once."
+  }
+}
