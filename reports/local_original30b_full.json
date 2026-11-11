@@ -1,0 +1,59 @@
+{
+  "complete": true,
+  "metrics": {
+    "plain": {
+      "n": 1307,
+      "f1": 0.5769544660270987,
+      "macro_f1": 0.47895416937828816,
+      "evidence_recall": 0.929559774584151,
+      "context_tokens": 2996.506503442999,
+      "by_category": {
+        "1": {
+          "n": 239,
+          "f1": 0.5330404105294035
+        },
+        "2": {
+          "n": 258,
+          "f1": 0.4792989740664159
+        },
+        "3": {
+          "n": 83,
+          "f1": 0.23882655012289755
+        },
+        "4": {
+          "n": 727,
+          "f1": 0.6646507427944357
+        }
+      }
+    }
+  },
+  "truncated_outputs": [
+    {
+      "qid": "conv-41:50",
+      "method": "plain"
+    }
+  ],
+  "scope": "Original unadapted Qwen3-30B-A3B-Instruct-2507, conversations 2-9, 1307 category-1-4 questions, frozen 3K v2 source retrieval",
+  "source_hashes": {
+    "config.json": "5489f7c6159d95f77314cf88daf5dd55eaa5b9516b2c51050d62927740fb8ca1",
+    "inputs.jsonl": "945ecacca86101f82109050b69aac5f8ca4402d1e4ddc687bd05a40db881ec7a",
+    "predictions.jsonl": "a2ece48b46160b338d2fb1551f8070d159ddca661fd449d2b25dd781653e6fac"
+  },
+  "model": "/home/wqshen/models/Qwen3-30B-A3B-Instruct-2507",
+  "generation": "same greedy 192-token policy as previous local controls",
+  "existing_luna_same_cohort_f1": 0.6141744446926,
+  "delta_vs_existing_luna": -0.03721997866550131,
+  "generation_accounting": {
+    "reused_separate_outputs": 160,
+    "new_local_answers": 1147,
+    "new_paid_calls": 0
+  },
+  "source_adapter_full_status": {
+    "complete": false,
+    "saved": 160,
+    "expected": 1307,
+    "intentionally_cancelled": true,
+    "reason": "Candidate trails strongest matched reader in all four categories; no further adapted generation."
+  },
+  "reproduce_score": ".venv/bin/python src/local_cad.py score --run local_source_control_full"
+}

@@ -131,6 +131,15 @@ study, not a completed full score. The next [fixed native 30B reader policy](nat
 uses unchanged 3K evidence and a single model-card sampling policy, with a hard
 4096-token budget and no prompt/temperature/budget grid. Generation is pending.
 
+Original control completes **1307/1307 at 57.6954 F1**, retaining its one capped
+answer; its paused orchestrator is terminated without launching the adapted
+child. The old same-cohort Luna reference is 61.4174. A
+[decision-theory interpretation](information_and_reader_risk.md) distinguishes
+optimal information order from a fixed reader's realized loss, without treating
+token budgets as measured Shannon capacity or inventing an information-loss
+guarantee for a generated summary. Existing SF caches do not contain reasoning
+text, so offline teacher-trajectory distillation is not silently assumed.
+
 The [Memory-R1 final paper and pinned release assessment](memory_r1_release.md)
 replaces stale assumptions that author code is unavailable. It distinguishes
 trajectory cloning, final-answer supervision and outcome learning, and records

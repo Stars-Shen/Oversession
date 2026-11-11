@@ -220,3 +220,9 @@ to prevent launching the queued adapted child; terminate that parent after the
 control finishes. Preserve the 160 adapted outputs, checkpoint and all baseline
 outputs. `full_pipeline_status.json` explicitly records intentional cancellation,
 not successful full pairing. No completed full adapter result is claimed.
+
+The original control subsequently completes all **1307** questions at **57.6954
+F1**, with one capped output retained. The same-cohort old Luna reference is
+61.4174. `reports/local_original30b_full.json` records this completed original
+reader result and the separate cancelled-adapter status. There is no observation
+of the adapted reader's full score and no extrapolation is substituted for it.

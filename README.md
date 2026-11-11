@@ -146,8 +146,9 @@ the unchanged final adapter on 160 questions across eight conversations:
 points and zero capped outputs. Target-mixture sensitivity is +4.29 points;
 multi-hop declines by 3.97 points. A 1307-question paired comparison was started,
 but the queued adapter expansion is cancelled after the stronger-reader check
-below. The original control finishes independently; all cached answers and the
-adapter are preserved. There is no completed 1307-question paired adapter score.
+below. The original control completes at **57.70 F1**, versus the same-cohort
+old Luna reference's 61.42; all cached answers and the adapter are preserved.
+There is no completed 1307-question paired adapter score.
 
 The stronger same-context DeepSeek deliberate reference on those 160 questions
 is **65.40 F1**, 9.70 points above the adapted local reader. A gain against the
